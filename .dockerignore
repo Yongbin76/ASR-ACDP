@@ -17,3 +17,10 @@ docs/**
 data_sources/cleaned
 *.log
 *.pid
+
+# Added to keep generated prototype workspaces and db files out of build context
+prototype/**/workspace-unit-*
+prototype/**/workspace-contract-snapshots-*
+prototype/**/workspace-verify-*
+prototype/**/platform.db
+prototype/**/*.db
