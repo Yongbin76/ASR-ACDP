@@ -1,0 +1,10 @@
+{
+  "releasePolicies": {
+    "submitterReviewerSeparationRequired": false,
+    "distinctApprovalReviewersRequired": false,
+    "reviewerPublisherSeparationRequired": false,
+    "highRiskReleaseRequiresDualApproval": false,
+    "defaultRequiredApprovals": 1,
+    "highRiskReleaseRequiredApprovals": 2
+  }
+}

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: acdp-workspace-pvc
+  namespace: acdp
+spec:
+  # 运行时共享目录，持久化 SQLite、发布产物、runtime 本地制品和验证报告。
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      # 原型阶段的最小建议容量，后续可按快照与日志规模上调。
+      storage: 5Gi

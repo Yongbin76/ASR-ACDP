@@ -1,0 +1,254 @@
+[
+  {
+    "templateCode": "structured_terms_csv_v2",
+    "templateName": "结构化词条导入模板",
+    "templateVersion": "v2",
+    "importType": "structured_terms",
+    "sourceType": "import_csv",
+    "fileFormat": "csv",
+    "description": "适用于统一批量导入结构化词条。",
+    "templateRole": "term_import",
+    "primary": true,
+    "legacy": false,
+    "consoleVisible": true,
+    "supportsDefaultCategoryCode": true,
+    "businessCategoryOptions": [
+      { "value": "poi_road", "label": "路名" },
+      { "value": "gov_term", "label": "政府部门" },
+      { "value": "proper_noun", "label": "常用词" }
+    ],
+    "templateFile": "structured_terms_csv_v2.template.csv",
+    "exampleFile": "structured_terms_csv_v2.example.csv",
+    "fields": [
+      { "fieldName": "canonicalText", "label": "标准词", "required": true, "type": "string", "description": "标准词文本", "example": "工伤认定" },
+      { "fieldName": "aliases", "label": "错误词列表", "required": false, "type": "multi_string", "description": "多个值用 | 分隔", "example": "工商认定|工伤认丁" },
+      { "fieldName": "categoryCode", "label": "类别编码", "required": false, "type": "enum", "description": "可为空；为空时沿用批次级业务属性", "example": "gov_term", "allowedValues": ["poi_road", "gov_term", "proper_noun"] },
+      { "fieldName": "priority", "label": "优先级", "required": false, "type": "number", "description": "默认80", "example": "92" },
+      { "fieldName": "riskLevel", "label": "风险等级", "required": false, "type": "enum", "description": "low/medium/high", "example": "medium", "allowedValues": ["low", "medium", "high"] },
+      { "fieldName": "replaceMode", "label": "替换模式", "required": false, "type": "enum", "description": "replace/candidate/block", "example": "replace", "allowedValues": ["replace", "candidate", "block"] },
+      { "fieldName": "baseConfidence", "label": "基础置信度", "required": false, "type": "number", "description": "0~1", "example": "0.94" },
+      { "fieldName": "pinyinRuntimeMode", "label": "拼音运行模式", "required": false, "type": "enum", "description": "off/candidate/replace", "example": "candidate", "allowedValues": ["off", "candidate", "replace"] },
+      { "fieldName": "customFullPinyinNoTone", "label": "自定义全拼", "required": false, "type": "string", "description": "人工指定的全拼，无声调", "example": "gong shang ren ding" },
+      { "fieldName": "alternativeReadings", "label": "备用读音", "required": false, "type": "multi_string", "description": "多个值用 | 分隔", "example": "gong shang ren ding|gong shang ren ding" },
+      { "fieldName": "sourceType", "label": "来源类型", "required": false, "type": "string", "description": "来源标识", "example": "import_csv" },
+      { "fieldName": "remark", "label": "备注", "required": false, "type": "string", "description": "附加说明", "example": "示例" }
+    ],
+    "examples": [
+      {
+        "canonicalText": "工伤认定",
+        "aliases": "工商认定",
+        "categoryCode": "gov_term",
+        "priority": 92,
+        "riskLevel": "medium",
+        "replaceMode": "replace",
+        "baseConfidence": 0.94,
+        "pinyinRuntimeMode": "candidate",
+        "customFullPinyinNoTone": "",
+        "alternativeReadings": "",
+        "sourceType": "import_csv",
+        "remark": "示例"
+      }
+    ],
+    "rules": [
+      "主路径统一采用 CSV + UTF-8",
+      "canonicalText 必填",
+      "aliases 与 alternativeReadings 使用 | 分隔",
+      "categoryCode 可为空；为空时沿用批次级业务属性",
+      "导入后写入 terms / aliases，并可同步写入 pinyin_profiles"
+    ]
+  },
+  {
+    "templateCode": "term_aliases_csv_v1",
+    "templateName": "错误词批量补录模板",
+    "templateVersion": "v1",
+    "importType": "term_aliases",
+    "sourceType": "import_alias",
+    "fileFormat": "csv",
+    "description": "适用于给已有词条批量补充错误词。",
+    "templateRole": "alias_patch",
+    "primary": true,
+    "legacy": false,
+    "consoleVisible": true,
+    "supportsDefaultCategoryCode": false,
+    "templateFile": "term_aliases_csv_v1.template.csv",
+    "exampleFile": "term_aliases_csv_v1.example.csv",
+    "fields": [
+      { "fieldName": "categoryCode", "label": "类别编码", "required": true, "type": "enum", "description": "辅助定位词条", "example": "gov_term", "allowedValues": ["poi_road", "gov_term", "proper_noun"] },
+      { "fieldName": "canonicalText", "label": "标准词", "required": true, "type": "string", "description": "用于定位词条", "example": "工伤认定" },
+      { "fieldName": "aliasText", "label": "错误词", "required": true, "type": "string", "description": "需新增的错误词/别名", "example": "工商认定" },
+      { "fieldName": "sourceType", "label": "来源类型", "required": false, "type": "string", "description": "来源", "example": "qa_feedback" },
+      { "fieldName": "remark", "label": "备注", "required": false, "type": "string", "description": "附加说明", "example": "QA汇总" }
+    ],
+    "examples": [
+      {
+        "categoryCode": "gov_term",
+        "canonicalText": "工伤认定",
+        "aliasText": "工商认定",
+        "sourceType": "qa_feedback",
+        "remark": "示例"
+      }
+    ],
+    "rules": [
+      "标准词必须已存在",
+      "aliasText 必填",
+      "写入 aliases"
+    ]
+  },
+  {
+    "templateCode": "validation_cases_csv_v1",
+    "templateName": "验证样本批量导入模板",
+    "templateVersion": "v1",
+    "importType": "validation_cases",
+    "sourceType": "validation_import",
+    "fileFormat": "csv",
+    "description": "适用于批量导入验证样本。",
+    "templateRole": "validation_import",
+    "primary": true,
+    "legacy": false,
+    "consoleVisible": true,
+    "supportsDefaultCategoryCode": false,
+    "templateFile": "validation_cases_csv_v1.template.csv",
+    "exampleFile": "validation_cases_csv_v1.example.csv",
+    "fields": [
+      { "fieldName": "caseId", "label": "样本ID", "required": false, "type": "string", "description": "建议提供稳定唯一值", "example": "qa-feedback-001" },
+      { "fieldName": "description", "label": "样本说明", "required": false, "type": "string", "description": "样本描述", "example": "工伤认定误识别样本" },
+      { "fieldName": "text", "label": "原始文本", "required": true, "type": "string", "description": "业务文本", "example": "我想了解工商认定的办理材料。" },
+      { "fieldName": "expectedCanonicals", "label": "期望标准词", "required": true, "type": "multi_string", "description": "多个值用 | 分隔", "example": "工伤认定" },
+      { "fieldName": "sourceType", "label": "来源类型", "required": false, "type": "string", "description": "来源", "example": "qa_feedback" },
+      { "fieldName": "notes", "label": "备注", "required": false, "type": "string", "description": "附加说明", "example": "reported by qa replay" }
+    ],
+    "examples": [
+      {
+        "caseId": "qa-feedback-001",
+        "description": "工伤认定误识别样本",
+        "text": "我想了解工商认定的办理材料。",
+        "expectedCanonicals": "工伤认定",
+        "sourceType": "qa_feedback",
+        "notes": "示例"
+      }
+    ],
+    "rules": [
+      "text 必填",
+      "expectedCanonicals 必填",
+      "导入后写入 validation_cases"
+    ]
+  },
+  {
+    "templateCode": "structured_terms_csv_v1",
+    "templateName": "结构化词条导入模板（兼容旧版）",
+    "templateVersion": "v1",
+    "importType": "structured_terms",
+    "sourceType": "import_csv",
+    "fileFormat": "csv",
+    "description": "兼容旧版结构化词条导入；新导入请优先使用 v2 统一合同。",
+    "templateRole": "term_import",
+    "primary": false,
+    "legacy": true,
+    "consoleVisible": false,
+    "supportsDefaultCategoryCode": true,
+    "supersededBy": "structured_terms_csv_v2",
+    "templateFile": "structured_terms_csv_v1.template.csv",
+    "exampleFile": "structured_terms_csv_v1.example.csv",
+    "fields": [
+      { "fieldName": "categoryCode", "label": "类别编码", "required": true, "type": "enum", "description": "词条类别", "example": "gov_term", "allowedValues": ["poi_road", "gov_term", "proper_noun"] },
+      { "fieldName": "canonicalText", "label": "标准词", "required": true, "type": "string", "description": "标准词文本", "example": "工伤认定" },
+      { "fieldName": "aliases", "label": "错误词列表", "required": false, "type": "multi_string", "description": "多个值用 | 分隔", "example": "工商认定|工伤认丁" },
+      { "fieldName": "priority", "label": "优先级", "required": false, "type": "number", "description": "默认80", "example": "92" },
+      { "fieldName": "riskLevel", "label": "风险等级", "required": false, "type": "enum", "description": "low/medium/high", "example": "medium", "allowedValues": ["low", "medium", "high"] },
+      { "fieldName": "replaceMode", "label": "替换模式", "required": false, "type": "enum", "description": "replace/candidate/block", "example": "replace", "allowedValues": ["replace", "candidate", "block"] },
+      { "fieldName": "baseConfidence", "label": "基础置信度", "required": false, "type": "number", "description": "0~1", "example": "0.94" },
+      { "fieldName": "sourceType", "label": "来源类型", "required": false, "type": "string", "description": "来源标识", "example": "import_csv" },
+      { "fieldName": "pinyinRuntimeMode", "label": "拼音运行模式", "required": false, "type": "enum", "description": "off/candidate/replace", "example": "candidate", "allowedValues": ["off", "candidate", "replace"] },
+      { "fieldName": "remark", "label": "备注", "required": false, "type": "string", "description": "附加说明", "example": "示例" }
+    ],
+    "examples": [
+      {
+        "categoryCode": "gov_term",
+        "canonicalText": "工伤认定",
+        "aliases": "工商认定",
+        "priority": 92,
+        "riskLevel": "medium",
+        "replaceMode": "replace",
+        "baseConfidence": 0.94,
+        "sourceType": "import_csv",
+        "pinyinRuntimeMode": "candidate",
+        "remark": "示例"
+      }
+    ],
+    "rules": [
+      "标准词和类别必填",
+      "aliases 使用 | 分隔",
+      "导入后写入 terms / aliases"
+    ]
+  },
+  {
+    "templateCode": "raw_roads_text_v1",
+    "templateName": "原始路名文本导入模板（兼容旧版）",
+    "templateVersion": "v1",
+    "importType": "raw_roads",
+    "sourceType": "raw_roads",
+    "fileFormat": "txt",
+    "description": "兼容旧版路名逐行文本导入；新导入请优先使用 v2 统一词条合同。",
+    "templateRole": "term_import",
+    "primary": false,
+    "legacy": true,
+    "consoleVisible": false,
+    "supportsDefaultCategoryCode": false,
+    "supersededBy": "structured_terms_csv_v2",
+    "templateFile": "raw_roads_text_v1.template.txt",
+    "exampleFile": "raw_roads_text_v1.example.txt",
+    "fields": [],
+    "examples": [
+      "祁顺路",
+      "中山北路",
+      "人民大道"
+    ],
+    "rules": [
+      "一行一个路名",
+      "UTF-8 编码",
+      "不要混入页码、编号和注释"
+    ]
+  },
+  {
+    "templateCode": "gov_departments_csv_v1",
+    "templateName": "政府部门结构化导入模板（兼容旧版）",
+    "templateVersion": "v1",
+    "importType": "gov_departments",
+    "sourceType": "raw_government",
+    "fileFormat": "csv",
+    "description": "兼容旧版政府部门字段映射导入；新导入请优先使用 v2 统一词条合同。",
+    "templateRole": "term_import",
+    "primary": false,
+    "legacy": true,
+    "consoleVisible": false,
+    "supportsDefaultCategoryCode": false,
+    "supersededBy": "structured_terms_csv_v2",
+    "templateFile": "gov_departments_csv_v1.template.csv",
+    "exampleFile": "gov_departments_csv_v1.example.csv",
+    "fields": [
+      { "fieldName": "standardName", "label": "部门名称", "required": true, "type": "string", "description": "标准全称", "example": "上海市发展和改革委员会" },
+      { "fieldName": "shortName", "label": "简称", "required": false, "type": "string", "description": "常见简称", "example": "市发改委" },
+      { "fieldName": "district", "label": "所属区域", "required": false, "type": "string", "description": "区域信息", "example": "上海市" },
+      { "fieldName": "address", "label": "地址", "required": false, "type": "string", "description": "地址信息", "example": "人民大道200号" },
+      { "fieldName": "level", "label": "级别", "required": false, "type": "string", "description": "级别", "example": "市级" },
+      { "fieldName": "category", "label": "类别", "required": false, "type": "string", "description": "机构类别", "example": "政府部门" },
+      { "fieldName": "remark", "label": "备注", "required": false, "type": "string", "description": "附加说明", "example": "2026基线" }
+    ],
+    "examples": [
+      {
+        "standardName": "上海市发展和改革委员会",
+        "shortName": "市发改委",
+        "district": "上海市",
+        "address": "人民大道200号",
+        "level": "市级",
+        "category": "政府部门",
+        "remark": "示例"
+      }
+    ],
+    "rules": [
+      "使用 UTF-8 CSV",
+      "部门名称必填",
+      "简称将作为 aliases 导入"
+    ]
+  }
+]

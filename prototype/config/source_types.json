@@ -1,0 +1,94 @@
+{
+  "items": [
+    {
+      "code": "manual",
+      "label": "人工录入",
+      "description": "用于后台人工新增或维护的录入来源。",
+      "enabled": true,
+      "sortOrder": 10,
+      "scopes": ["dictionary", "validation"],
+      "allowedEntryModes": ["manual", "import"]
+    },
+    {
+      "code": "demo_seed",
+      "label": "演示种子",
+      "description": "用于演示初始化数据或本地样例数据。",
+      "enabled": true,
+      "sortOrder": 20,
+      "scope": "dictionary",
+      "allowedEntryModes": ["import"]
+    },
+    {
+      "code": "import_csv",
+      "label": "结构化导入",
+      "description": "用于结构化词条 CSV 导入。",
+      "enabled": true,
+      "sortOrder": 30,
+      "scope": "dictionary",
+      "allowedEntryModes": ["import"]
+    },
+    {
+      "code": "import_alias",
+      "label": "错误词补录",
+      "description": "用于错误词、别名的批量补录。",
+      "enabled": true,
+      "sortOrder": 40,
+      "scope": "dictionary",
+      "allowedEntryModes": ["import"]
+    },
+    {
+      "code": "raw_roads",
+      "label": "原始路名",
+      "description": "用于路名原始数据导入。",
+      "enabled": true,
+      "sortOrder": 50,
+      "scope": "dictionary",
+      "allowedEntryModes": ["import"]
+    },
+    {
+      "code": "raw_government",
+      "label": "原始政府数据",
+      "description": "用于政府机构原始数据导入。",
+      "enabled": true,
+      "sortOrder": 60,
+      "scope": "dictionary",
+      "allowedEntryModes": ["import"]
+    },
+    {
+      "code": "validation_import",
+      "label": "样本导入",
+      "description": "用于验证样本 CSV 导入。",
+      "enabled": true,
+      "sortOrder": 110,
+      "scope": "validation",
+      "allowedEntryModes": ["import"]
+    },
+    {
+      "code": "qa_feedback",
+      "label": "QA 反馈",
+      "description": "用于质检反馈样本回流。",
+      "enabled": true,
+      "sortOrder": 120,
+      "scope": "validation",
+      "allowedEntryModes": ["import"]
+    },
+    {
+      "code": "online_feedback",
+      "label": "线上反馈",
+      "description": "用于线上反馈样本回流。",
+      "enabled": true,
+      "sortOrder": 130,
+      "scope": "validation",
+      "allowedEntryModes": ["import"]
+    },
+    {
+      "code": "cg3",
+      "label": "CG3 回流",
+      "description": "用于 CG3 外部回流样本。",
+      "enabled": true,
+      "sortOrder": 140,
+      "scope": "validation",
+      "allowedEntryModes": ["import"]
+    }
+  ]
+}

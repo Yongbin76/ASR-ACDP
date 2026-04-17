@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acdp-prototype
+  namespace: acdp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acdp-prototype
+  template:
+    metadata:
+      labels:
+        app: acdp-prototype
+    spec:
+      containers:
+        - name: acdp-prototype
+          image: acdp-prototype:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8787
+              name: http
+          command:
+            - sh
+            - -lc
+            - npm run setup:prototype && npm run start:prototype
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8787
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8787
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          volumeMounts:
+            - name: workspace
+              mountPath: /app/prototype/workspace
+      volumes:
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: acdp-workspace-pvc

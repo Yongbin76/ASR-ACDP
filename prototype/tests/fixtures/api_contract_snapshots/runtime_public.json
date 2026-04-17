@@ -1,0 +1,58 @@
+{
+  "runtimeCurrent": {
+    "stable": {
+      "version": "<version>",
+      "builtAt": "<timestamp>",
+      "schemaVersion": 1,
+      "normalizerVersion": "v1",
+      "termCount": 8767,
+      "literalPatternCount": 412,
+      "pinyinKeyCount": 8788
+    },
+    "canary": null,
+    "grayPolicy": null
+  },
+  "runtimeStats": {
+    "startedAt": "<timestamp>",
+    "inFlight": 0,
+    "peak": {
+      "peakConcurrency": 1,
+      "peakAt": "<timestamp>",
+      "updatedAt": "<timestamp>"
+    },
+    "totalCorrections": 0,
+    "httpCorrections": 0,
+    "wsCorrections": 0,
+    "totalErrors": 0,
+    "lastCorrectionAt": null,
+    "lastErrorAt": null,
+    "activeWebSocketConnections": 0,
+    "latency": {
+      "sampleCount": 0,
+      "avgLatencyMs": 0,
+      "p50LatencyMs": 0,
+      "p95LatencyMs": 0,
+      "maxLatencyMs": 0
+    },
+    "websocketGovernance": {
+      "registryEnabled": false,
+      "registeredCallerCount": 0,
+      "rejectUnknownCallers": false,
+      "blacklistedIpCount": 0,
+      "totalAcceptedConnections": 0,
+      "activeCallerCount": 0,
+      "activeConnectionsByCaller": {},
+      "rejections": {
+        "auth": 0,
+        "blacklist": 0,
+        "connectionQuota": 0,
+        "rateLimit": 0
+      }
+    }
+  },
+  "correctCand": {
+    "correctedTexts": [
+      "我想咨询祁顺路和工伤认定。"
+    ]
+  }
+}

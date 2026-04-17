@@ -1,0 +1,33 @@
+node_modules/
+
+# Local workspace and generated runtime/test artifacts
+prototype/workspace*/
+prototype/runtime_instances/
+prototype/runtime_instances/*/workspace/
+
+# Local environment and temporary files
+.env
+.env.*
+*.log
+*.pid
+*.tmp
+*.swp
+*.swo
+
+# SQLite and transient database sidecars
+*.db
+*.sqlite
+*.sqlite3
+*-wal
+*-shm
+\[object Object\]
+\[object Object\]-wal
+\[object Object\]-shm
+
+# Local backup files
+*.bak
+*.bak.*
+
+# OS/editor artifacts
+.DS_Store
+Thumbs.db

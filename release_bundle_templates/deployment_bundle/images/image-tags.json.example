@@ -1,0 +1,8 @@
+{
+  "version": "v1.0.0",
+  "releaseId": "rel_xxx",
+  "adminImage": "registry.example.com/acdp-admin:v1.0.0",
+  "runtimeImage": "registry.example.com/acdp-runtime:v1.0.0",
+  "adminReleaseTag": "registry.example.com/acdp-admin:release-rel_xxx",
+  "runtimeReleaseTag": "registry.example.com/acdp-runtime:release-rel_xxx"
+}

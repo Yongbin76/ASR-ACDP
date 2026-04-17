@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "code": "COMM_WORDS",
+      "value": "COMM_WORDS",
+      "label": "常用词信息",
+      "description": "大于2个字的中文常用词、成语等",
+      "enabled": true,
+      "sortOrder": 110,
+      "legacyCategoryCode": "proper_noun"
+    },
+    {
+      "code": "SURNAME",
+      "value": "SURNAME",
+      "label": "中文姓的拆解",
+      "description": "中文姓的拆解，一般一个字",
+      "enabled": true,
+      "sortOrder": 120,
+      "legacyCategoryCode": "SURNAME"
+    },
+    {
+      "code": "GOV_INFO",
+      "value": "GOV_INFO",
+      "label": "政府部门信息",
+      "description": "上海主要政府部门信息",
+      "enabled": true,
+      "sortOrder": 130,
+      "legacyCategoryCode": "gov_term"
+    },
+    {
+      "code": "ROAD_INFO",
+      "value": "ROAD_INFO",
+      "label": "上海路名信息",
+      "description": "上海主要路名信息",
+      "enabled": true,
+      "sortOrder": 140,
+      "legacyCategoryCode": "poi_road"
+    }
+  ]
+}

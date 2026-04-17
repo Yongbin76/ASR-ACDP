@@ -1,0 +1,3 @@
+categoryCode,canonicalText,aliases,priority,riskLevel,replaceMode,baseConfidence,sourceType,pinyinRuntimeMode,remark
+gov_term,工伤认定,工商认定,92,medium,replace,0.94,import_csv,candidate,示例
+proper_noun,婚姻介绍所,婚姻检查所|婚因介绍所,85,medium,replace,0.93,import_csv,candidate,示例

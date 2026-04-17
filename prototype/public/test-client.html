@@ -1,0 +1,1158 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACDP 管理原型</title>
+  <style>
+    :root { --bg:#eef7ff; --panel:#ffffff; --ink:#16324a; --line:#cfe3f5; --accent:#2186d4; --accent-2:#4aa3df; --accent-3:#6db7e8; --muted:#5f7c96; --code:#142334; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:"Microsoft YaHei","PingFang SC",sans-serif; color:var(--ink); background:radial-gradient(circle at top left, rgba(33,134,212,0.12), transparent 28%), linear-gradient(180deg, #f7fbff 0%, #e6f2fb 100%); }
+    .wrap { max-width: 1480px; margin: 0 auto; padding: 24px; }
+    h1 { margin: 0 0 8px; font-size: 30px; }
+    .lead { margin: 0 0 22px; color: var(--muted); }
+    .layout { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 16px; }
+    .stack { display: grid; gap: 16px; }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 18px; box-shadow: 0 12px 30px rgba(0,0,0,0.05); }
+    .card h2 { margin: 0 0 12px; font-size: 18px; }
+    .sub { color: var(--muted); font-size: 12px; margin-bottom: 10px; }
+    label { display:block; margin:10px 0 6px; font-size:13px; color:var(--muted); }
+    input, textarea, select { width:100%; border:1px solid var(--line); border-radius:10px; padding:11px 12px; font:inherit; background:#fff; }
+    textarea { min-height: 100px; resize: vertical; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+    .grid2 { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    button { border:0; border-radius:999px; padding:10px 16px; font:inherit; cursor:pointer; color:#fff; background:var(--accent); }
+    button.secondary { background:var(--accent-2); }
+    button.olive { background:var(--accent-3); }
+    button.ghost { background:transparent; color:var(--accent); border:1px solid var(--accent); }
+    .list { border:1px solid var(--line); border-radius:12px; max-height:280px; overflow:auto; background:#fff; }
+    .list-item { padding:12px 14px; border-bottom:1px solid #eee5d8; }
+    .list-item:last-child { border-bottom:0; }
+    .list-item.active { background:#eef7ff; }
+    .detail-panel { border:1px solid var(--line); border-radius:12px; min-height:280px; padding:14px; background:#fff; overflow:auto; }
+    .list-item strong { display:block; margin-bottom:4px; }
+    .pill { display:inline-block; padding:2px 8px; border-radius:999px; margin-right:6px; font-size:12px; background:#eef4f4; color:var(--accent); }
+    .pill-info { background:#e9f3ff; color:#1f6fb2; }
+    .pill-ok { background:#e8f7ef; color:#1d7c4d; }
+    .pill-warn { background:#fff4de; color:#ad6b00; }
+    .pill-danger { background:#ffe9e7; color:#c44839; }
+    .pill-neutral { background:#eef2f6; color:#5b6b7d; }
+    .actions { margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; }
+    .sheet-nav { display:flex; gap:10px; flex-wrap:wrap; margin: 16px 0; }
+    .sheet-tab { background:rgba(33,134,212,0.08); color:var(--accent); border:1px solid rgba(33,134,212,0.18); }
+    .sheet-tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .sheet { display:none; gap:16px; }
+    .sheet.active { display:grid; }
+    .sheet-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-end; margin-bottom:6px; }
+    .sheet-head .sub { margin:0; }
+    .metric-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+    .metric-card { border:1px solid var(--line); border-radius:14px; background:linear-gradient(180deg, #ffffff 0%, #f3faff 100%); padding:14px; }
+    .metric-card strong { display:block; font-size:24px; margin-top:4px; }
+    .bar-row { display:grid; gap:8px; }
+    .bar-item { display:grid; gap:4px; padding:10px 12px; border-bottom:1px solid #e7eef6; }
+    .bar-item:last-child { border-bottom:0; }
+    .bar-head { display:flex; justify-content:space-between; gap:10px; font-size:13px; }
+    .bar-track { height:8px; border-radius:999px; background:#e5f1fb; overflow:hidden; }
+    .bar-fill { height:100%; border-radius:999px; background:linear-gradient(90deg, #67b2ec 0%, #2186d4 100%); }
+    pre { margin:0; min-height:780px; white-space:pre-wrap; word-break:break-word; background:var(--code); color:#edf2f7; border-radius:14px; padding:14px; overflow:auto; font-size:13px; line-height:1.5; }
+    @media (max-width: 1120px) { .layout { grid-template-columns:1fr; } .grid2, .grid3, .metric-grid { grid-template-columns:1fr; } pre { min-height:320px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>ACDP 管理原型</h1>
+    <p class="lead">支持运行时模拟、词条管理、拼音画像治理、规则配置、审核任务、版本发布/回滚和灰度策略。推荐用 Chrome 直接测试中文请求。</p>
+
+    <div class="card">
+      <h2>访问上下文</h2>
+      <div class="grid2">
+        <div>
+          <label for="operatorName">操作人</label>
+          <input id="operatorName" value="prototype_user" title="用于记录当前操作人，并参与审计日志。" />
+        </div>
+        <div>
+          <label for="roleName">当前角色</label>
+          <select id="roleName" title="用于模拟不同后台角色的权限边界。">
+            <option value="dict_admin">管理员</option>
+            <option value="dict_editor">词条编辑</option>
+            <option value="dict_reviewer">审核人</option>
+            <option value="dict_publisher">发布人</option>
+            <option value="dict_operator">运维操作人</option>
+            <option value="dict_viewer">只读查看</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <button class="ghost" id="btnWhoAmI" title="查看当前操作人、角色和权限集合。">查看当前身份</button>
+      </div>
+    </div>
+
+    <div class="sheet-nav">
+      <button class="sheet-tab active" data-sheet-target="dashboard" title="查看词典规模、接口调用、命中热点和峰值并发。">数据画板</button>
+      <button class="sheet-tab" data-sheet-target="runtime" title="用于演示纠错效果和查看当前运行版本。">运行时</button>
+      <button class="sheet-tab" data-sheet-target="terms" title="用于新建词条、编辑规则和管理词条状态。">词条规则</button>
+      <button class="sheet-tab" data-sheet-target="pinyin" title="用于拼音画像治理、冲突分析、候选审批和差异对比。">拼音治理</button>
+      <button class="sheet-tab" data-sheet-target="releases" title="用于构建版本、发布审批、灰度和回滚。">发布治理</button>
+      <button class="sheet-tab" data-sheet-target="validation" title="用于管理业务校验样本和外部样本 feed。">校验样本</button>
+      <button class="sheet-tab" data-sheet-target="audits" title="用于查看最近的后台审计日志。">审计日志</button>
+    </div>
+
+    <div class="layout">
+      <div class="stack">
+        <section class="sheet active" data-sheet="dashboard">
+          <div class="card">
+            <div class="sheet-head">
+              <h2>数据画板</h2>
+              <div class="sub">查看词典规模、接口调用、命中热点和峰值并发等管理数据。</div>
+            </div>
+            <div class="row">
+              <button class="ghost" id="btnRefreshDashboard" title="重新加载词典规模、接口调用和命中统计。">刷新画板</button>
+            </div>
+            <div id="dashboardSummary" class="metric-grid"></div>
+            <div class="grid2">
+              <div>
+                <div class="sub">种子词典按类型分布</div>
+                <div id="dashboardDictionaryByCategory" class="list"></div>
+              </div>
+              <div>
+                <div class="sub">错误词库规模（按类型别名数量）</div>
+                <div id="dashboardAliasByCategory" class="list"></div>
+              </div>
+            </div>
+            <div class="grid2">
+              <div>
+                <div class="sub">最近小时调用统计</div>
+                <div id="dashboardHourly" class="list"></div>
+              </div>
+              <div>
+                <div class="sub">TOP10 命中词条</div>
+                <div id="dashboardTopTerms" class="list"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="sheet" data-sheet="runtime">
+          <div class="card">
+            <div class="sheet-head">
+              <h2>运行时模拟</h2>
+              <div class="sub">用于现场演示纠错效果、健康状态和当前运行版本。</div>
+            </div>
+            <div class="grid2">
+              <div>
+                <label for="simulateText">测试文本</label>
+                <textarea id="simulateText">我想咨询市发改委、婚姻检查所，还有起顺路和工商认定。</textarea>
+              </div>
+              <div>
+                <label for="trafficKey">灰度流量键</label>
+                <input id="trafficKey" value="call-demo-001" title="用于命中灰度路由；相同键会稳定命中同一流量桶。" />
+                <div class="sub">若存在启用中的 gray policy，服务会按 `trafficKey` 哈希决定走 stable 还是 canary。</div>
+              </div>
+            </div>
+            <div class="row">
+              <button id="btnHealth" title="查看服务健康状态和当前版本摘要。">健康检查</button>
+              <button id="btnRuntime" title="查看当前 stable/canary 运行版本。">当前运行版本</button>
+              <button id="btnSimulate" title="用当前文本执行一次运行时纠错模拟。">执行模拟</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="sheet" data-sheet="terms">
+          <div class="card">
+            <div class="sheet-head">
+              <h2>词条编辑</h2>
+              <div class="sub">创建词条、配置规则，并从列表快速进入规则或拼音治理。</div>
+            </div>
+            <div class="grid3">
+              <div>
+                <label for="termCategory">类别</label>
+                <select id="termCategory" title="选择词条所属业务类别。">
+                  <option value="gov_term">gov_term</option>
+                  <option value="poi_road">poi_road</option>
+                  <option value="proper_noun">proper_noun</option>
+                </select>
+              </div>
+              <div>
+                <label for="termPriority">优先级</label>
+                <input id="termPriority" type="number" value="80" title="数值越大，词条在同类冲突中的优先级越高。" />
+              </div>
+              <div>
+                <label for="selectedTermId">当前目标词条ID（termId）</label>
+                <input id="selectedTermId" placeholder="点击词条卡片中的“规则”或“拼音”按钮后自动填充" title="保存规则或拼音画像前，需要先确定目标词条ID（termId）。" />
+              </div>
+            </div>
+            <label for="termCanonical">标准词</label>
+            <input id="termCanonical" value="上海市应急测试局" title="词条的标准写法，运行时最终替换文本将使用这里的值。" />
+            <label for="termAlias">别名列表（逗号分隔）</label>
+            <input id="termAlias" value="市应急测试局,应急测试局" title="输入易错写法或常见别称，使用逗号分隔。" />
+            <label for="termRules">规则 JSON</label>
+            <textarea id="termRules" title="用于控制命中长度、上下文和候选/替换行为。">{
+  "candidateOnly": false,
+  "minTextLen": 3,
+  "maxTextLen": null,
+  "boundaryPolicy": "none",
+  "leftContextAllow": [],
+  "rightContextAllow": [],
+  "leftContextBlock": [],
+  "rightContextBlock": [],
+  "regexAllow": [],
+  "regexBlock": []
+}</textarea>
+            <div class="row">
+              <button class="secondary" id="btnCreateTerm" title="创建新词条，并初始化默认规则和拼音画像。">创建词条</button>
+              <button class="olive" id="btnSaveRules" title="把当前规则 JSON 保存到目标词条。">保存规则</button>
+              <button class="ghost" id="btnListTerms" title="重新加载词条列表。">刷新词条列表</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="sheet-head">
+              <h2>词条列表</h2>
+              <div class="sub">可查看详情、送审、直接批准、停用，并跳转到规则或拼音治理。</div>
+            </div>
+            <div id="termList" class="list"></div>
+          </div>
+        </section>
+
+        <section class="sheet" data-sheet="pinyin">
+          <div class="card">
+            <div class="sheet-head">
+              <h2>拼音画像治理</h2>
+              <div class="sub">集中处理画像编辑、冲突分析、候选审批和字级差异对比。</div>
+            </div>
+            <div class="grid2">
+              <div>
+                <label for="pinyinRuntimeMode">拼音运行模式</label>
+                <select id="pinyinRuntimeMode">
+                  <option value="candidate">候选模式</option>
+                  <option value="replace">替换模式</option>
+                  <option value="off">关闭</option>
+                </select>
+              </div>
+              <div>
+                <label for="polyphoneMode">多音字策略</label>
+                <select id="polyphoneMode" title="控制多音字人工覆盖和备用读音行为。">
+                  <option value="default">默认</option>
+                  <option value="manual_override">人工覆盖</option>
+                  <option value="manual_with_alternatives">人工覆盖+备用读音</option>
+                </select>
+              </div>
+            </div>
+            <label for="customPinyin">自定义标准读音（无声调，空格分隔）</label>
+            <input id="customPinyin" placeholder="例如：chong qing" title="用于覆盖默认生成的标准读音。" />
+            <label for="alternativeReadings">备用读音列表（每行一个，无声调）</label>
+            <textarea id="alternativeReadings" title="审批通过的多音字候选通常会追加到这里。">qing zhong</textarea>
+            <label for="pinyinNotes">备注</label>
+            <textarea id="pinyinNotes" title="记录人工校正原因、多音字说明或治理备注。">多音字或人工校正说明</textarea>
+            <div class="row">
+              <button class="olive" id="btnSavePinyin" title="保存当前词条的拼音画像。">保存拼音画像</button>
+              <button class="ghost" id="btnListPinyinProfiles" title="重新加载拼音画像列表。">刷新拼音画像列表</button>
+              <button class="ghost" id="btnListPinyinConflicts" title="重新分析并加载拼音冲突。">刷新拼音冲突</button>
+              <button class="ghost" id="btnGeneratePinyinCandidates" title="根据多音字规则为当前词条生成候选。">生成多音字候选</button>
+              <button class="ghost" id="btnListPinyinComparisons" title="重新加载默认画像与当前画像的对比。">刷新画像对比</button>
+            </div>
+            <div id="pinyinList" class="list"></div>
+            <div id="pinyinConflictMeta" class="sub">点击“刷新拼音冲突”查看标准读音、首字母和备用读音冲突。</div>
+            <div class="grid2">
+              <div id="pinyinConflictList" class="list"></div>
+              <div id="pinyinConflictDetail" class="detail-panel">等待加载冲突详情...</div>
+            </div>
+            <div id="pinyinCandidateMeta" class="sub">点击“生成多音字候选”查看自动候选；加入备用读音后仍需手动保存拼音画像。</div>
+            <div id="pinyinCandidateList" class="list"></div>
+            <div id="pinyinComparisonMeta" class="sub">用于比较默认生成读音与当前人工画像差异。</div>
+            <div class="grid2">
+              <div id="pinyinComparisonList" class="list"></div>
+              <div id="pinyinComparisonDetail" class="detail-panel">请选择一个对比项查看详情。</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="sheet" data-sheet="releases">
+          <div class="card">
+            <div class="sheet-head">
+              <h2>版本管理</h2>
+              <div class="sub">在一个 sheet 里完成构建、审批、灰度、发布、回滚和发布门禁查看。</div>
+            </div>
+            <div class="grid2">
+              <div>
+                <label for="buildSummary">构建摘要</label>
+                <input id="buildSummary" value="browser build" />
+              </div>
+              <div>
+                <label for="grayPercentage">灰度百分比</label>
+                <input id="grayPercentage" type="number" value="10" min="1" max="100" />
+              </div>
+            </div>
+            <div class="row">
+              <button class="olive" id="btnBuildRelease" title="基于当前 approved/published 词条构建新 release。">构建新版本</button>
+              <button class="ghost" id="btnListReleases" title="重新加载版本列表和 gate 状态。">刷新版本列表</button>
+            </div>
+            <div class="sub">版本卡片中支持全量发布、回滚和挂灰度策略。</div>
+            <div id="releaseList" class="list"></div>
+          </div>
+
+          <div class="card">
+            <div class="sheet-head">
+              <h2>灰度策略</h2>
+              <div class="sub">查看当前启用中的灰度策略，并对指定策略执行停用。</div>
+            </div>
+            <div class="row">
+              <button class="ghost" id="btnListGray" title="重新加载灰度策略。">刷新灰度策略</button>
+            </div>
+            <div id="grayList" class="list"></div>
+          </div>
+
+          <div class="card">
+            <div class="sheet-head">
+              <h2>审核任务</h2>
+              <div class="sub">集中查看词条审核、拼音候选审核和发布审核。</div>
+            </div>
+            <div class="row">
+              <button class="ghost" id="btnListReviews" title="重新加载审核任务。">刷新审核任务</button>
+            </div>
+            <div id="reviewList" class="list"></div>
+          </div>
+        </section>
+
+        <section class="sheet" data-sheet="validation">
+          <div class="card">
+            <div class="sheet-head">
+              <h2>业务校验样本</h2>
+              <div class="sub">维护 validation cases，并管理 file-based feed connector 的导入入口。</div>
+            </div>
+            <label for="validationCaseId">样本ID（caseId）</label>
+            <input id="validationCaseId" value="manual-case-001" title="validation case 的唯一标识。" />
+            <label for="validationCaseDescription">描述</label>
+            <input id="validationCaseDescription" value="人工录入业务样本" title="用于说明这条样本来自哪里、用于校验什么。" />
+            <label for="validationCaseText">样本文本</label>
+            <textarea id="validationCaseText" title="用于 release gate 回放校验的业务样本文本。">我想咨询旗顺路附近的办事点。</textarea>
+            <label for="validationCaseCanonicals">期望 canonical 列表（每行一个）</label>
+            <textarea id="validationCaseCanonicals" title="预期在样本文本中命中的 canonical 列表，每行一个。">祁顺路</textarea>
+            <label for="validationCaseNotes">备注</label>
+            <input id="validationCaseNotes" value="manual validation sample" title="记录样本来源、用途和额外说明。" />
+            <label for="validationImportSourceType">批量导入来源</label>
+            <input id="validationImportSourceType" value="offline_feed" title="导入后记录到 validation case 的来源类型。" />
+            <label for="validationImportMode">批量导入模式</label>
+            <select id="validationImportMode" title="upsert 会更新已存在样本，insert_only 只插入新样本。">
+              <option value="upsert">upsert</option>
+              <option value="insert_only">insert_only</option>
+            </select>
+            <label for="validationImportJson">批量导入 JSON 数组</label>
+            <textarea id="validationImportJson" title="输入待批量导入的 validation case JSON 数组。">[
+  {
+    "caseId": "offline-feed-001",
+    "description": "离线样本导入示例",
+    "text": "我想咨询旗顺路附近的办事点。",
+    "expectedCanonicals": ["祁顺路"]
+  }
+]</textarea>
+            <div class="row">
+              <button class="olive" id="btnCreateValidationCase" title="创建一条手工 validation case。">创建样本</button>
+              <button class="secondary" id="btnImportValidationCases" title="按 JSON 数组批量导入 validation case。">批量导入</button>
+              <button class="secondary" id="btnImportValidationFeeds" title="扫描 cg3/qa/online feed inbox 并执行导入。">扫描 feed 目录</button>
+              <button class="ghost" id="btnListValidationFeedSources" title="查看当前 feed 目录状态、待导入文件和错误文件。">查看 feed 目录</button>
+              <button class="ghost" id="btnListValidationCases" title="重新加载 validation case 列表。">刷新样本列表</button>
+            </div>
+            <div id="validationFeedSourceList" class="list"></div>
+            <div id="validationCaseList" class="list"></div>
+          </div>
+        </section>
+
+        <section class="sheet" data-sheet="audits">
+          <div class="card">
+            <div class="sheet-head">
+              <h2>审计日志</h2>
+              <div class="sub">用于回看最近管理动作、发布动作和样本导入动作。</div>
+            </div>
+            <div class="row">
+              <button class="ghost" id="btnListAudits" title="重新加载最近审计日志。">刷新审计日志</button>
+            </div>
+            <div id="auditList" class="list"></div>
+          </div>
+        </section>
+      </div>
+
+      <div class="card">
+        <h2>接口响应</h2>
+        <pre id="output">等待请求...</pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const output = document.getElementById('output');
+    const termList = document.getElementById('termList');
+    const releaseList = document.getElementById('releaseList');
+    const reviewList = document.getElementById('reviewList');
+    const auditList = document.getElementById('auditList');
+    const grayList = document.getElementById('grayList');
+    const validationCaseList = document.getElementById('validationCaseList');
+    const validationFeedSourceList = document.getElementById('validationFeedSourceList');
+    const pinyinList = document.getElementById('pinyinList');
+    const pinyinConflictList = document.getElementById('pinyinConflictList');
+    const pinyinConflictDetail = document.getElementById('pinyinConflictDetail');
+    const pinyinConflictMeta = document.getElementById('pinyinConflictMeta');
+    const pinyinCandidateList = document.getElementById('pinyinCandidateList');
+    const pinyinCandidateMeta = document.getElementById('pinyinCandidateMeta');
+    const pinyinComparisonList = document.getElementById('pinyinComparisonList');
+    const pinyinComparisonDetail = document.getElementById('pinyinComparisonDetail');
+    const pinyinComparisonMeta = document.getElementById('pinyinComparisonMeta');
+    const dashboardSummary = document.getElementById('dashboardSummary');
+    const dashboardDictionaryByCategory = document.getElementById('dashboardDictionaryByCategory');
+    const dashboardAliasByCategory = document.getElementById('dashboardAliasByCategory');
+    const dashboardHourly = document.getElementById('dashboardHourly');
+    const dashboardTopTerms = document.getElementById('dashboardTopTerms');
+    const sheetTabs = Array.from(document.querySelectorAll('.sheet-tab'));
+    const sheets = Array.from(document.querySelectorAll('.sheet'));
+
+    let pinyinConflictItems = [];
+    let activePinyinConflictKey = '';
+    let pinyinCandidateItems = [];
+    let pinyinComparisonItems = [];
+    let activePinyinComparisonTermId = '';
+    let activeSheet = 'dashboard';
+
+    function activateSheet(sheetId) {
+      activeSheet = sheetId;
+      for (const sheet of sheets) {
+        sheet.classList.toggle('active', sheet.dataset.sheet === sheetId);
+      }
+      for (const button of sheetTabs) {
+        button.classList.toggle('active', button.dataset.sheetTarget === sheetId);
+      }
+    }
+
+    function show(value) { output.textContent = typeof value === 'string' ? value : JSON.stringify(value, null, 2); }
+    function withAccessHeaders(headers = {}) { return { ...headers, 'x-operator': document.getElementById('operatorName').value.trim() || 'prototype_user', 'x-role': document.getElementById('roleName').value || 'dict_admin' }; }
+    async function request(url, options = {}) { show('???...'); const finalOptions = { ...options, headers: withAccessHeaders(options.headers || {}) }; const res = await fetch(url, finalOptions); const text = await res.text(); let data = text; try { data = JSON.parse(text); } catch {} show(data); return data; }
+    function parseRules() { const text = document.getElementById('termRules').value.trim(); return text ? JSON.parse(text) : {}; }
+    function parseAlternativeReadings() { return document.getElementById('alternativeReadings').value.split(/\r?\n/).map(s => s.trim()).filter(Boolean); }
+    function conflictTypeLabel(conflictType) {
+      if (conflictType === 'full_pinyin_no_tone') return '标准读音';
+      if (conflictType === 'initials') return '首字母';
+      if (conflictType === 'alternative_reading') return '备用读音';
+      return conflictType;
+    }
+    function conflictIdentity(item) { return [item.conflictType, item.key].join('|'); }
+    function conflictSeverityReasonLabel(reason) {
+      if (reason === 'shared_full_pinyin') return '共享标准读音';
+      if (reason === 'shared_alternative_reading') return '共享备用读音';
+      if (reason === 'shared_initials') return '共享首字母';
+      if (reason === 'many_terms') return '冲突词条较多';
+      if (reason === 'multiple_terms') return '多词条冲突';
+      if (reason === 'very_short_term_present') return '包含超短词';
+      if (reason === 'short_term_present') return '包含短词';
+      if (reason === 'multiple_short_terms') return '短词数量较多';
+      if (reason === 'text_contains_text') return '存在包含关系';
+      if (reason === 'high_text_overlap') return '文本重叠高';
+      if (reason === 'shared_text_prefix') return '共享文本前缀';
+      if (reason === 'cross_category_spread') return '跨分类扩散';
+      return reason;
+    }
+    function riskLevelLabel(riskLevel) {
+      if (riskLevel === 'high') return '高风险';
+      if (riskLevel === 'medium') return '中风险';
+      return '低风险';
+    }
+    function statusPillClass(status) {
+      if (['已启用', '已批准', '可发布', '当前发布', '当前灰度', '当前启用', '一致'].includes(status)) return 'pill-ok';
+      if (['高风险', '部分批准', '待审批'].includes(status)) return 'pill-warn';
+      if (['已停用', '已驳回', '已阻塞', '失败', '已变更'].includes(status)) return 'pill-danger';
+      return 'pill-info';
+    }
+    function categoryLabel(value) {
+      if (value === 'gov_term') return '政务词';
+      if (value === 'poi_road') return '道路地名';
+      if (value === 'proper_noun') return '专有名词';
+      return value || '未知';
+    }
+    function runtimeModeLabel(value) {
+      if (value === 'candidate') return '候选模式';
+      if (value === 'replace') return '替换模式';
+      if (value === 'off') return '关闭';
+      return value || '未知';
+    }
+    function polyphoneModeLabel(value) {
+      if (value === 'default') return '默认';
+      if (value === 'manual_override') return '人工覆盖';
+      if (value === 'manual_with_alternatives') return '人工覆盖+备用读音';
+      return value || '未知';
+    }
+    function sourceTypeLabel(value) {
+      if (value === 'manual') return '人工录入';
+      if (value === 'offline_feed') return '离线样本';
+      if (value === 'cg3') return 'CG3';
+      if (value === 'qa_feedback') return '质检反馈';
+      if (value === 'online_feedback') return '线上反馈';
+      if (value === 'seed_config') return '默认样本';
+      return value || '未知来源';
+    }
+    function reviewTaskTypeLabel(value) {
+      if (value === 'term_review') return '词条审核';
+      if (value === 'pinyin_candidate_review') return '拼音候选审核';
+      if (value === 'release_publish_review') return '发布审核';
+      return value || '未知任务';
+    }
+    function targetTypeLabel(value) {
+      if (value === 'term') return '词条';
+      if (value === 'pinyin_candidate') return '拼音候选';
+      if (value === 'release') return '版本';
+      if (value === 'validation_case') return '校验样本';
+      if (value === 'gray_policy') return '灰度策略';
+      return value || '未知目标';
+    }
+    function scopeTypeLabel(value) {
+      if (value === 'traffic_key_hash') return '流量键哈希';
+      return value || '未知范围';
+    }
+    function reviewStatusLabel(status) {
+      if (status === 'pending') return '待审批';
+      if (status === 'partially_approved') return '部分批准';
+      if (status === 'approved') return '已批准';
+      if (status === 'rejected') return '已驳回';
+      return '未提交';
+    }
+    function renderBarList(items, getLabel, getValue, emptyText) {
+      if (!items || items.length === 0) {
+        return `<div class="list-item"><div class="sub">${emptyText}</div></div>`;
+      }
+      const max = Math.max(...items.map((item) => Number(getValue(item) || 0)), 1);
+      return `<div class="bar-row">${items.map((item) => {
+        const value = Number(getValue(item) || 0);
+        const width = Math.max(4, Math.round((value / max) * 100));
+        return `
+          <div class="bar-item">
+            <div class="bar-head"><strong>${getLabel(item)}</strong><span>${value}</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:${width}%"></div></div>
+          </div>
+        `;
+      }).join('')}</div>`;
+    }
+    function addAlternativeReadingCandidate(value) {
+      const normalized = String(value || '').trim();
+      if (!normalized) return;
+      const textarea = document.getElementById('alternativeReadings');
+      const items = textarea.value.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
+      if (!items.includes(normalized)) {
+        items.push(normalized);
+        textarea.value = items.join('\n');
+      }
+      show({ status: 'candidate_added', reading: normalized, pendingSave: true });
+    }
+    function clearPinyinCandidates() {
+      pinyinCandidateItems = [];
+      pinyinCandidateMeta.textContent = '点击“生成多音字候选”查看自动候选；加入备用读音后仍需手动保存拼音画像。';
+      pinyinCandidateList.innerHTML = '<div class="list-item"><div class="sub">候选结果会显示在这里。</div></div>';
+    }
+
+    function comparisonStatusLabel(status) {
+      if (status === 'changed') return '已变更';
+      if (status === 'aligned_override') return '人工对齐';
+      return '默认生成';
+    }
+    function comparisonFieldLabel(field) {
+      if (field === 'fullPinyinNoTone') return '标准读音';
+      if (field === 'initials') return '首字母';
+      if (field === 'syllables') return '音节';
+      if (field === 'alternativeReadings') return '备用读音';
+      if (field === 'polyphoneMode') return '多音字策略';
+      return field;
+    }
+    function renderCharComparisonRows(items) {
+      if (!items || items.length === 0) {
+        return '<div class="sub">当前没有可展示的字级差异槽位。</div>';
+      }
+      return items.map((item) => `
+        <div class="list-item">
+          <strong>${item.char || '(slot ' + (item.index + 1) + ')'}</strong>
+          <div><span class="pill">字位 ${item.index + 1}</span><span class="pill">${item.changed ? '已变更' : '一致'}</span></div>
+          <div class="sub">默认=${item.defaultSyllable || '无'}</div>
+          <div class="sub">当前=${item.currentSyllable || '无'}</div>
+        </div>
+      `).join('');
+    }
+    function clearPinyinComparisonDetail() {
+      activePinyinComparisonTermId = '';
+      pinyinComparisonDetail.textContent = '请选择一个对比项查看详情。';
+    }
+
+    function renderDashboard(data) {
+      const dictionary = data.dictionary || {};
+      const runtime = data.runtime || {};
+      const overview = data.overview || {};
+      const peak = runtime.peak || {};
+      const hourly = runtime.hourly || [];
+      const latestHour = hourly.length > 0 ? hourly[hourly.length - 1] : {};
+
+      dashboardSummary.innerHTML = `
+        <div class="metric-card"><div class="sub">种子词条总量</div><strong>${dictionary.totalSeedTerms || 0}</strong></div>
+        <div class="metric-card"><div class="sub">最近小时调用次数</div><strong>${latestHour.requestCount || 0}</strong></div>
+        <div class="metric-card"><div class="sub">最近小时命中词条量</div><strong>${latestHour.hitTermCount || 0}</strong></div>
+        <div class="metric-card"><div class="sub">历史峰值并发</div><strong>${peak.peakConcurrency || 0}</strong></div>
+        <div class="metric-card"><div class="sub">当前发布版本</div><strong>${overview.currentRelease?.version || '无'}</strong></div>
+        <div class="metric-card"><div class="sub">当前灰度版本</div><strong>${overview.currentCanaryRelease?.version || '无'}</strong></div>
+        <div class="metric-card"><div class="sub">门禁阻塞版本数</div><strong>${overview.gateBlockedReleaseCount || 0}</strong></div>
+        <div class="metric-card"><div class="sub">Feed 错误文件数</div><strong>${overview.feedErrorFileCount || 0}</strong></div>
+      `;
+
+      dashboardDictionaryByCategory.innerHTML = renderBarList(
+        dictionary.byCategory || [],
+        (item) => categoryLabel(item.categoryCode),
+        (item) => item.count,
+        '当前暂无种子词条分类数据。'
+      );
+      dashboardAliasByCategory.innerHTML = renderBarList(
+        dictionary.aliasByCategory || [],
+        (item) => categoryLabel(item.categoryCode),
+        (item) => item.aliasCount,
+        '当前暂无错误词库分类数据。'
+      );
+      dashboardHourly.innerHTML = renderBarList(
+        runtime.hourly || [],
+        (item) => `${item.hourKey}（HTTP ${item.httpRequestCount} / WS ${item.wsRequestCount} / 命中 ${item.hitTermCount}）`,
+        (item) => item.requestCount,
+        '当前暂无小时调用统计。'
+      );
+      dashboardTopTerms.innerHTML = renderBarList(
+        runtime.topHitTerms || [],
+        (item) => `${item.canonicalText}（${item.hourKey}）`,
+        (item) => item.hitCount,
+        '当前暂无 TOP 命中词条。'
+      );
+    }
+
+    function renderTerms(data) {
+      termList.innerHTML = '';
+      for (const item of data.items || []) {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.innerHTML = `
+          <strong>${item.canonicalText}</strong>
+          <div><span class="pill pill-info" title="${item.categoryCode}">${categoryLabel(item.categoryCode)}</span><span class="pill ${statusPillClass(item.status)}">${item.status}</span><span class="pill pill-neutral">修订 ${item.revision}</span></div>
+          <div class="sub">别名：${(item.aliases || []).join('，') || '无'}</div>
+          <div class="actions">
+            <button class="ghost" data-action="detail" data-id="${item.termId}">详情</button>
+            <button class="ghost" data-action="submit-review" data-id="${item.termId}">送审</button>
+            <button class="ghost" data-action="approve" data-id="${item.termId}">直接批准</button>
+            <button class="ghost" data-action="disable" data-id="${item.termId}">停用</button>
+            <button class="ghost" data-action="rule" data-id="${item.termId}">规则</button>
+            <button class="ghost" data-action="pinyin" data-id="${item.termId}">拼音</button>
+          </div>
+        `;
+        termList.appendChild(div);
+      }
+    }
+
+    function renderPinyinProfiles(data) {
+      pinyinList.innerHTML = '';
+      for (const item of data.items || []) {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.innerHTML = `
+          <strong>${item.canonicalText}</strong>
+          <div><span class="pill pill-info" title="${item.runtimeMode}">${runtimeModeLabel(item.runtimeMode)}</span><span class="pill pill-info" title="${item.polyphoneMode}">${polyphoneModeLabel(item.polyphoneMode)}</span></div>
+          <div class="sub">标准读音=${item.fullPinyinNoTone || ''}</div>
+          <div class="sub">备用读音=${(item.alternativeReadings || []).join(' | ') || '无'}</div>
+          <div class="actions">
+            <button class="ghost" data-action="load-pinyin" data-id="${item.termId}">载入画像</button>
+          </div>
+        `;
+        pinyinList.appendChild(div);
+      }
+    }
+
+    function renderPinyinConflictListItems() {
+      pinyinConflictList.innerHTML = '';
+      if (pinyinConflictItems.length === 0) {
+        pinyinConflictList.innerHTML = '<div class="list-item"><strong>暂无冲突</strong><div class="sub">当前没有检测到多词条共享相同读音键。</div></div>';
+        return;
+      }
+      for (const item of pinyinConflictItems) {
+        const div = document.createElement('div');
+        const identity = conflictIdentity(item);
+        div.className = activePinyinConflictKey === identity ? 'list-item active' : 'list-item';
+        div.innerHTML = `
+          <strong>${conflictTypeLabel(item.conflictType)}: ${item.key}</strong>
+          <div><span class="pill ${statusPillClass(riskLevelLabel(item.severityLevel))}">${riskLevelLabel(item.severityLevel)}</span><span class="pill pill-neutral">score ${item.severityScore || 0}</span><span class="pill pill-info">${item.termCount} 项</span><span class="pill pill-info">${item.categoryCodes.join(', ') || 'all'}</span></div>
+          <div class="sub">短词 ${item.shortTermCount || 0} | 超短词 ${item.veryShortTermCount || 0} | 高重叠 ${item.highOverlapPairCount || 0}</div>
+          <div class="sub">${(item.sampleTerms || []).map(term => term.canonicalText).join('，') || '无样例'}${item.termCount > 5 ? ' ...' : ''}</div>
+          <div class="actions">
+            <button class="ghost" data-action="show-pinyin-conflict" data-type="${item.conflictType}" data-key="${item.key}">查看详情</button>
+          </div>
+        `;
+        pinyinConflictList.appendChild(div);
+      }
+    }
+
+    function renderPinyinConflictDetail(item) {
+      if (!item) {
+        pinyinConflictDetail.innerHTML = '等待加载冲突详情...';
+        return;
+      }
+      pinyinConflictDetail.innerHTML = `
+        <div><span class="pill pill-info">${conflictTypeLabel(item.conflictType)}</span><span class="pill ${statusPillClass(riskLevelLabel(item.severityLevel))}">${riskLevelLabel(item.severityLevel)}</span><span class="pill pill-neutral">score ${item.severityScore || 0}</span><span class="pill pill-info">${item.termCount} 项</span></div>
+        <div class="sub">key=${item.key}</div>
+        <div class="sub">短词 ${item.shortTermCount || 0} | 超短词 ${item.veryShortTermCount || 0} | 包含关系 ${item.containmentPairCount || 0} | 高重叠 ${item.highOverlapPairCount || 0}</div>
+          <div class="sub">原因=${(item.severityReasons || []).map(conflictSeverityReasonLabel).join(' / ') || '无'}</div>
+        ${(item.terms || []).map(term => `
+          <div class="list-item">
+            <strong>${term.canonicalText}</strong>
+            <div><span class="pill pill-info" title="${term.categoryCode}">${categoryLabel(term.categoryCode)}</span><span class="pill pill-info" title="${term.runtimeMode}">${runtimeModeLabel(term.runtimeMode)}</span><span class="pill pill-info" title="${term.polyphoneMode}">${polyphoneModeLabel(term.polyphoneMode)}</span></div>
+            <div class="sub">标准读音=${term.fullPinyinNoTone || '无'} | 首字母=${term.initials || '无'}</div>
+            <div class="sub">备用读音=${(term.alternativeReadings || []).join(' | ') || '无'}</div>
+            <div class="sub">备注=${term.notes || '无'}</div>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    function renderPinyinConflicts(data) {
+      pinyinConflictItems = data.items || [];
+      activePinyinConflictKey = '';
+      const stats = data.stats || {};
+      const severity = stats.severity || {};
+      pinyinConflictMeta.textContent = `共 ${data.total || 0} 组冲突，标准读音 ${stats.fullPinyinNoTone || 0}，首字母 ${stats.initials || 0}，备用读音 ${stats.alternativeReading || 0}；高风险 ${severity.high || 0}，中风险 ${severity.medium || 0}，低风险 ${severity.low || 0}`;
+      renderPinyinConflictListItems();
+      renderPinyinConflictDetail(null);
+    }
+
+    function renderPinyinCandidates(data) {
+      pinyinCandidateItems = data.items || [];
+      const stats = data.stats || {};
+      const generatedDefault = data.generatedDefault || {};
+      pinyinCandidateMeta.textContent = `默认读音 ${generatedDefault.fullPinyinNoTone || '无'}；多音位置 ${stats.polyphonicSlotCount || 0} 个；新候选 ${stats.candidateCount || 0} 个；已存在 ${stats.skippedExistingCount || 0} 个`;
+      pinyinCandidateList.innerHTML = '';
+      if (pinyinCandidateItems.length === 0) {
+        pinyinCandidateList.innerHTML = '<div class="list-item"><strong>暂无新候选</strong><div class="sub">当前词条没有可新增的多音字候选，或候选已存在于当前画像中。</div></div>';
+        return;
+      }
+      for (const item of pinyinCandidateItems) {
+        const div = document.createElement('div');
+        const changes = (item.changes || []).map(change => `${change.char}: ${change.from} -> ${change.to}`).join('；') || '无';
+        const fullConflicts = item.conflictHints?.fullPinyinNoTone?.count || 0;
+        const initialsConflicts = item.conflictHints?.initials?.count || 0;
+        const alternativeConflicts = item.conflictHints?.alternativeReadings?.count || 0;
+        const reviewStatus = item.reviewStatus || 'not_submitted';
+        div.className = 'list-item';
+        div.innerHTML = `
+          <strong>${item.fullPinyinNoTone}</strong>
+          <div><span class="pill pill-info">${item.sourceRuleLabel || item.sourceRule}</span><span class="pill ${statusPillClass(riskLevelLabel(item.riskLevel))}">${riskLevelLabel(item.riskLevel)}</span><span class="pill pill-neutral">score ${item.riskScore}</span><span class="pill ${statusPillClass(reviewStatusLabel(reviewStatus))}">${reviewStatusLabel(reviewStatus)}</span></div>
+          <div class="sub">changes=${changes}</div>
+          <div class="sub">冲突提示：full ${fullConflicts} / initials ${initialsConflicts} / alt ${alternativeConflicts}</div>
+          <div class="sub">原因=${(item.riskReasons || []).join(', ') || '无'}</div>
+          <div class="actions">
+            <button class="ghost" data-action="submit-pinyin-candidate" data-reading="${item.fullPinyinNoTone}" ${reviewStatus === 'pending' || reviewStatus === 'approved' ? 'disabled' : ''}>${reviewStatus === 'rejected' ? '重新提交审批' : '提交候选审批'}</button>
+            <button class="ghost" data-action="append-pinyin-candidate" data-reading="${item.fullPinyinNoTone}">临时加入备用读音</button>
+          </div>
+        `;
+        pinyinCandidateList.appendChild(div);
+      }
+    }
+
+    function renderPinyinComparisons(data) {
+      pinyinComparisonItems = data.items || [];
+      const stats = data.stats || {};
+      pinyinComparisonMeta.textContent = `总数 ${data.total || 0}；已变更 ${stats.changedCount || 0}；人工对齐 ${stats.alignedOverrideCount || 0}；默认生成 ${stats.defaultGeneratedCount || 0}`;
+      pinyinComparisonList.innerHTML = '';
+      if (pinyinComparisonItems.length === 0) {
+        pinyinComparisonList.innerHTML = '<div class="list-item"><strong>暂无差异</strong><div class="sub">当前窗口内没有发生变化的拼音画像。</div></div>';
+        clearPinyinComparisonDetail();
+        return;
+      }
+      for (const item of pinyinComparisonItems) {
+        const div = document.createElement('div');
+        div.className = activePinyinComparisonTermId === item.termId ? 'list-item active' : 'list-item';
+        div.innerHTML = `
+          <strong>${item.canonicalText}</strong>
+          <div><span class="pill ${statusPillClass(comparisonStatusLabel(item.status))}">${comparisonStatusLabel(item.status)}</span><span class="pill pill-neutral">${item.differenceCount} 项差异</span><span class="pill pill-info">${item.changedCharCount || 0} 个字位</span></div>
+          <div class="sub">默认=${item.defaultFullPinyinNoTone || ""}</div>
+          <div class="sub">当前=${item.currentFullPinyinNoTone || ""}</div>
+          <div class="sub">${(item.differenceFields || []).map(comparisonFieldLabel).join("，") || "无"}</div>
+          <div class="actions">
+            <button class="ghost" data-action="show-pinyin-comparison" data-id="${item.termId}">查看详情</button>
+          </div>
+        `;
+        pinyinComparisonList.appendChild(div);
+      }
+      clearPinyinComparisonDetail();
+    }
+    function renderPinyinComparisonDetail(item) {
+      if (!item) {
+        pinyinComparisonDetail.textContent = '请选择一个对比项查看详情。';
+        return;
+      }
+      const differenceText = (item.differences || []).length > 0
+        ? item.differences.map((diff) => `${comparisonFieldLabel(diff.field)}: ${diff.defaultValue || ""} -> ${diff.currentValue || ""}`).join("\n")
+        : '当前画像与默认生成读音一致，没有差异。';
+      const changedChars = (item.charComparisons || []).filter((entry) => entry.changed);
+      pinyinComparisonDetail.innerHTML = `
+        <strong>${item.canonicalText}</strong>
+        <div><span class="pill ${statusPillClass(comparisonStatusLabel(item.status))}">${comparisonStatusLabel(item.status)}</span><span class="pill pill-info" title="${item.categoryCode}">${categoryLabel(item.categoryCode)}</span><span class="pill pill-neutral">${item.changedCharCount || 0} 个字位变更</span></div>
+        <div class="sub">默认标准读音=${item.defaultProfile?.fullPinyinNoTone || ""}</div>
+        <div class="sub">当前标准读音=${item.currentProfile?.fullPinyinNoTone || ""}</div>
+        <div class="sub">人工标准读音=${item.currentProfile?.customFullPinyinNoTone || "无"}</div>
+        <div class="sub">备用读音=${(item.currentProfile?.alternativeReadings || []).join(" | ") || "无"}</div>
+        <div class="sub">多音字策略=${polyphoneModeLabel(item.currentProfile?.polyphoneMode || "default")}</div>
+        <div class="sub">备注=${item.currentProfile?.notes || "无"}</div>
+        <div class="sub">变更字位=${changedChars.map((entry) => `${entry.char || '#' + (entry.index + 1)}:${entry.defaultSyllable || '无'}->${entry.currentSyllable || '无'}`).join(' / ') || '无'}</div>
+        <pre style="min-height:auto; margin-top:12px;">${differenceText}</pre>
+        <div style="margin-top:12px;">${renderCharComparisonRows(item.charComparisons || [])}</div>
+      `;
+    }
+
+    function renderReleases(data) {
+      releaseList.innerHTML = '';
+      for (const item of data.items || []) {
+        const isCurrent = data.current && data.current.releaseId === item.releaseId;
+        const isCanary = data.canary && data.canary.releaseId === item.releaseId;
+        const approval = item.approval || {};
+        const approvalStatus = approval.status || 'not_submitted';
+        const gate = item.gate || {};
+        const topBlocker = (gate.blockers || [])[0];
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.innerHTML = `
+          <strong>${item.version}</strong>
+          <div><span class="pill pill-info">${item.status}</span><span class="pill ${statusPillClass(reviewStatusLabel(approvalStatus))}">${reviewStatusLabel(approvalStatus)}</span><span class="pill ${statusPillClass(gate.blocked ? '已阻塞' : '可发布')}">${gate.blocked ? '已阻塞' : '可发布'}</span>${isCurrent ? '<span class="pill pill-ok">当前发布</span>' : ''}${isCanary ? '<span class="pill pill-info">当前灰度</span>' : ''}</div>
+          <div class="sub">${item.summary}</div>
+          <div class="sub">词条数量=${item.termCount}</div>
+          <div class="sub">审批进度=${approval.approvedCount || 0}/${approval.requiredApprovals || 1} | 高风险=${approval.isHighRisk ? '是' : '否'}</div>
+          <div class="sub">审核人=${(approval.approvedReviewers || []).join(', ') || '无'} | 提交人=${approval.submittedBy || '无'}</div>
+          <div class="sub">门禁阻塞=${gate.blockerCount || 0}${topBlocker ? ' | 最高优先级=' + topBlocker.code + ':' + topBlocker.count : ''}</div>
+          <div class="sub">校验样本=${gate.validation?.caseCount || 0} | 业务样本=${gate.validation?.businessCaseCount || 0} | 失败=${gate.validation?.failedCount || 0}</div>
+          <div class="actions">
+            <button class="ghost" data-action="submit-release-review" data-release="${item.releaseId}" ${item.status !== 'built' && item.status !== 'canary' ? 'disabled' : ''}>提交发布审批</button>
+            <button class="ghost" data-action="publish" data-release="${item.releaseId}" ${approvalStatus !== 'approved' || gate.blocked ? 'disabled' : ''}>发布</button>
+            <button class="ghost" data-action="rollback" data-release="${item.releaseId}">回滚</button>
+            <button class="ghost" data-action="canary" data-release="${item.releaseId}" ${approvalStatus !== 'approved' || gate.blocked ? 'disabled' : ''}>挂灰度</button>
+          </div>
+        `;
+        releaseList.appendChild(div);
+      }
+    }
+
+    function renderGray(data) {
+      grayList.innerHTML = '';
+      for (const item of data.items || []) {
+        const current = data.current && data.current.policyId === item.policyId;
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.innerHTML = `
+          <strong>${item.policyId}</strong>
+          <div><span class="pill pill-info" title="${item.scopeType}">${scopeTypeLabel(item.scopeType)}</span><span class="pill pill-neutral">${item.percentage}%</span>${current ? '<span class="pill pill-ok">当前启用</span>' : ''}</div>
+          <div class="sub">关联版本=${item.releaseId}</div>
+          <div class="actions">
+            <button class="ghost" data-action="disable-gray" data-policy="${item.policyId}">停用</button>
+          </div>
+        `;
+        grayList.appendChild(div);
+      }
+    }
+
+    function renderValidationCases(data) {
+      validationCaseList.innerHTML = '';
+      for (const item of data.items || []) {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.innerHTML = `
+          <strong>${item.caseId}</strong>
+          <div><span class="pill ${statusPillClass(item.enabled ? '已启用' : '已停用')}">${item.enabled ? '已启用' : '已停用'}</span><span class="pill pill-info" title="${item.sourceType || 'manual'}">${sourceTypeLabel(item.sourceType || 'manual')}</span></div>
+          <div class="sub">${item.description || '无描述'}</div>
+          <div class="sub">样本文本=${item.text || ''}</div>
+          <div class="sub">期望命中=${(item.expectedCanonicals || []).join(' | ') || '无'}</div>
+          <div class="actions">
+            <button class="ghost" data-action="disable-validation-case" data-case-id="${item.caseId}" ${item.enabled ? '' : 'disabled'}>停用</button>
+          </div>
+        `;
+        validationCaseList.appendChild(div);
+      }
+    }
+
+    function renderValidationFeedSources(data) {
+      validationFeedSourceList.innerHTML = '';
+      for (const item of data.items || []) {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.innerHTML = `
+          <strong>${sourceTypeLabel(item.sourceType)}</strong>
+          <div><span class="pill pill-warn">待导入 ${item.pendingFileCount || 0}</span><span class="pill pill-ok">已归档 ${item.archivedFileCount || 0}</span><span class="pill pill-danger">失败 ${item.errorFileCount || 0}</span></div>
+          <div class="sub">inbox目录=${item.inboxDir}</div>
+          <div class="sub">archive目录=${item.archiveDir}</div>
+          <div class="sub">error目录=${item.errorDir}</div>
+          <div class="sub">待导入文件=${(item.pendingFiles || []).join(' | ') || '无'}</div>
+          <div class="sub">错误文件=${(item.errorFiles || []).join(' | ') || '无'}</div>
+        `;
+        validationFeedSourceList.appendChild(div);
+      }
+    }
+
+    function renderReviews(data) {
+      reviewList.innerHTML = '';
+      for (const item of data.items || []) {
+        const snapshot = item.targetSnapshot || {};
+        const candidateLine = item.targetType === 'pinyin_candidate'
+          ? `<div class="sub">词条=${snapshot.canonicalText || snapshot.termId || '未知'} | 读音=${snapshot.fullPinyinNoTone || '未知'}</div>`
+          : '';
+        const releaseLine = item.targetType === 'release'
+          ? `<div class="sub">版本号=${snapshot.version || '未知'} | 版本状态=${snapshot.status || '未知'}</div>`
+          : '';
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.innerHTML = `
+          <strong>${item.taskId}</strong>
+          <div><span class="pill ${statusPillClass(reviewStatusLabel(item.status))}">${reviewStatusLabel(item.status)}</span><span class="pill pill-info" title="${item.taskType}">${reviewTaskTypeLabel(item.taskType)}</span></div>
+          <div class="sub">目标=${targetTypeLabel(item.targetType)}:${item.targetId}</div>
+          ${candidateLine}
+          ${releaseLine}
+          <div class="actions">
+            <button class="ghost" data-action="approve-review" data-review="${item.taskId}">批准任务</button>
+            <button class="ghost" data-action="reject-review" data-review="${item.taskId}">驳回任务</button>
+          </div>
+        `;
+        reviewList.appendChild(div);
+      }
+    }
+
+    function renderAudits(data) {
+      auditList.innerHTML = '';
+      for (const item of data.items || []) {
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        div.innerHTML = `
+          <strong>${item.operation}</strong>
+          <div><span class="pill" title="${item.targetType}">${targetTypeLabel(item.targetType)}</span><span class="pill">${item.operator}</span></div>
+          <div class="sub">目标=${item.targetId}</div>
+          <div class="sub">${item.createdAt}</div>
+        `;
+        auditList.appendChild(div);
+      }
+    }
+
+    async function refreshTerms() { const data = await request('./api/admin/terms?limit=20'); renderTerms(data); return data; }
+    async function refreshDashboard() { const data = await request('./api/admin/dashboard'); renderDashboard(data); return data; }
+    async function refreshPinyinProfiles() { const data = await request('./api/admin/pinyin-profiles?limit=20'); renderPinyinProfiles(data); return data; }
+    async function refreshPinyinConflicts() { const data = await request('./api/admin/pinyin-conflicts?limit=20'); renderPinyinConflicts(data); return data; }
+    async function generatePinyinCandidates() {
+      const termId = document.getElementById('selectedTermId').value.trim();
+      if (!termId) {
+        show('请先选择一个 termId 再生成多音字候选');
+        return null;
+      }
+      const data = await request('./api/admin/terms/' + encodeURIComponent(termId) + '/generate-pinyin-candidates', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: JSON.stringify({ limit: 12 }) });
+      renderPinyinCandidates(data);
+      return data;
+    }
+    async function refreshPinyinComparisons() { const data = await request('./api/admin/pinyin-comparisons?limit=20'); renderPinyinComparisons(data); return data; }
+    async function loadPinyinComparison(termId) { const data = await request('./api/admin/terms/' + encodeURIComponent(termId) + '/pinyin-comparison'); activePinyinComparisonTermId = termId; renderPinyinComparisonDetail(data.item || null); return data; }
+    async function refreshReleases() { const data = await request('./api/admin/releases'); renderReleases(data); return data; }
+    async function refreshValidationCases() { const data = await request('./api/admin/validation-cases?limit=200'); renderValidationCases(data); return data; }
+    async function refreshValidationFeedSources() { const data = await request('./api/admin/validation-cases/feed-sources'); renderValidationFeedSources(data); return data; }
+    async function refreshGray() { const data = await request('./api/admin/gray-policies'); renderGray(data); return data; }
+    async function refreshReviews() { const data = await request('./api/admin/reviews?limit=20'); renderReviews(data); return data; }
+    async function refreshAudits() { const data = await request('./api/admin/audits?limit=20'); renderAudits(data); return data; }
+
+    document.getElementById('btnWhoAmI').addEventListener('click', () => request('./api/admin/me'));
+    document.getElementById('btnRefreshDashboard').addEventListener('click', refreshDashboard);
+    document.getElementById('btnHealth').addEventListener('click', () => request('./health'));
+    document.getElementById('btnRuntime').addEventListener('click', () => request('./api/runtime/current'));
+    document.getElementById('btnSimulate').addEventListener('click', () => request('./api/simulate', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: JSON.stringify({ text: document.getElementById('simulateText').value, trafficKey: document.getElementById('trafficKey').value.trim(), enablePinyinChannel:true, enablePinyinAutoReplace:true }) }));
+    document.getElementById('btnCreateTerm').addEventListener('click', async () => { await request('./api/admin/terms', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: JSON.stringify({ categoryCode: document.getElementById('termCategory').value, canonicalText: document.getElementById('termCanonical').value.trim(), aliases: document.getElementById('termAlias').value.split(',').map(s => s.trim()).filter(Boolean), priority: Number(document.getElementById('termPriority').value || 80), baseConfidence: 0.91, replaceMode:'replace', pinyinRuntimeMode:'candidate', rules: parseRules() }) }); await Promise.all([refreshTerms(), refreshAudits(), refreshPinyinProfiles(), refreshPinyinConflicts(), refreshPinyinComparisons()]); });
+    document.getElementById('btnSaveRules').addEventListener('click', async () => { const termId = document.getElementById('selectedTermId').value.trim(); if (!termId) { show('请先选择一个 termId 再保存规则'); return; } await request('./api/admin/terms/' + encodeURIComponent(termId) + '/rules', { method:'PUT', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: JSON.stringify(parseRules()) }); await Promise.all([refreshTerms(), refreshAudits()]); });
+    document.getElementById('btnSavePinyin').addEventListener('click', async () => { const termId = document.getElementById('selectedTermId').value.trim(); if (!termId) { show('请先选择一个 termId 再保存拼音画像'); return; } await request('./api/admin/terms/' + encodeURIComponent(termId) + '/pinyin', { method:'PUT', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: JSON.stringify({ runtimeMode: document.getElementById('pinyinRuntimeMode').value, polyphoneMode: document.getElementById('polyphoneMode').value, customFullPinyinNoTone: document.getElementById('customPinyin').value.trim(), alternativeReadings: parseAlternativeReadings(), notes: document.getElementById('pinyinNotes').value.trim() }) }); await Promise.all([refreshPinyinProfiles(), refreshPinyinConflicts(), refreshPinyinComparisons(), refreshAudits(), refreshTerms()]); });
+    document.getElementById('btnListTerms').addEventListener('click', refreshTerms);
+    document.getElementById('btnListPinyinProfiles').addEventListener('click', refreshPinyinProfiles);
+    document.getElementById('btnListPinyinConflicts').addEventListener('click', refreshPinyinConflicts);
+    document.getElementById('btnGeneratePinyinCandidates').addEventListener('click', generatePinyinCandidates);
+    document.getElementById('btnListPinyinComparisons').addEventListener('click', refreshPinyinComparisons);
+    document.getElementById('btnBuildRelease').addEventListener('click', async () => { await request('./api/admin/releases/build', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: JSON.stringify({ summary: document.getElementById('buildSummary').value.trim() || 'browser build' }) }); await Promise.all([refreshReleases(), refreshAudits(), refreshGray()]); });
+    document.getElementById('btnListReleases').addEventListener('click', refreshReleases);
+    document.getElementById('btnCreateValidationCase').addEventListener('click', async () => {
+      await request('./api/admin/validation-cases', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json; charset=utf-8' },
+        body: JSON.stringify({
+          caseId: document.getElementById('validationCaseId').value.trim(),
+          description: document.getElementById('validationCaseDescription').value.trim(),
+          text: document.getElementById('validationCaseText').value.trim(),
+          expectedCanonicals: document.getElementById('validationCaseCanonicals').value.split(/\r?\n/).map(s => s.trim()).filter(Boolean),
+          notes: document.getElementById('validationCaseNotes').value.trim(),
+          sourceType: 'manual'
+        })
+      });
+      await Promise.all([refreshValidationCases(), refreshAudits(), refreshReleases()]);
+    });
+    document.getElementById('btnImportValidationCases').addEventListener('click', async () => {
+      await request('./api/admin/validation-cases/import', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json; charset=utf-8' },
+        body: JSON.stringify({
+          sourceType: document.getElementById('validationImportSourceType').value.trim() || 'offline_feed',
+          mode: document.getElementById('validationImportMode').value || 'upsert',
+          items: JSON.parse(document.getElementById('validationImportJson').value || '[]'),
+        })
+      });
+      await Promise.all([refreshValidationCases(), refreshAudits(), refreshReleases()]);
+    });
+    document.getElementById('btnImportValidationFeeds').addEventListener('click', async () => {
+      await request('./api/admin/validation-cases/import-feeds', {
+        method:'POST',
+        headers:{ 'Content-Type':'application/json; charset=utf-8' },
+        body: '{}'
+      });
+      await Promise.all([refreshValidationCases(), refreshValidationFeedSources(), refreshAudits(), refreshReleases()]);
+    });
+    document.getElementById('btnListValidationFeedSources').addEventListener('click', refreshValidationFeedSources);
+    document.getElementById('btnListValidationCases').addEventListener('click', refreshValidationCases);
+    document.getElementById('btnListGray').addEventListener('click', refreshGray);
+    document.getElementById('btnListReviews').addEventListener('click', refreshReviews);
+    document.getElementById('btnListAudits').addEventListener('click', refreshAudits);
+
+    termList.addEventListener('click', async (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+      const action = button.dataset.action;
+      const id = button.dataset.id;
+      if (action === 'detail') {
+        await request('./api/admin/terms/' + encodeURIComponent(id));
+      } else if (action === 'submit-review') {
+        await request('./api/admin/terms/' + encodeURIComponent(id) + '/submit-review', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: JSON.stringify({ comment: 'browser submit' }) });
+        await Promise.all([refreshTerms(), refreshReviews(), refreshAudits()]);
+      } else if (action === 'approve') {
+        await request('./api/admin/terms/' + encodeURIComponent(id) + '/approve', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: '{}' });
+        await Promise.all([refreshTerms(), refreshAudits()]);
+      } else if (action === 'disable') {
+        await request('./api/admin/terms/' + encodeURIComponent(id) + '/disable', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: '{}' });
+        await Promise.all([refreshTerms(), refreshAudits()]);
+      } else if (action === 'rule') {
+        activateSheet('terms');
+        const data = await request('./api/admin/terms/' + encodeURIComponent(id) + '/rules');
+        document.getElementById('selectedTermId').value = id;
+        document.getElementById('termRules').value = JSON.stringify(data, null, 2);
+      } else if (action === 'pinyin') {
+        activateSheet('pinyin');
+        const data = await request('./api/admin/terms/' + encodeURIComponent(id) + '/pinyin');
+        document.getElementById('selectedTermId').value = id;
+        document.getElementById('pinyinRuntimeMode').value = data.runtimeMode || 'candidate';
+        document.getElementById('polyphoneMode').value = data.polyphoneMode || 'default';
+        document.getElementById('customPinyin').value = data.customFullPinyinNoTone || '';
+        document.getElementById('alternativeReadings').value = (data.alternativeReadings || []).join('\n');
+        document.getElementById('pinyinNotes').value = data.notes || '';
+        clearPinyinCandidates();
+        await loadPinyinComparison(id);
+      }
+    });
+
+    pinyinList.addEventListener('click', async (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+      if (button.dataset.action === 'load-pinyin') {
+        activateSheet('pinyin');
+        const id = button.dataset.id;
+        const data = await request('./api/admin/terms/' + encodeURIComponent(id) + '/pinyin');
+        document.getElementById('selectedTermId').value = id;
+        document.getElementById('pinyinRuntimeMode').value = data.runtimeMode || 'candidate';
+        document.getElementById('polyphoneMode').value = data.polyphoneMode || 'default';
+        document.getElementById('customPinyin').value = data.customFullPinyinNoTone || '';
+        document.getElementById('alternativeReadings').value = (data.alternativeReadings || []).join('\n');
+        document.getElementById('pinyinNotes').value = data.notes || '';
+        clearPinyinCandidates();
+        await loadPinyinComparison(id);
+      }
+    });
+
+    pinyinConflictList.addEventListener('click', async (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button || button.dataset.action !== 'show-pinyin-conflict') return;
+      const conflictType = button.dataset.type;
+      const key = button.dataset.key;
+      const data = await request('./api/admin/pinyin-conflicts/detail?conflictType=' + encodeURIComponent(conflictType) + '&key=' + encodeURIComponent(key));
+      activePinyinConflictKey = [conflictType, key].join('|');
+      renderPinyinConflictListItems();
+      renderPinyinConflictDetail(data.item || null);
+    });
+
+    pinyinCandidateList.addEventListener('click', async (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+      if (button.dataset.action === 'append-pinyin-candidate') {
+        addAlternativeReadingCandidate(button.dataset.reading || '');
+        return;
+      }
+      if (button.dataset.action === 'submit-pinyin-candidate') {
+        const termId = document.getElementById('selectedTermId').value.trim();
+        if (!termId) {
+          show('请先选择 termId 再提交候选审批');
+          return;
+        }
+        await request('./api/admin/terms/' + encodeURIComponent(termId) + '/pinyin-candidates', {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json; charset=utf-8' },
+          body: JSON.stringify({ fullPinyinNoTone: button.dataset.reading || '', comment: 'browser pinyin candidate submit' })
+        });
+        await Promise.all([generatePinyinCandidates(), refreshReviews(), refreshAudits()]);
+      }
+    });
+
+    pinyinComparisonList.addEventListener('click', async (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button || button.dataset.action !== 'show-pinyin-comparison') return;
+      document.getElementById('selectedTermId').value = button.dataset.id || '';
+      await loadPinyinComparison(button.dataset.id || '');
+    });
+
+    releaseList.addEventListener('click', async (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+      const action = button.dataset.action;
+      const id = button.dataset.release;
+      if (action === 'submit-release-review') {
+        await request('./api/admin/releases/' + encodeURIComponent(id) + '/submit-review', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: JSON.stringify({ comment: 'browser release review submit' }) });
+      } else if (action === 'publish') {
+        await request('./api/admin/releases/' + encodeURIComponent(id) + '/publish', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: '{}' });
+      } else if (action === 'rollback') {
+        await request('./api/admin/releases/' + encodeURIComponent(id) + '/rollback', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: '{}' });
+      } else if (action === 'canary') {
+        await request('./api/admin/gray-policies', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: JSON.stringify({ releaseId: id, scopeType: 'traffic_key_hash', percentage: Number(document.getElementById('grayPercentage').value || 10) }) });
+      }
+      await Promise.all([refreshReleases(), refreshGray(), refreshAudits()]);
+    });
+
+    grayList.addEventListener('click', async (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+      if (button.dataset.action === 'disable-gray') {
+        await request('./api/admin/gray-policies/' + encodeURIComponent(button.dataset.policy) + '/disable', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: '{}' });
+        await Promise.all([refreshGray(), refreshAudits()]);
+      }
+    });
+
+    validationCaseList.addEventListener('click', async (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button || button.dataset.action !== 'disable-validation-case') return;
+      await request('./api/admin/validation-cases/' + encodeURIComponent(button.dataset.caseId || '') + '/disable', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: '{}' });
+      await Promise.all([refreshValidationCases(), refreshAudits(), refreshReleases()]);
+    });
+
+    reviewList.addEventListener('click', async (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+      const action = button.dataset.action;
+      const id = button.dataset.review;
+      if (action === 'approve-review') {
+        await request('./api/admin/reviews/' + encodeURIComponent(id) + '/approve', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: '{}' });
+      } else if (action === 'reject-review') {
+        await request('./api/admin/reviews/' + encodeURIComponent(id) + '/reject', { method:'POST', headers:{ 'Content-Type':'application/json; charset=utf-8' }, body: JSON.stringify({ comment: 'browser reject' }) });
+      }
+      await Promise.all([refreshReviews(), refreshTerms(), refreshAudits()]);
+    });
+
+    for (const button of sheetTabs) {
+      button.addEventListener('click', () => activateSheet(button.dataset.sheetTarget));
+    }
+
+    clearPinyinCandidates();
+    activateSheet(activeSheet);
+    Promise.all([refreshDashboard(), refreshTerms(), refreshPinyinProfiles(), refreshPinyinConflicts(), refreshPinyinComparisons(), refreshReleases(), refreshValidationCases(), refreshValidationFeedSources(), refreshGray(), refreshReviews(), refreshAudits()]).catch((error) => show(String(error)));
+  </script>
+</body>
+</html>

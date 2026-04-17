@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acdp-admin
+  namespace: acdp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acdp-admin
+  template:
+    metadata:
+      labels:
+        app: acdp-admin
+    spec:
+      containers:
+        - name: acdp-admin
+          image: acdp-admin:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            # admin 服务监听端口，同时承载 /console 入口。
+            - name: ACDP_ADMIN_PORT
+              value: "8788"
+            # 控制面对 runtime 侧接口鉴权时使用的共享 Token。
+            - name: ACDP_RUNTIME_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-runtime-auth
+                  key: runtime-token
+            # 制品仓内部访问地址。
+            - name: ACDP_ARTIFACT_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: endpoint
+            # 控制面对外生成下载地址时使用的公开基地址。
+            - name: ACDP_ARTIFACT_PUBLIC_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: public-base-url
+            # 发布产物桶名。
+            - name: ACDP_ARTIFACT_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: bucket
+            # 对象存储区域，MinIO 本地场景可为空。
+            - name: ACDP_ARTIFACT_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: region
+                  optional: true
+            # 控制面在需要确保桶存在时可使用的 root 用户。
+            - name: ACDP_ARTIFACT_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: root-user
+                  optional: true
+            # root 用户密码。
+            - name: ACDP_ARTIFACT_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: root-password
+                  optional: true
+            # 控制面实际访问对象存储时使用的 access key。
+            - name: ACDP_ARTIFACT_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: access-key
+                  optional: true
+            # 控制面实际访问对象存储时使用的 secret key。
+            - name: ACDP_ARTIFACT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: secret-key
+                  optional: true
+          ports:
+            - containerPort: 8788
+              name: admin-http
+          command:
+            - sh
+            - -lc
+            - npm run setup:prototype && npm run start:admin
+          readinessProbe:
+            httpGet:
+              path: /admin
+              port: 8788
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /admin
+              port: 8788
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          volumeMounts:
+            # admin 挂载共享 workspace 以读取 SQLite、发布版本与验证报告。
+            - name: workspace
+              mountPath: /app/prototype/workspace
+      volumes:
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: acdp-workspace-pvc

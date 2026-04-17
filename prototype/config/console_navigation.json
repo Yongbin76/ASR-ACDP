@@ -1,0 +1,237 @@
+{
+  "groups": [
+    {
+      "key": "overview",
+      "label": "工作台",
+      "shortLabel": "台",
+      "iconGlyph": "⌂",
+      "order": 10,
+      "items": [
+        {
+          "key": "overview",
+          "label": "总览",
+          "path": "/console",
+          "navKey": "/",
+          "helpSlug": "page-workbench-home"
+        }
+      ]
+    },
+    {
+      "key": "dictionary",
+      "label": "词典建设",
+      "shortLabel": "典",
+      "iconGlyph": "▤",
+      "order": 20,
+      "items": [
+        {
+          "key": "terms",
+          "label": "词典记录",
+          "path": "/console/dictionary/terms",
+          "navKey": "/dictionary/terms",
+          "helpSlug": "page-master-terms"
+        },
+        {
+          "key": "import_jobs",
+          "label": "批量导入",
+          "path": "/console/dictionary/import-jobs",
+          "navKey": "/dictionary/import-jobs",
+          "helpSlug": "page-master-import"
+        },
+        {
+          "key": "reviews",
+          "label": "词典审核",
+          "path": "/console/dictionary/reviews?targetType=term",
+          "navKey": "/dictionary/reviews?targetType=term",
+          "helpSlug": "page-review-terms"
+        },
+        {
+          "key": "config",
+          "label": "基础配置",
+          "path": "/console/dictionary/config",
+          "navKey": "/dictionary/config",
+          "helpSlug": "page-master-business-properties"
+        }
+      ]
+    },
+    {
+      "key": "validation",
+      "label": "验证与回流",
+      "shortLabel": "验",
+      "iconGlyph": "✓",
+      "order": 30,
+      "items": [
+        {
+          "key": "cases",
+          "label": "验证样本",
+          "path": "/console/validation/cases",
+          "navKey": "/validation/cases",
+          "helpSlug": "page-master-validation-cases"
+        }
+      ]
+    },
+    {
+      "key": "releases",
+      "label": "版本发布",
+      "shortLabel": "版",
+      "iconGlyph": "◫",
+      "order": 40,
+      "items": [
+        {
+          "key": "list",
+          "label": "版本列表",
+          "path": "/console/releases",
+          "navKey": "/releases",
+          "helpSlug": "page-release-list"
+        },
+        {
+          "key": "review",
+          "label": "发布审核",
+          "path": "/console/releases?view=review",
+          "navKey": "/releases?view=review",
+          "helpSlug": "page-release-review"
+        },
+        {
+          "key": "canary",
+          "label": "灰度发布",
+          "path": "/console/releases?view=canary",
+          "navKey": "/releases?view=canary",
+          "helpSlug": "page-release-canary"
+        },
+        {
+          "key": "risk",
+          "label": "发布后风险",
+          "path": "/console/releases?view=risk",
+          "navKey": "/releases?view=risk",
+          "helpSlug": "page-release-risk"
+        },
+        {
+          "key": "rollback",
+          "label": "回滚记录",
+          "path": "/console/releases?view=rollback",
+          "navKey": "/releases?view=rollback",
+          "helpSlug": "page-release-rollback"
+        }
+      ]
+    },
+    {
+      "key": "runtime",
+      "label": "运行治理",
+      "shortLabel": "运",
+      "iconGlyph": "◎",
+      "order": 50,
+      "items": [
+        {
+          "key": "overview",
+          "label": "总览",
+          "path": "/console/runtime",
+          "navKey": "/runtime",
+          "helpSlug": "page-runtime-home"
+        },
+        {
+          "key": "registry",
+          "label": "节点备案",
+          "path": "/console/runtime-node-registry",
+          "navKey": "/runtime-node-registry",
+          "helpSlug": "page-runtime-node-registry"
+        },
+        {
+          "key": "nodes",
+          "label": "运行节点",
+          "path": "/console/runtime-nodes",
+          "navKey": "/runtime-nodes",
+          "helpSlug": "page-runtime-nodes"
+        },
+        {
+          "key": "verify",
+          "label": "运行验证",
+          "path": "/console/runtime-verify",
+          "navKey": "/runtime-verify",
+          "helpSlug": "page-runtime-verify"
+        }
+      ]
+    },
+    {
+      "key": "system",
+      "label": "系统管理",
+      "shortLabel": "系",
+      "iconGlyph": "⚙",
+      "order": 60,
+      "items": [
+        {
+          "key": "overview",
+          "label": "总览",
+          "path": "/console/system",
+          "navKey": "/system",
+          "helpSlug": "flow-system-access-governance"
+        },
+        {
+          "key": "users",
+          "label": "用户管理",
+          "path": "/console/users",
+          "navKey": "/users",
+          "helpSlug": "page-system-users"
+        },
+        {
+          "key": "roles",
+          "label": "角色管理",
+          "path": "/console/roles",
+          "navKey": "/roles",
+          "helpSlug": "page-system-roles"
+        },
+        {
+          "key": "permissions",
+          "label": "权限管理",
+          "path": "/console/permissions",
+          "navKey": "/permissions",
+          "helpSlug": "page-system-permissions"
+        },
+        {
+          "key": "governance",
+          "label": "治理策略",
+          "path": "/console/governance-policies",
+          "navKey": "/governance-policies",
+          "helpSlug": "page-system-governance"
+        }
+      ]
+    },
+    {
+      "key": "help",
+      "label": "帮助",
+      "shortLabel": "助",
+      "iconGlyph": "?",
+      "order": 70,
+      "items": [
+        {
+          "key": "pages",
+          "label": "页面手册",
+          "path": "/console/help?pageGroup=pages",
+          "navKey": "/help?pageGroup=pages"
+        },
+        {
+          "key": "flows",
+          "label": "流程手册",
+          "path": "/console/help?pageGroup=flows",
+          "navKey": "/help?pageGroup=flows"
+        },
+        {
+          "key": "ops",
+          "label": "部署手册",
+          "path": "/console/help?pageGroup=ops",
+          "navKey": "/help?pageGroup=ops"
+        },
+        {
+          "key": "apis",
+          "label": "接口手册",
+          "path": "/console/help?pageGroup=apis",
+          "navKey": "/help?pageGroup=apis"
+        },
+        {
+          "key": "troubleshooting",
+          "label": "故障排查",
+          "path": "/console/help?pageGroup=troubleshooting",
+          "navKey": "/help?pageGroup=troubleshooting"
+        }
+      ]
+    }
+  ]
+}

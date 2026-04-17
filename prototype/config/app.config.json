@@ -1,0 +1,50 @@
+﻿{
+  "project": {
+    "name": "ACDP",
+    "encoding": "utf8"
+  },
+  "server": {
+    "host": "0.0.0.0",
+    "port": 8787,
+    "runtimePort": 8787,
+    "adminPort": 8788,
+    "urlBaseForParsing": "http://localhost"
+  },
+  "auth": {
+    "runtimeBearerToken": "",
+    "runtimeBearerTokenEnv": "ACDP_RUNTIME_TOKEN",
+    "websocketMaxConnections": 200,
+    "websocketIdleTimeoutMs": 60000,
+    "websocketMaxMessageBytes": 65536,
+    "websocketCallerIdHeader": "x-acdp-caller-id",
+    "websocketCallerSecretHeader": "x-acdp-caller-secret",
+    "websocketCallerIdQueryKey": "callerId",
+    "websocketCallerSecretQueryKey": "callerSecret",
+    "websocketCallerIpHeader": "x-forwarded-for",
+    "websocketRejectUnknownCallers": false,
+    "websocketDefaultMaxConnectionsPerCaller": 0,
+    "websocketDefaultMaxRequestsPerMinute": 0,
+    "websocketBlacklistIps": [],
+    "websocketCallers": []
+  },
+  "paths": {
+    "prototypeDir": "prototype",
+    "publicDir": "prototype/public",
+    "consoleClientDir": "console/client",
+    "workspaceDir": "prototype/workspace",
+    "hostVerificationDir": "prototype/workspace/host_verification",
+    "catalogDir": "prototype/workspace/catalog",
+    "releasesDir": "prototype/workspace/releases",
+    "latestReleaseDir": "prototype/workspace/releases/latest",
+    "databaseFile": "prototype/workspace/platform.db",
+    "validationFeedInboxDir": "prototype/workspace/validation_feeds/inbox",
+    "validationFeedArchiveDir": "prototype/workspace/validation_feeds/archive",
+    "validationFeedErrorDir": "prototype/workspace/validation_feeds/error",
+    "validationFeedReceiptDir": "prototype/workspace/validation_feeds/receipts",
+    "demoTermsConfig": "prototype/config/demo_terms.json",
+    "seedCatalogFile": "prototype/workspace/catalog/seed_terms.json",
+    "rawRoadsFile": "data_sources/raw/shanghai_roads/shanghai_all_roads.txt",
+    "rawGovernmentFile": "data_sources/raw/shanghai_government/shanghai_government_complete.csv",
+    "cleanedDir": "data_sources/cleaned"
+  }
+}

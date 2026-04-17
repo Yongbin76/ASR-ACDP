@@ -1,0 +1,3 @@
+caseId,description,text,expectedCanonicals,sourceType,notes
+qa-feedback-001,工伤认定误识别样本,我想了解工商认定的办理材料。,工伤认定,qa_feedback,示例
+online-feedback-001,婚姻介绍所误识别样本,附近有婚姻检查所吗？,婚姻介绍所,online_feedback,示例

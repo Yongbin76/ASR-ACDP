@@ -1,0 +1,348 @@
+{
+  "items": [
+    {
+      "slug": "integration",
+      "title": "宿主联调说明",
+      "summary": "用于宿主环境启动、执行新后台 smoke、定位入口与记录联调结果。",
+      "updatedAt": "2026-03-31",
+      "kicker": "部署 / 联调",
+      "sourceDocPath": "docs/25-console宿主环境联调与smoke执行说明.md"
+    },
+    {
+      "slug": "trial",
+      "title": "内部试用说明",
+      "summary": "用于内部试用新后台，理解当前用户权限体系，并明确试用边界。",
+      "updatedAt": "2026-04-02",
+      "kicker": "试用 / 反馈",
+      "sourceDocPath": "docs/26-console内部试用说明.md"
+    },
+    {
+      "slug": "page-workbench-home",
+      "title": "工作台",
+      "summary": "说明工作台的作用、边界和待办引导用法。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-workbench-home.md"
+    },
+    {
+      "slug": "page-master-terms",
+      "title": "词条",
+      "summary": "说明词条页的主对象、主要动作和审核前后链路。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-master-terms.md"
+    },
+    {
+      "slug": "page-master-import",
+      "title": "批量导入",
+      "summary": "说明主数据批量导入的模板、预览和确认导入流程。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-master-import.md"
+    },
+    {
+      "slug": "page-master-business-properties",
+      "title": "业务属性",
+      "summary": "说明业务属性配置如何影响词条页和导入页。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-master-business-properties.md"
+    },
+    {
+      "slug": "page-master-validation-cases",
+      "title": "样本与回流",
+      "summary": "说明 validation case 和回流样本在主数据域中的位置。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-master-validation-cases.md"
+    },
+    {
+      "slug": "page-review-terms",
+      "title": "词条审核",
+      "summary": "说明词条审核的目的、通过后的下一步和驳回后的回流路径。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-review-terms.md"
+    },
+    {
+      "slug": "page-review-pinyin",
+      "title": "拼音审核",
+      "summary": "说明拼音审核的对象、通过后的写回逻辑和驳回后的修正路径。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-review-pinyin.md"
+    },
+    {
+      "slug": "page-release-list",
+      "title": "版本列表",
+      "summary": "说明 release 生命周期列表页和构建入口的使用方式。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-release-list.md"
+    },
+    {
+      "slug": "page-release-review",
+      "title": "发布审核",
+      "summary": "说明发布审核是 release 生命周期中的一个环节，而不是独立审核中心。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-release-review.md"
+    },
+    {
+      "slug": "page-release-canary",
+      "title": "灰度发布",
+      "summary": "说明灰度发布的前置条件和灰度后的下一步。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-release-canary.md"
+    },
+    {
+      "slug": "page-release-risk",
+      "title": "发布后风险",
+      "summary": "说明已发布版本的运行中风险观察和后续处置。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-release-risk.md"
+    },
+    {
+      "slug": "page-release-rollback",
+      "title": "回滚记录",
+      "summary": "说明回滚是动作而不是 release 状态，并展示回滚历史。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-release-rollback.md"
+    },
+    {
+      "slug": "page-runtime-home",
+      "title": "运行治理",
+      "summary": "说明运行治理首页如何承接备案、运行节点、运行验证与当前默认下发模式。",
+      "updatedAt": "2026-04-15",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-runtime-home.md"
+    },
+    {
+      "slug": "page-runtime-node-registry",
+      "title": "节点备案",
+      "summary": "说明节点备案、轮换密钥，以及 `admin_http_signed` 模式下的部署改法和启动命令。",
+      "updatedAt": "2026-04-15",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-runtime-node-registry.md"
+    },
+    {
+      "slug": "page-runtime-nodes",
+      "title": "运行节点",
+      "summary": "说明备案节点治理视图、实时状态、目标状态和历史异常。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-runtime-nodes.md"
+    },
+    {
+      "slug": "page-runtime-verify",
+      "title": "运行验证",
+      "summary": "说明 `correct` 与 `correct_cand` 的当前验证范围。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-runtime-verify.md"
+    },
+    {
+      "slug": "page-system-users",
+      "title": "用户",
+      "summary": "说明用户与角色的关系以及用户页的维护范围。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-system-users.md"
+    },
+    {
+      "slug": "page-system-roles",
+      "title": "角色",
+      "summary": "说明角色与权限集合的映射关系。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-system-roles.md"
+    },
+    {
+      "slug": "page-system-permissions",
+      "title": "权限",
+      "summary": "说明权限总览和角色-权限映射关系。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-system-permissions.md"
+    },
+    {
+      "slug": "page-system-governance",
+      "title": "治理策略",
+      "summary": "说明治理策略如何约束高风险动作。",
+      "updatedAt": "2026-04-08",
+      "kicker": "页面手册",
+      "sourceDocPath": "docs/help_manuals/pages/page-system-governance.md"
+    },
+    {
+      "slug": "flow-master-data-to-release",
+      "title": "主数据录入到发布输入池",
+      "summary": "说明主数据进入下一次 build 输入池的标准流程。",
+      "updatedAt": "2026-04-08",
+      "kicker": "流程手册",
+      "sourceDocPath": "docs/help_manuals/flows/flow-master-data-to-release.md"
+    },
+    {
+      "slug": "flow-content-review",
+      "title": "内容审核流程",
+      "summary": "说明词条审核和拼音审核的职责边界。",
+      "updatedAt": "2026-04-08",
+      "kicker": "流程手册",
+      "sourceDocPath": "docs/help_manuals/flows/flow-content-review.md"
+    },
+    {
+      "slug": "flow-single-character-and-batch-review",
+      "title": "单字标准词与批量审核说明",
+      "summary": "面向业务使用者说明单字标准词录入规则，以及导入批次批量审核的真实处理范围。",
+      "updatedAt": "2026-04-14",
+      "kicker": "流程手册",
+      "sourceDocPath": "docs/help_manuals/flows/flow-single-character-and-batch-review.md"
+    },
+    {
+      "slug": "flow-release-lifecycle",
+      "title": "版本发布生命周期",
+      "summary": "说明 build、审核、灰度、正式发布的标准顺序。",
+      "updatedAt": "2026-04-08",
+      "kicker": "流程手册",
+      "sourceDocPath": "docs/help_manuals/flows/flow-release-lifecycle.md"
+    },
+    {
+      "slug": "flow-release-rollback",
+      "title": "版本回滚流程",
+      "summary": "说明已发布版本回滚的标准路径。",
+      "updatedAt": "2026-04-08",
+      "kicker": "流程手册",
+      "sourceDocPath": "docs/help_manuals/flows/flow-release-rollback.md"
+    },
+    {
+      "slug": "flow-runtime-node-onboarding",
+      "title": "节点备案到 runtime 接入",
+      "summary": "说明节点备案、按 `admin_http_signed` 口径启动 runtime、注册成功和收敛验证的流程。",
+      "updatedAt": "2026-04-15",
+      "kicker": "流程手册",
+      "sourceDocPath": "docs/help_manuals/flows/flow-runtime-node-onboarding.md"
+    },
+    {
+      "slug": "flow-runtime-verification",
+      "title": "运行验证流程",
+      "summary": "说明运行验证页的标准使用步骤。",
+      "updatedAt": "2026-04-08",
+      "kicker": "流程手册",
+      "sourceDocPath": "docs/help_manuals/flows/flow-runtime-verification.md"
+    },
+    {
+      "slug": "flow-system-access-governance",
+      "title": "权限与治理策略边界",
+      "summary": "说明 RBAC 与治理策略分别回答什么问题。",
+      "updatedAt": "2026-04-08",
+      "kicker": "流程手册",
+      "sourceDocPath": "docs/help_manuals/flows/flow-system-access-governance.md"
+    },
+    {
+      "slug": "flow-workbench-usage",
+      "title": "工作台使用说明",
+      "summary": "说明工作台的推荐阅读顺序和处理优先级。",
+      "updatedAt": "2026-04-08",
+      "kicker": "流程手册",
+      "sourceDocPath": "docs/help_manuals/flows/flow-workbench-usage.md"
+    },
+    {
+      "slug": "ops-admin-deploy",
+      "title": "admin 启动与部署",
+      "summary": "说明 admin 控制面的基本启动与部署方式，以及 `admin_http_signed` 默认口径。",
+      "updatedAt": "2026-04-15",
+      "kicker": "部署手册",
+      "sourceDocPath": "docs/help_manuals/ops/ops-admin-deploy.md"
+    },
+    {
+      "slug": "ops-runtime-deploy",
+      "title": "runtime 启动与部署",
+      "summary": "说明单实例 runtime 的基本启动与部署方式，以及跨机时要改哪些地址。",
+      "updatedAt": "2026-04-15",
+      "kicker": "部署手册",
+      "sourceDocPath": "docs/help_manuals/ops/ops-runtime-deploy.md"
+    },
+    {
+      "slug": "ops-multi-runtime-deploy",
+      "title": "多 runtime 实例部署",
+      "summary": "说明多 runtime 实例的启动命令、默认下发模式和统一环境变量口径。",
+      "updatedAt": "2026-04-15",
+      "kicker": "部署手册",
+      "sourceDocPath": "docs/help_manuals/ops/ops-multi-runtime-deploy.md"
+    },
+    {
+      "slug": "ops-runtime-secret-and-token",
+      "title": "registration-secret、指纹与 runtime token",
+      "summary": "说明节点密钥、密钥指纹、runtime token，以及 `admin_http_signed` 额外配置项。",
+      "updatedAt": "2026-04-15",
+      "kicker": "部署手册",
+      "sourceDocPath": "docs/help_manuals/ops/ops-runtime-secret-and-token.md"
+    },
+    {
+      "slug": "api-runtime-http",
+      "title": "runtime HTTP 对外接口",
+      "summary": "说明 runtime HTTP 接口的范围与用途。",
+      "updatedAt": "2026-04-08",
+      "kicker": "接口手册",
+      "sourceDocPath": "docs/help_manuals/apis/api-runtime-http.md"
+    },
+    {
+      "slug": "api-runtime-websocket",
+      "title": "runtime WebSocket 对外接口",
+      "summary": "说明 runtime WebSocket 接口的范围与用途。",
+      "updatedAt": "2026-04-08",
+      "kicker": "接口手册",
+      "sourceDocPath": "docs/help_manuals/apis/api-runtime-websocket.md"
+    },
+    {
+      "slug": "api-admin-console-management",
+      "title": "admin / console 管理接口",
+      "summary": "说明 admin / console 管理接口的边界与适用对象。",
+      "updatedAt": "2026-04-08",
+      "kicker": "接口手册",
+      "sourceDocPath": "docs/help_manuals/apis/api-admin-console-management.md"
+    },
+    {
+      "slug": "troubleshoot-runtime-not-registered",
+      "title": "节点启动成功但未注册",
+      "summary": "说明 runtime 已启动但未注册的排查顺序。",
+      "updatedAt": "2026-04-08",
+      "kicker": "故障排查",
+      "sourceDocPath": "docs/help_manuals/troubleshooting/troubleshoot-runtime-not-registered.md"
+    },
+    {
+      "slug": "troubleshoot-artifact-download",
+      "title": "制品下载失败",
+      "summary": "说明对象存储、预签名 URL 和鉴权相关问题的排查方式。",
+      "updatedAt": "2026-04-08",
+      "kicker": "故障排查",
+      "sourceDocPath": "docs/help_manuals/troubleshooting/troubleshoot-artifact-download.md"
+    },
+    {
+      "slug": "troubleshoot-release-blocked",
+      "title": "版本校验未通过",
+      "summary": "说明版本校验阻断时的排查顺序。",
+      "updatedAt": "2026-04-08",
+      "kicker": "故障排查",
+      "sourceDocPath": "docs/help_manuals/troubleshooting/troubleshoot-release-blocked.md"
+    },
+    {
+      "slug": "troubleshoot-post-publish-risk",
+      "title": "发布后风险",
+      "summary": "说明已发布版本出现风险时的处理路径。",
+      "updatedAt": "2026-04-08",
+      "kicker": "故障排查",
+      "sourceDocPath": "docs/help_manuals/troubleshooting/troubleshoot-post-publish-risk.md"
+    },
+    {
+      "slug": "troubleshoot-business-properties",
+      "title": "业务属性配置修改后不生效",
+      "summary": "说明业务属性配置修改后不生效的排查顺序。",
+      "updatedAt": "2026-04-08",
+      "kicker": "故障排查",
+      "sourceDocPath": "docs/help_manuals/troubleshooting/troubleshoot-business-properties.md"
+    }
+  ]
+}

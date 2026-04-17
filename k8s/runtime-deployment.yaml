@@ -1,0 +1,144 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acdp-runtime
+  namespace: acdp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acdp-runtime
+  template:
+    metadata:
+      labels:
+        app: acdp-runtime
+    spec:
+      initContainers:
+        # runtime 独立部署时仍依赖共享 workspace 中的 latest 快照作为兜底基线。
+        - name: wait-latest-snapshot
+          image: acdp-runtime:latest
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -lc
+            - |
+              until [ -f /app/prototype/workspace/releases/latest/snapshot.json ]; do
+                echo "waiting for latest snapshot ..."
+                sleep 2
+              done
+          volumeMounts:
+            - name: workspace
+              mountPath: /app/prototype/workspace
+      containers:
+        - name: acdp-runtime
+          image: acdp-runtime:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            # runtime 对外监听端口。
+            - name: ACDP_RUNTIME_PORT
+              value: "8787"
+            # runtime 调用 admin 控制面注册、心跳、拉取控制态时使用的 Bearer Token。
+            - name: ACDP_RUNTIME_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-runtime-auth
+                  key: runtime-token
+            # 控制面基地址，供 runtime 主动读取 desiredVersion 与证据。
+            - name: ACDP_RUNTIME_CONTROL_ADMIN_BASE_URL
+              value: "http://acdp-admin:8788"
+            # 节点唯一标识，当前直接复用 Pod 名称。
+            - name: ACDP_RUNTIME_CONTROL_NODE_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            # 控制面展示名称，当前直接复用 Pod 名称。
+            - name: ACDP_RUNTIME_CONTROL_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            # 节点部署环境标签，用于控制台筛选与状态展示。
+            - name: ACDP_RUNTIME_CONTROL_NODE_ENV
+              value: "k8s"
+            # 节点对控制面上报的访问地址。
+            - name: ACDP_RUNTIME_CONTROL_NODE_ADDRESS
+              value: "http://acdp-runtime:8787"
+            # 制品仓内部访问地址。
+            - name: ACDP_ARTIFACT_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: endpoint
+            # 控制面生成下载链接时使用的公开访问基地址。
+            - name: ACDP_ARTIFACT_PUBLIC_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: public-base-url
+            # 发布产物所在桶名。
+            - name: ACDP_ARTIFACT_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: bucket
+            # 对象存储区域，MinIO 本地场景可为空。
+            - name: ACDP_ARTIFACT_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: region
+                  optional: true
+            # 管理桶或启动本地 MinIO 时可用的 root 用户。
+            - name: ACDP_ARTIFACT_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: root-user
+                  optional: true
+            # root 用户密码。
+            - name: ACDP_ARTIFACT_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: root-password
+                  optional: true
+            # runtime 实际访问对象存储时使用的 access key。
+            - name: ACDP_ARTIFACT_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: access-key
+                  optional: true
+            # runtime 实际访问对象存储时使用的 secret key。
+            - name: ACDP_ARTIFACT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: acdp-artifact-store
+                  key: secret-key
+                  optional: true
+          ports:
+            - containerPort: 8787
+              name: runtime-http
+          command:
+            - sh
+            - -lc
+            - npm run start:runtime
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8787
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8787
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          volumeMounts:
+            # runtime 本地安装版本、共享 latest、统计 SQLite 与日志均写入同一 workspace。
+            - name: workspace
+              mountPath: /app/prototype/workspace
+      volumes:
+        - name: workspace
+          persistentVolumeClaim:
+            claimName: acdp-workspace-pvc

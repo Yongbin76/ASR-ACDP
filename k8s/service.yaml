@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: acdp-prototype
+  namespace: acdp
+spec:
+  selector:
+    app: acdp-prototype
+  ports:
+    - name: http
+      port: 8787
+      targetPort: 8787
+  type: ClusterIP

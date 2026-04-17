@@ -1,0 +1,20 @@
+{
+  "screenshotDir": "prototype/tests/fixtures/visual_regression/console",
+  "items": [
+    {
+      "fileName": "01_admin_home.png",
+      "sizeBytes": 12345,
+      "checksumSha256": "sha256-of-admin-home"
+    },
+    {
+      "fileName": "02_console_overview.png",
+      "sizeBytes": 23456,
+      "checksumSha256": "sha256-of-console-overview"
+    },
+    {
+      "fileName": "03_console_terms.png",
+      "sizeBytes": 34567,
+      "checksumSha256": "sha256-of-console-terms"
+    }
+  ]
+}

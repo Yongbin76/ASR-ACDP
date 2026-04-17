@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: acdp-runtime
+  namespace: acdp
+spec:
+  selector:
+    app: acdp-runtime
+  ports:
+    # 对内暴露 runtime HTTP / WebSocket 入口。
+    - name: runtime-http
+      port: 8787
+      targetPort: 8787
+  type: ClusterIP

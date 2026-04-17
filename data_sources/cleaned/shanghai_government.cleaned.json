@@ -1,0 +1,5258 @@
+[
+  {
+    "standardName": "上海市人民政府",
+    "shortName": "市政府",
+    "district": "",
+    "address": "上海市黄浦区人民大道200号",
+    "level": "市级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市人民政府办公厅",
+    "shortName": "市政府办公厅",
+    "district": "",
+    "address": "上海市黄浦区人民大道200号",
+    "level": "市级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市发展和改革委员会",
+    "shortName": "市发改委",
+    "district": "",
+    "address": "上海市黄浦区人民大道200号",
+    "level": "市级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市经济和信息化委员会",
+    "shortName": "市经信委",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号5号楼",
+    "level": "市级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市商务委员会",
+    "shortName": "市商务委",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号7号楼",
+    "level": "市级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市科学技术委员会",
+    "shortName": "市科委",
+    "district": "",
+    "address": "上海市黄浦区人民大道200号",
+    "level": "市级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市财政局",
+    "shortName": "市财政局",
+    "district": "",
+    "address": "上海市黄浦区肇嘉浜路800号",
+    "level": "市级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市人力资源和社会保障局",
+    "shortName": "市人社局",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号2号楼",
+    "level": "市级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市住房和城乡建设管理委员会",
+    "shortName": "市住建委",
+    "district": "",
+    "address": "上海市黄浦区大沽路100号",
+    "level": "市级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市交通委员会",
+    "shortName": "市交通委",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号1号楼",
+    "level": "市级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局",
+    "shortName": "市公安局",
+    "district": "",
+    "address": "上海市静安区武宁南路128号",
+    "level": "市级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市司法局",
+    "shortName": "市司法局",
+    "district": "",
+    "address": "上海市徐汇区建国西路648号",
+    "level": "市级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市市场监督管理局",
+    "shortName": "市市场监管局",
+    "district": "",
+    "address": "上海市徐汇区肇嘉浜路301号",
+    "level": "市级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市教育委员会",
+    "shortName": "市教委",
+    "district": "",
+    "address": "上海市黄浦区大沽路100号",
+    "level": "市级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市卫生健康委员会",
+    "shortName": "市卫健委",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号4号楼",
+    "level": "市级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市规划和自然资源局",
+    "shortName": "市规划资源局",
+    "district": "",
+    "address": "上海市黄浦区北京西路99号",
+    "level": "市级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市生态环境局",
+    "shortName": "市生态环境局",
+    "district": "",
+    "address": "上海市黄浦区大沽路100号",
+    "level": "市级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市农业农村委员会",
+    "shortName": "市农业农村委",
+    "district": "",
+    "address": "上海市黄浦区大沽路100号",
+    "level": "市级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市水务局",
+    "shortName": "市水务局",
+    "district": "",
+    "address": "上海市黄浦区江苏路389号",
+    "level": "市级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市文化和旅游局",
+    "shortName": "市文旅局",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号8号楼",
+    "level": "市级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市应急管理局",
+    "shortName": "市应急局",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号7号楼",
+    "level": "市级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市审计局",
+    "shortName": "市审计局",
+    "district": "",
+    "address": "上海市黄浦区陆家浜路1388号",
+    "level": "市级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市统计局",
+    "shortName": "市统计局",
+    "district": "",
+    "address": "上海市黄浦区威海路48号",
+    "level": "市级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市医疗保障局",
+    "shortName": "市医保局",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号4号楼",
+    "level": "市级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市地方金融监督管理局",
+    "shortName": "市地方金融监管局",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号10号楼",
+    "level": "市级",
+    "category": "金融管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市国有资产监督管理委员会",
+    "shortName": "市国资委",
+    "district": "",
+    "address": "上海市黄浦区大沽路100号",
+    "level": "市级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市体育局",
+    "shortName": "市体育局",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号8号楼",
+    "level": "市级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市绿化和市容管理局",
+    "shortName": "市绿化市容局",
+    "district": "",
+    "address": "上海市黄浦区人民大道200号",
+    "level": "市级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市房屋管理局",
+    "shortName": "市房屋管理局",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号7号楼",
+    "level": "市级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市民族和宗教事务局",
+    "shortName": "市民宗局",
+    "district": "",
+    "address": "上海市黄浦区世博村路300号3号楼",
+    "level": "市级",
+    "category": "民族宗教",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市人民政府外事办公室",
+    "shortName": "市外办",
+    "district": "",
+    "address": "上海市黄浦区人民大道200号",
+    "level": "市级",
+    "category": "外事侨务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市人民政府合作交流办公室",
+    "shortName": "市合作交流办",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号10号楼",
+    "level": "市级",
+    "category": "合作交流",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市机关事务管理局",
+    "shortName": "市机管局",
+    "district": "",
+    "address": "上海市黄浦区人民大道200号",
+    "level": "市级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市国防动员办公室",
+    "shortName": "市国动办",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号9号楼",
+    "level": "市级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市数据局",
+    "shortName": "市数据局",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号10号楼",
+    "level": "市级",
+    "category": "数据管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区人民政府",
+    "shortName": "浦东新区政府",
+    "district": "",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区人民政府",
+    "shortName": "黄浦区政府",
+    "district": "",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区人民政府",
+    "shortName": "静安区政府",
+    "district": "",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区人民政府",
+    "shortName": "徐汇区政府",
+    "district": "",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区人民政府",
+    "shortName": "长宁区政府",
+    "district": "",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区人民政府",
+    "shortName": "普陀区政府",
+    "district": "",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区人民政府",
+    "shortName": "虹口区政府",
+    "district": "",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区人民政府",
+    "shortName": "杨浦区政府",
+    "district": "",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区人民政府",
+    "shortName": "宝山区政府",
+    "district": "",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区人民政府",
+    "shortName": "闵行区政府",
+    "district": "",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区人民政府",
+    "shortName": "嘉定区政府",
+    "district": "",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区人民政府",
+    "shortName": "金山区政府",
+    "district": "",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区人民政府",
+    "shortName": "松江区政府",
+    "district": "",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区人民政府",
+    "shortName": "青浦区政府",
+    "district": "",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区人民政府",
+    "shortName": "奉贤区政府",
+    "district": "",
+    "address": "上海市奉贤区南桥镇解放东路928号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区人民政府",
+    "shortName": "崇明区政府",
+    "district": "",
+    "address": "上海市崇明区城桥镇人民路68号",
+    "level": "区级",
+    "category": "区级政府",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市人民政府研究室",
+    "shortName": "市政府研究室",
+    "district": "",
+    "address": "上海市黄浦区人民大道200号",
+    "level": "市级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市人民政府发展研究中心",
+    "shortName": "市政府发展研究中心",
+    "district": "",
+    "address": "上海市黄浦区人民大道200号",
+    "level": "市级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市档案局",
+    "shortName": "市档案局",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号",
+    "level": "市级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市人民政府新闻办公室",
+    "shortName": "市政府新闻办",
+    "district": "",
+    "address": "上海市黄浦区人民大道200号",
+    "level": "市级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市信访办公室",
+    "shortName": "市信访办",
+    "district": "",
+    "address": "上海市黄浦区人民大道200号",
+    "level": "市级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市粮食和物资储备局",
+    "shortName": "市粮食和物资储备局",
+    "district": "",
+    "address": "上海市黄浦区人民大道200号",
+    "level": "市级",
+    "category": "经济管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市中小企业发展服务中心",
+    "shortName": "市中小企业服务中心",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号",
+    "level": "市级",
+    "category": "企业服务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市投资促进服务中心",
+    "shortName": "市投资促进服务中心",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号",
+    "level": "市级",
+    "category": "企业服务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市知识产权局",
+    "shortName": "市知识产权局",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号",
+    "level": "市级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市药品监督管理局",
+    "shortName": "市药监局",
+    "district": "",
+    "address": "上海市徐汇区宜山路728号",
+    "level": "市级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市社会组织管理局",
+    "shortName": "市社会组织管理局",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号",
+    "level": "市级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市社会信用促进中心",
+    "shortName": "市社会信用促进中心",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号",
+    "level": "市级",
+    "category": "信用管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市大数据中心",
+    "shortName": "市大数据中心",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号",
+    "level": "市级",
+    "category": "数据管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市城市运行管理中心",
+    "shortName": "市城运中心",
+    "district": "",
+    "address": "上海市浦东新区世博村路300号",
+    "level": "市级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市消防救援总队",
+    "shortName": "市消防救援总队",
+    "district": "",
+    "address": "上海市长宁区中山西路229号",
+    "level": "市级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市税务局",
+    "shortName": "市税务局",
+    "district": "",
+    "address": "上海市徐汇区肇嘉浜路800号",
+    "level": "市级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海海关",
+    "shortName": "上海海关",
+    "district": "",
+    "address": "上海市浦东新区陆家嘴西路153号",
+    "level": "市级",
+    "category": "海关监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市邮政管理局",
+    "shortName": "市邮政管理局",
+    "district": "",
+    "address": "上海市虹口区北苏州路276号",
+    "level": "市级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市通信管理局",
+    "shortName": "市通信管理局",
+    "district": "",
+    "address": "上海市黄浦区中山南路508号",
+    "level": "市级",
+    "category": "通信管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市气象局",
+    "shortName": "市气象局",
+    "district": "",
+    "address": "上海市徐汇区蒲西路166号",
+    "level": "市级",
+    "category": "气象服务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市地震局",
+    "shortName": "市地震局",
+    "district": "",
+    "address": "上海市静安区兰溪路87号",
+    "level": "市级",
+    "category": "地震应急",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区政府办公室",
+    "shortName": "",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区发展和改革委员会",
+    "shortName": "浦东新区发改委",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区经济委员会",
+    "shortName": "浦东新区经委",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区商务委员会",
+    "shortName": "浦东新区商务委",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区农业农村委员会",
+    "shortName": "浦东新区农业农村委",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区建设和管理委员会",
+    "shortName": "浦东新区建管委",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区科学技术委员会",
+    "shortName": "浦东新区科委",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区国有资产监督管理委员会",
+    "shortName": "浦东新区国资委",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区司法局",
+    "shortName": "",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区人力资源和社会保障局",
+    "shortName": "浦东新区人社局",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区民政局",
+    "shortName": "",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区财政局",
+    "shortName": "",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区审计局",
+    "shortName": "",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区统计局",
+    "shortName": "",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区教育局",
+    "shortName": "",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区卫生健康委员会",
+    "shortName": "浦东新区卫健委",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区文化和旅游局",
+    "shortName": "浦东新区文旅局",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区体育局",
+    "shortName": "",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区绿化和市容管理局",
+    "shortName": "浦东新区绿化市容局",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区生态环境局",
+    "shortName": "",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区规划和自然资源局",
+    "shortName": "浦东新区规划资源局",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区住房保障和房屋管理局",
+    "shortName": "浦东新区房管局",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区水务局",
+    "shortName": "",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区民防办公室",
+    "shortName": "浦东新区民防办",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区应急管理局",
+    "shortName": "浦东新区应急局",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区市场监督管理局",
+    "shortName": "浦东新区市场监管局",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区城市管理行政执法局",
+    "shortName": "浦东新区城管执法局",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区机关事务管理局",
+    "shortName": "浦东新区机管局",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区退役军人事务局",
+    "shortName": "",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区医疗保障局",
+    "shortName": "浦东新区医保局",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市浦东新区区交通委员会",
+    "shortName": "浦东新区交通委",
+    "district": "浦东新区",
+    "address": "上海市浦东新区世纪大道2001号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区政府办公室",
+    "shortName": "",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区发展和改革委员会",
+    "shortName": "黄浦区发改委",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区经济委员会",
+    "shortName": "黄浦区经委",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区商务委员会",
+    "shortName": "黄浦区商务委",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区农业农村委员会",
+    "shortName": "黄浦区农业农村委",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区建设和管理委员会",
+    "shortName": "黄浦区建管委",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区科学技术委员会",
+    "shortName": "黄浦区科委",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区国有资产监督管理委员会",
+    "shortName": "黄浦区国资委",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区司法局",
+    "shortName": "",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区人力资源和社会保障局",
+    "shortName": "黄浦区人社局",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区民政局",
+    "shortName": "",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区财政局",
+    "shortName": "",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区审计局",
+    "shortName": "",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区统计局",
+    "shortName": "",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区教育局",
+    "shortName": "",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区卫生健康委员会",
+    "shortName": "黄浦区卫健委",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区文化和旅游局",
+    "shortName": "黄浦区文旅局",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区体育局",
+    "shortName": "",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区绿化和市容管理局",
+    "shortName": "黄浦区绿化市容局",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区生态环境局",
+    "shortName": "",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区规划和自然资源局",
+    "shortName": "黄浦区规划资源局",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区住房保障和房屋管理局",
+    "shortName": "黄浦区房管局",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区水务局",
+    "shortName": "",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区民防办公室",
+    "shortName": "黄浦区民防办",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区应急管理局",
+    "shortName": "黄浦区应急局",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区市场监督管理局",
+    "shortName": "黄浦区市场监管局",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区城市管理行政执法局",
+    "shortName": "黄浦区城管执法局",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区机关事务管理局",
+    "shortName": "黄浦区机管局",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区退役军人事务局",
+    "shortName": "",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区医疗保障局",
+    "shortName": "黄浦区医保局",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市黄浦区区交通委员会",
+    "shortName": "黄浦区交通委",
+    "district": "黄浦区",
+    "address": "上海市黄浦区延安东路300号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区政府办公室",
+    "shortName": "",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区发展和改革委员会",
+    "shortName": "静安区发改委",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区经济委员会",
+    "shortName": "静安区经委",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区商务委员会",
+    "shortName": "静安区商务委",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区农业农村委员会",
+    "shortName": "静安区农业农村委",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区建设和管理委员会",
+    "shortName": "静安区建管委",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区科学技术委员会",
+    "shortName": "静安区科委",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区国有资产监督管理委员会",
+    "shortName": "静安区国资委",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区司法局",
+    "shortName": "",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区人力资源和社会保障局",
+    "shortName": "静安区人社局",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区民政局",
+    "shortName": "",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区财政局",
+    "shortName": "",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区审计局",
+    "shortName": "",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区统计局",
+    "shortName": "",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区教育局",
+    "shortName": "",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区卫生健康委员会",
+    "shortName": "静安区卫健委",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区文化和旅游局",
+    "shortName": "静安区文旅局",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区体育局",
+    "shortName": "",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区绿化和市容管理局",
+    "shortName": "静安区绿化市容局",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区生态环境局",
+    "shortName": "",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区规划和自然资源局",
+    "shortName": "静安区规划资源局",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区住房保障和房屋管理局",
+    "shortName": "静安区房管局",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区水务局",
+    "shortName": "",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区民防办公室",
+    "shortName": "静安区民防办",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区应急管理局",
+    "shortName": "静安区应急局",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区市场监督管理局",
+    "shortName": "静安区市场监管局",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区城市管理行政执法局",
+    "shortName": "静安区城管执法局",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区机关事务管理局",
+    "shortName": "静安区机管局",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区退役军人事务局",
+    "shortName": "",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区医疗保障局",
+    "shortName": "静安区医保局",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市静安区区交通委员会",
+    "shortName": "静安区交通委",
+    "district": "静安区",
+    "address": "上海市静安区常德路370号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区政府办公室",
+    "shortName": "",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区发展和改革委员会",
+    "shortName": "徐汇区发改委",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区经济委员会",
+    "shortName": "徐汇区经委",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区商务委员会",
+    "shortName": "徐汇区商务委",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区农业农村委员会",
+    "shortName": "徐汇区农业农村委",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区建设和管理委员会",
+    "shortName": "徐汇区建管委",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区科学技术委员会",
+    "shortName": "徐汇区科委",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区国有资产监督管理委员会",
+    "shortName": "徐汇区国资委",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区司法局",
+    "shortName": "",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区人力资源和社会保障局",
+    "shortName": "徐汇区人社局",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区民政局",
+    "shortName": "",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区财政局",
+    "shortName": "",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区审计局",
+    "shortName": "",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区统计局",
+    "shortName": "",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区教育局",
+    "shortName": "",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区卫生健康委员会",
+    "shortName": "徐汇区卫健委",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区文化和旅游局",
+    "shortName": "徐汇区文旅局",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区体育局",
+    "shortName": "",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区绿化和市容管理局",
+    "shortName": "徐汇区绿化市容局",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区生态环境局",
+    "shortName": "",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区规划和自然资源局",
+    "shortName": "徐汇区规划资源局",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区住房保障和房屋管理局",
+    "shortName": "徐汇区房管局",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区水务局",
+    "shortName": "",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区民防办公室",
+    "shortName": "徐汇区民防办",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区应急管理局",
+    "shortName": "徐汇区应急局",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区市场监督管理局",
+    "shortName": "徐汇区市场监管局",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区城市管理行政执法局",
+    "shortName": "徐汇区城管执法局",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区机关事务管理局",
+    "shortName": "徐汇区机管局",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区退役军人事务局",
+    "shortName": "",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区医疗保障局",
+    "shortName": "徐汇区医保局",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市徐汇区区交通委员会",
+    "shortName": "徐汇区交通委",
+    "district": "徐汇区",
+    "address": "上海市徐汇区漕溪北路336号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区政府办公室",
+    "shortName": "",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区发展和改革委员会",
+    "shortName": "长宁区发改委",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区经济委员会",
+    "shortName": "长宁区经委",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区商务委员会",
+    "shortName": "长宁区商务委",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区农业农村委员会",
+    "shortName": "长宁区农业农村委",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区建设和管理委员会",
+    "shortName": "长宁区建管委",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区科学技术委员会",
+    "shortName": "长宁区科委",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区国有资产监督管理委员会",
+    "shortName": "长宁区国资委",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区司法局",
+    "shortName": "",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区人力资源和社会保障局",
+    "shortName": "长宁区人社局",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区民政局",
+    "shortName": "",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区财政局",
+    "shortName": "",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区审计局",
+    "shortName": "",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区统计局",
+    "shortName": "",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区教育局",
+    "shortName": "",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区卫生健康委员会",
+    "shortName": "长宁区卫健委",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区文化和旅游局",
+    "shortName": "长宁区文旅局",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区体育局",
+    "shortName": "",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区绿化和市容管理局",
+    "shortName": "长宁区绿化市容局",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区生态环境局",
+    "shortName": "",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区规划和自然资源局",
+    "shortName": "长宁区规划资源局",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区住房保障和房屋管理局",
+    "shortName": "长宁区房管局",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区水务局",
+    "shortName": "",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区民防办公室",
+    "shortName": "长宁区民防办",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区应急管理局",
+    "shortName": "长宁区应急局",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区市场监督管理局",
+    "shortName": "长宁区市场监管局",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区城市管理行政执法局",
+    "shortName": "长宁区城管执法局",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区机关事务管理局",
+    "shortName": "长宁区机管局",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区退役军人事务局",
+    "shortName": "",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区医疗保障局",
+    "shortName": "长宁区医保局",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市长宁区区交通委员会",
+    "shortName": "长宁区交通委",
+    "district": "长宁区",
+    "address": "上海市长宁区长宁路599号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区政府办公室",
+    "shortName": "",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区发展和改革委员会",
+    "shortName": "普陀区发改委",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区经济委员会",
+    "shortName": "普陀区经委",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区商务委员会",
+    "shortName": "普陀区商务委",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区农业农村委员会",
+    "shortName": "普陀区农业农村委",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区建设和管理委员会",
+    "shortName": "普陀区建管委",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区科学技术委员会",
+    "shortName": "普陀区科委",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区国有资产监督管理委员会",
+    "shortName": "普陀区国资委",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区司法局",
+    "shortName": "",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区人力资源和社会保障局",
+    "shortName": "普陀区人社局",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区民政局",
+    "shortName": "",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区财政局",
+    "shortName": "",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区审计局",
+    "shortName": "",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区统计局",
+    "shortName": "",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区教育局",
+    "shortName": "",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区卫生健康委员会",
+    "shortName": "普陀区卫健委",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区文化和旅游局",
+    "shortName": "普陀区文旅局",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区体育局",
+    "shortName": "",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区绿化和市容管理局",
+    "shortName": "普陀区绿化市容局",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区生态环境局",
+    "shortName": "",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区规划和自然资源局",
+    "shortName": "普陀区规划资源局",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区住房保障和房屋管理局",
+    "shortName": "普陀区房管局",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区水务局",
+    "shortName": "",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区民防办公室",
+    "shortName": "普陀区民防办",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区应急管理局",
+    "shortName": "普陀区应急局",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区市场监督管理局",
+    "shortName": "普陀区市场监管局",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区城市管理行政执法局",
+    "shortName": "普陀区城管执法局",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区机关事务管理局",
+    "shortName": "普陀区机管局",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区退役军人事务局",
+    "shortName": "",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区医疗保障局",
+    "shortName": "普陀区医保局",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市普陀区区交通委员会",
+    "shortName": "普陀区交通委",
+    "district": "普陀区",
+    "address": "上海市普陀区大渡河路1668号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区政府办公室",
+    "shortName": "",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区发展和改革委员会",
+    "shortName": "虹口区发改委",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区经济委员会",
+    "shortName": "虹口区经委",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区商务委员会",
+    "shortName": "虹口区商务委",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区农业农村委员会",
+    "shortName": "虹口区农业农村委",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区建设和管理委员会",
+    "shortName": "虹口区建管委",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区科学技术委员会",
+    "shortName": "虹口区科委",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区国有资产监督管理委员会",
+    "shortName": "虹口区国资委",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区司法局",
+    "shortName": "",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区人力资源和社会保障局",
+    "shortName": "虹口区人社局",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区民政局",
+    "shortName": "",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区财政局",
+    "shortName": "",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区审计局",
+    "shortName": "",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区统计局",
+    "shortName": "",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区教育局",
+    "shortName": "",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区卫生健康委员会",
+    "shortName": "虹口区卫健委",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区文化和旅游局",
+    "shortName": "虹口区文旅局",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区体育局",
+    "shortName": "",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区绿化和市容管理局",
+    "shortName": "虹口区绿化市容局",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区生态环境局",
+    "shortName": "",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区规划和自然资源局",
+    "shortName": "虹口区规划资源局",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区住房保障和房屋管理局",
+    "shortName": "虹口区房管局",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区水务局",
+    "shortName": "",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区民防办公室",
+    "shortName": "虹口区民防办",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区应急管理局",
+    "shortName": "虹口区应急局",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区市场监督管理局",
+    "shortName": "虹口区市场监管局",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区城市管理行政执法局",
+    "shortName": "虹口区城管执法局",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区机关事务管理局",
+    "shortName": "虹口区机管局",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区退役军人事务局",
+    "shortName": "",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区医疗保障局",
+    "shortName": "虹口区医保局",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市虹口区区交通委员会",
+    "shortName": "虹口区交通委",
+    "district": "虹口区",
+    "address": "上海市虹口区飞虹路518号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区政府办公室",
+    "shortName": "",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区发展和改革委员会",
+    "shortName": "杨浦区发改委",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区经济委员会",
+    "shortName": "杨浦区经委",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区商务委员会",
+    "shortName": "杨浦区商务委",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区农业农村委员会",
+    "shortName": "杨浦区农业农村委",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区建设和管理委员会",
+    "shortName": "杨浦区建管委",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区科学技术委员会",
+    "shortName": "杨浦区科委",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区国有资产监督管理委员会",
+    "shortName": "杨浦区国资委",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区司法局",
+    "shortName": "",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区人力资源和社会保障局",
+    "shortName": "杨浦区人社局",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区民政局",
+    "shortName": "",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区财政局",
+    "shortName": "",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区审计局",
+    "shortName": "",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区统计局",
+    "shortName": "",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区教育局",
+    "shortName": "",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区卫生健康委员会",
+    "shortName": "杨浦区卫健委",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区文化和旅游局",
+    "shortName": "杨浦区文旅局",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区体育局",
+    "shortName": "",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区绿化和市容管理局",
+    "shortName": "杨浦区绿化市容局",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区生态环境局",
+    "shortName": "",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区规划和自然资源局",
+    "shortName": "杨浦区规划资源局",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区住房保障和房屋管理局",
+    "shortName": "杨浦区房管局",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区水务局",
+    "shortName": "",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区民防办公室",
+    "shortName": "杨浦区民防办",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区应急管理局",
+    "shortName": "杨浦区应急局",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区市场监督管理局",
+    "shortName": "杨浦区市场监管局",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区城市管理行政执法局",
+    "shortName": "杨浦区城管执法局",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区机关事务管理局",
+    "shortName": "杨浦区机管局",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区退役军人事务局",
+    "shortName": "",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区医疗保障局",
+    "shortName": "杨浦区医保局",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市杨浦区区交通委员会",
+    "shortName": "杨浦区交通委",
+    "district": "杨浦区",
+    "address": "上海市杨浦区榆林路707号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区政府办公室",
+    "shortName": "",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区发展和改革委员会",
+    "shortName": "宝山区发改委",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区经济委员会",
+    "shortName": "宝山区经委",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区商务委员会",
+    "shortName": "宝山区商务委",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区农业农村委员会",
+    "shortName": "宝山区农业农村委",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区建设和管理委员会",
+    "shortName": "宝山区建管委",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区科学技术委员会",
+    "shortName": "宝山区科委",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区国有资产监督管理委员会",
+    "shortName": "宝山区国资委",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区司法局",
+    "shortName": "",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区人力资源和社会保障局",
+    "shortName": "宝山区人社局",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区民政局",
+    "shortName": "",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区财政局",
+    "shortName": "",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区审计局",
+    "shortName": "",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区统计局",
+    "shortName": "",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区教育局",
+    "shortName": "",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区卫生健康委员会",
+    "shortName": "宝山区卫健委",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区文化和旅游局",
+    "shortName": "宝山区文旅局",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区体育局",
+    "shortName": "",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区绿化和市容管理局",
+    "shortName": "宝山区绿化市容局",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区生态环境局",
+    "shortName": "",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区规划和自然资源局",
+    "shortName": "宝山区规划资源局",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区住房保障和房屋管理局",
+    "shortName": "宝山区房管局",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区水务局",
+    "shortName": "",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区民防办公室",
+    "shortName": "宝山区民防办",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区应急管理局",
+    "shortName": "宝山区应急局",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区市场监督管理局",
+    "shortName": "宝山区市场监管局",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区城市管理行政执法局",
+    "shortName": "宝山区城管执法局",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区机关事务管理局",
+    "shortName": "宝山区机管局",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区退役军人事务局",
+    "shortName": "",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区医疗保障局",
+    "shortName": "宝山区医保局",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市宝山区区交通委员会",
+    "shortName": "宝山区交通委",
+    "district": "宝山区",
+    "address": "上海市宝山区密山路5号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区政府办公室",
+    "shortName": "",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区发展和改革委员会",
+    "shortName": "闵行区发改委",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区经济委员会",
+    "shortName": "闵行区经委",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区商务委员会",
+    "shortName": "闵行区商务委",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区农业农村委员会",
+    "shortName": "闵行区农业农村委",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区建设和管理委员会",
+    "shortName": "闵行区建管委",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区科学技术委员会",
+    "shortName": "闵行区科委",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区国有资产监督管理委员会",
+    "shortName": "闵行区国资委",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区司法局",
+    "shortName": "",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区人力资源和社会保障局",
+    "shortName": "闵行区人社局",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区民政局",
+    "shortName": "",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区财政局",
+    "shortName": "",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区审计局",
+    "shortName": "",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区统计局",
+    "shortName": "",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区教育局",
+    "shortName": "",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区卫生健康委员会",
+    "shortName": "闵行区卫健委",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区文化和旅游局",
+    "shortName": "闵行区文旅局",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区体育局",
+    "shortName": "",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区绿化和市容管理局",
+    "shortName": "闵行区绿化市容局",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区生态环境局",
+    "shortName": "",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区规划和自然资源局",
+    "shortName": "闵行区规划资源局",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区住房保障和房屋管理局",
+    "shortName": "闵行区房管局",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区水务局",
+    "shortName": "",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区民防办公室",
+    "shortName": "闵行区民防办",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区应急管理局",
+    "shortName": "闵行区应急局",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区市场监督管理局",
+    "shortName": "闵行区市场监管局",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区城市管理行政执法局",
+    "shortName": "闵行区城管执法局",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区机关事务管理局",
+    "shortName": "闵行区机管局",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区退役军人事务局",
+    "shortName": "",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区医疗保障局",
+    "shortName": "闵行区医保局",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市闵行区区交通委员会",
+    "shortName": "闵行区交通委",
+    "district": "闵行区",
+    "address": "上海市闵行区沪闵路6558号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区政府办公室",
+    "shortName": "",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区发展和改革委员会",
+    "shortName": "嘉定区发改委",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区经济委员会",
+    "shortName": "嘉定区经委",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区商务委员会",
+    "shortName": "嘉定区商务委",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区农业农村委员会",
+    "shortName": "嘉定区农业农村委",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区建设和管理委员会",
+    "shortName": "嘉定区建管委",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区科学技术委员会",
+    "shortName": "嘉定区科委",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区国有资产监督管理委员会",
+    "shortName": "嘉定区国资委",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区司法局",
+    "shortName": "",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区人力资源和社会保障局",
+    "shortName": "嘉定区人社局",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区民政局",
+    "shortName": "",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区财政局",
+    "shortName": "",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区审计局",
+    "shortName": "",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区统计局",
+    "shortName": "",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区教育局",
+    "shortName": "",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区卫生健康委员会",
+    "shortName": "嘉定区卫健委",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区文化和旅游局",
+    "shortName": "嘉定区文旅局",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区体育局",
+    "shortName": "",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区绿化和市容管理局",
+    "shortName": "嘉定区绿化市容局",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区生态环境局",
+    "shortName": "",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区规划和自然资源局",
+    "shortName": "嘉定区规划资源局",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区住房保障和房屋管理局",
+    "shortName": "嘉定区房管局",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区水务局",
+    "shortName": "",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区民防办公室",
+    "shortName": "嘉定区民防办",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区应急管理局",
+    "shortName": "嘉定区应急局",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区市场监督管理局",
+    "shortName": "嘉定区市场监管局",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区城市管理行政执法局",
+    "shortName": "嘉定区城管执法局",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区机关事务管理局",
+    "shortName": "嘉定区机管局",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区退役军人事务局",
+    "shortName": "",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区医疗保障局",
+    "shortName": "嘉定区医保局",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市嘉定区区交通委员会",
+    "shortName": "嘉定区交通委",
+    "district": "嘉定区",
+    "address": "上海市嘉定区博乐南路111号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区政府办公室",
+    "shortName": "",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区发展和改革委员会",
+    "shortName": "金山区发改委",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区经济委员会",
+    "shortName": "金山区经委",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区商务委员会",
+    "shortName": "金山区商务委",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区农业农村委员会",
+    "shortName": "金山区农业农村委",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区建设和管理委员会",
+    "shortName": "金山区建管委",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区科学技术委员会",
+    "shortName": "金山区科委",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区国有资产监督管理委员会",
+    "shortName": "金山区国资委",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区司法局",
+    "shortName": "",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区人力资源和社会保障局",
+    "shortName": "金山区人社局",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区民政局",
+    "shortName": "",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区财政局",
+    "shortName": "",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区审计局",
+    "shortName": "",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区统计局",
+    "shortName": "",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区教育局",
+    "shortName": "",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区卫生健康委员会",
+    "shortName": "金山区卫健委",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区文化和旅游局",
+    "shortName": "金山区文旅局",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区体育局",
+    "shortName": "",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区绿化和市容管理局",
+    "shortName": "金山区绿化市容局",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区生态环境局",
+    "shortName": "",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区规划和自然资源局",
+    "shortName": "金山区规划资源局",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区住房保障和房屋管理局",
+    "shortName": "金山区房管局",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区水务局",
+    "shortName": "",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区民防办公室",
+    "shortName": "金山区民防办",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区应急管理局",
+    "shortName": "金山区应急局",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区市场监督管理局",
+    "shortName": "金山区市场监管局",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区城市管理行政执法局",
+    "shortName": "金山区城管执法局",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区机关事务管理局",
+    "shortName": "金山区机管局",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区退役军人事务局",
+    "shortName": "",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区医疗保障局",
+    "shortName": "金山区医保局",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市金山区区交通委员会",
+    "shortName": "金山区交通委",
+    "district": "金山区",
+    "address": "上海市金山区金山大道2000号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区政府办公室",
+    "shortName": "",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区发展和改革委员会",
+    "shortName": "松江区发改委",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区经济委员会",
+    "shortName": "松江区经委",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区商务委员会",
+    "shortName": "松江区商务委",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区农业农村委员会",
+    "shortName": "松江区农业农村委",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区建设和管理委员会",
+    "shortName": "松江区建管委",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区科学技术委员会",
+    "shortName": "松江区科委",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区国有资产监督管理委员会",
+    "shortName": "松江区国资委",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区司法局",
+    "shortName": "",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区人力资源和社会保障局",
+    "shortName": "松江区人社局",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区民政局",
+    "shortName": "",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区财政局",
+    "shortName": "",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区审计局",
+    "shortName": "",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区统计局",
+    "shortName": "",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区教育局",
+    "shortName": "",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区卫生健康委员会",
+    "shortName": "松江区卫健委",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区文化和旅游局",
+    "shortName": "松江区文旅局",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区体育局",
+    "shortName": "",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区绿化和市容管理局",
+    "shortName": "松江区绿化市容局",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区生态环境局",
+    "shortName": "",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区规划和自然资源局",
+    "shortName": "松江区规划资源局",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区住房保障和房屋管理局",
+    "shortName": "松江区房管局",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区水务局",
+    "shortName": "",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区民防办公室",
+    "shortName": "松江区民防办",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区应急管理局",
+    "shortName": "松江区应急局",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区市场监督管理局",
+    "shortName": "松江区市场监管局",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区城市管理行政执法局",
+    "shortName": "松江区城管执法局",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区机关事务管理局",
+    "shortName": "松江区机管局",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区退役军人事务局",
+    "shortName": "",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区医疗保障局",
+    "shortName": "松江区医保局",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市松江区区交通委员会",
+    "shortName": "松江区交通委",
+    "district": "松江区",
+    "address": "上海市松江区人民北路3456号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区政府办公室",
+    "shortName": "",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区发展和改革委员会",
+    "shortName": "青浦区发改委",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区经济委员会",
+    "shortName": "青浦区经委",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区商务委员会",
+    "shortName": "青浦区商务委",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区农业农村委员会",
+    "shortName": "青浦区农业农村委",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区建设和管理委员会",
+    "shortName": "青浦区建管委",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区科学技术委员会",
+    "shortName": "青浦区科委",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区国有资产监督管理委员会",
+    "shortName": "青浦区国资委",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区司法局",
+    "shortName": "",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区人力资源和社会保障局",
+    "shortName": "青浦区人社局",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区民政局",
+    "shortName": "",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区财政局",
+    "shortName": "",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区审计局",
+    "shortName": "",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区统计局",
+    "shortName": "",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区教育局",
+    "shortName": "",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区卫生健康委员会",
+    "shortName": "青浦区卫健委",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区文化和旅游局",
+    "shortName": "青浦区文旅局",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区体育局",
+    "shortName": "",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区绿化和市容管理局",
+    "shortName": "青浦区绿化市容局",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区生态环境局",
+    "shortName": "",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区规划和自然资源局",
+    "shortName": "青浦区规划资源局",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区住房保障和房屋管理局",
+    "shortName": "青浦区房管局",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区水务局",
+    "shortName": "",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区民防办公室",
+    "shortName": "青浦区民防办",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区应急管理局",
+    "shortName": "青浦区应急局",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区市场监督管理局",
+    "shortName": "青浦区市场监管局",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区城市管理行政执法局",
+    "shortName": "青浦区城管执法局",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区机关事务管理局",
+    "shortName": "青浦区机管局",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区退役军人事务局",
+    "shortName": "",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区医疗保障局",
+    "shortName": "青浦区医保局",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市青浦区区交通委员会",
+    "shortName": "青浦区交通委",
+    "district": "青浦区",
+    "address": "上海市青浦区公园路100号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区政府办公室",
+    "shortName": "",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区发展和改革委员会",
+    "shortName": "奉贤区发改委",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区经济委员会",
+    "shortName": "奉贤区经委",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区商务委员会",
+    "shortName": "奉贤区商务委",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区农业农村委员会",
+    "shortName": "奉贤区农业农村委",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区建设和管理委员会",
+    "shortName": "奉贤区建管委",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区科学技术委员会",
+    "shortName": "奉贤区科委",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区国有资产监督管理委员会",
+    "shortName": "奉贤区国资委",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区司法局",
+    "shortName": "",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区人力资源和社会保障局",
+    "shortName": "奉贤区人社局",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区民政局",
+    "shortName": "",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区财政局",
+    "shortName": "",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区审计局",
+    "shortName": "",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区统计局",
+    "shortName": "",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区教育局",
+    "shortName": "",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区卫生健康委员会",
+    "shortName": "奉贤区卫健委",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区文化和旅游局",
+    "shortName": "奉贤区文旅局",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区体育局",
+    "shortName": "",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区绿化和市容管理局",
+    "shortName": "奉贤区绿化市容局",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区生态环境局",
+    "shortName": "",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区规划和自然资源局",
+    "shortName": "奉贤区规划资源局",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区住房保障和房屋管理局",
+    "shortName": "奉贤区房管局",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区水务局",
+    "shortName": "",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区民防办公室",
+    "shortName": "奉贤区民防办",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区应急管理局",
+    "shortName": "奉贤区应急局",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区市场监督管理局",
+    "shortName": "奉贤区市场监管局",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区城市管理行政执法局",
+    "shortName": "奉贤区城管执法局",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区机关事务管理局",
+    "shortName": "奉贤区机管局",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区退役军人事务局",
+    "shortName": "",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区医疗保障局",
+    "shortName": "奉贤区医保局",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市奉贤区区交通委员会",
+    "shortName": "奉贤区交通委",
+    "district": "奉贤区",
+    "address": "上海市奉贤区解放东路928号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区政府办公室",
+    "shortName": "",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "核心机关",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区发展和改革委员会",
+    "shortName": "崇明区发改委",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区经济委员会",
+    "shortName": "崇明区经委",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区商务委员会",
+    "shortName": "崇明区商务委",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "经济发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区农业农村委员会",
+    "shortName": "崇明区农业农村委",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "农业农村",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区建设和管理委员会",
+    "shortName": "崇明区建管委",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "城市建设",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区科学技术委员会",
+    "shortName": "崇明区科委",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "科技发展",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区国有资产监督管理委员会",
+    "shortName": "崇明区国资委",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "国资监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区司法局",
+    "shortName": "",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "司法行政",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区人力资源和社会保障局",
+    "shortName": "崇明区人社局",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区民政局",
+    "shortName": "",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "民政管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区财政局",
+    "shortName": "",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "财政税务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区审计局",
+    "shortName": "",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "审计监督",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区统计局",
+    "shortName": "",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "统计调查",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区教育局",
+    "shortName": "",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区卫生健康委员会",
+    "shortName": "崇明区卫健委",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "卫生健康",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区文化和旅游局",
+    "shortName": "崇明区文旅局",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "教育文化",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区体育局",
+    "shortName": "",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "体育健身",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区绿化和市容管理局",
+    "shortName": "崇明区绿化市容局",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "绿化市容",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区生态环境局",
+    "shortName": "",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "生态环境",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区规划和自然资源局",
+    "shortName": "崇明区规划资源局",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "规划资源",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区住房保障和房屋管理局",
+    "shortName": "崇明区房管局",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "住房保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区水务局",
+    "shortName": "",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "水务海洋",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区民防办公室",
+    "shortName": "崇明区民防办",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "国防动员",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区应急管理局",
+    "shortName": "崇明区应急局",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "应急管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区市场监督管理局",
+    "shortName": "崇明区市场监管局",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "市场监管",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区城市管理行政执法局",
+    "shortName": "崇明区城管执法局",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "城市管理",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区机关事务管理局",
+    "shortName": "崇明区机管局",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "机关事务",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区退役军人事务局",
+    "shortName": "",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "退役军人",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区医疗保障局",
+    "shortName": "崇明区医保局",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "社会保障",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市崇明区区交通委员会",
+    "shortName": "崇明区交通委",
+    "district": "崇明区",
+    "address": "上海市崇明区人民路68号",
+    "level": "区级",
+    "category": "交通运输",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局浦东新区分局",
+    "shortName": "浦东新区公安分局",
+    "district": "浦东新区",
+    "address": "上海市浦东新区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局黄浦区分局",
+    "shortName": "黄浦区公安分局",
+    "district": "黄浦区",
+    "address": "上海市黄浦区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局静安区分局",
+    "shortName": "静安区公安分局",
+    "district": "静安区",
+    "address": "上海市静安区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局徐汇区分局",
+    "shortName": "徐汇区公安分局",
+    "district": "徐汇区",
+    "address": "上海市徐汇区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局长宁区分局",
+    "shortName": "长宁区公安分局",
+    "district": "长宁区",
+    "address": "上海市长宁区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局普陀区分局",
+    "shortName": "普陀区公安分局",
+    "district": "普陀区",
+    "address": "上海市普陀区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局虹口区分局",
+    "shortName": "虹口区公安分局",
+    "district": "虹口区",
+    "address": "上海市虹口区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局杨浦区分局",
+    "shortName": "杨浦区公安分局",
+    "district": "杨浦区",
+    "address": "上海市杨浦区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局宝山区分局",
+    "shortName": "宝山区公安分局",
+    "district": "宝山区",
+    "address": "上海市宝山区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局闵行区分局",
+    "shortName": "闵行区公安分局",
+    "district": "闵行区",
+    "address": "上海市闵行区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局嘉定区分局",
+    "shortName": "嘉定区公安分局",
+    "district": "嘉定区",
+    "address": "上海市嘉定区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局金山区分局",
+    "shortName": "金山区公安分局",
+    "district": "金山区",
+    "address": "上海市金山区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局松江区分局",
+    "shortName": "松江区公安分局",
+    "district": "松江区",
+    "address": "上海市松江区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局青浦区分局",
+    "shortName": "青浦区公安分局",
+    "district": "青浦区",
+    "address": "上海市青浦区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局奉贤区分局",
+    "shortName": "奉贤区公安分局",
+    "district": "奉贤区",
+    "address": "上海市奉贤区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  },
+  {
+    "standardName": "上海市公安局崇明区分局",
+    "shortName": "崇明区公安分局",
+    "district": "崇明区",
+    "address": "上海市崇明区",
+    "level": "区级",
+    "category": "公共安全",
+    "sourceFile": "shanghai_government_complete.csv"
+  }
+]

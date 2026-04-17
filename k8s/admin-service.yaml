@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: acdp-admin
+  namespace: acdp
+spec:
+  selector:
+    app: acdp-admin
+  ports:
+    # 对内暴露 admin 与 /console 聚合入口。
+    - name: admin-http
+      port: 8788
+      targetPort: 8788
+  type: ClusterIP

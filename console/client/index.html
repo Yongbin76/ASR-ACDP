@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ACDP 后台</title>
+  <link rel="stylesheet" href="/console/app.css">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-copy">
+          <div class="brand-kicker">ACDP</div>
+          <div class="brand-title">后台</div>
+        </div>
+        <button type="button" class="sidebar-toggle" id="sidebarToggle" title="折叠或展开左侧导航">收起</button>
+      </div>
+      <nav class="nav-tree" id="mainNav"><!--__CONSOLE_NAV_TREE__--></nav>
+    </aside>
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-title">
+          <div class="eyebrow">ACDP</div>
+          <h1 id="pageTitle">ACDP 后台</h1>
+        </div>
+        <form id="accessForm" class="access-form">
+          <label>
+            <span>当前用户</span>
+            <select id="operatorInput" name="operator">
+              <option value="console_user">加载中（console_user）</option>
+            </select>
+          </label>
+          <label>
+            <span>当前角色</span>
+            <select id="roleInput" name="role">
+              <option value="dict_admin">加载中（dict_admin）</option>
+            </select>
+          </label>
+          <button type="submit">切换身份</button>
+        </form>
+        <div id="identityMeta" class="trial-badge"></div>
+      </header>
+      <main id="app" class="content">
+        <div class="loading-card">正在加载...</div>
+      </main>
+    </div>
+  </div>
+  <script src="/console/app.js"></script>
+</body>
+</html>

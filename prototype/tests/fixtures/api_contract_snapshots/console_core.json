@@ -1,0 +1,234 @@
+{
+  "helpList": {
+    "sampleItems": [
+      {
+        "slug": "flow-release-lifecycle",
+        "title": "版本发布生命周期",
+        "kicker": "流程手册",
+        "hasSourceDocPath": true
+      },
+      {
+        "slug": "page-master-terms",
+        "title": "词条",
+        "kicker": "页面手册",
+        "hasSourceDocPath": true
+      },
+      {
+        "slug": "page-release-list",
+        "title": "版本列表",
+        "kicker": "页面手册",
+        "hasSourceDocPath": true
+      },
+      {
+        "slug": "page-runtime-home",
+        "title": "运行治理",
+        "kicker": "页面手册",
+        "hasSourceDocPath": true
+      },
+      {
+        "slug": "page-system-users",
+        "title": "用户",
+        "kicker": "页面手册",
+        "hasSourceDocPath": true
+      }
+    ]
+  },
+  "releaseList": {
+    "items": [
+      {
+        "releaseId": "<id>",
+        "version": "<version>",
+        "status": "published",
+        "summary": "bootstrap release",
+        "termCount": 8767,
+        "createdAt": "<timestamp>",
+        "publishedAt": "<timestamp>",
+        "releaseState": {
+          "status": "published",
+          "isCurrentPublished": true,
+          "isCurrentCanary": false
+        },
+        "approval": {
+          "status": "not_submitted",
+          "taskId": null,
+          "requiredApprovals": 1,
+          "approvedCount": 0,
+          "approvedReviewers": []
+        },
+        "traffic": {
+          "status": "no_gray",
+          "title": "当前无灰度",
+          "detail": "当前没有启用中的灰度策略。",
+          "grayEnabled": false,
+          "isCurrentPublished": true,
+          "isCurrentCanary": false,
+          "scopeType": "",
+          "percentage": 0,
+          "releaseId": "<id>"
+        },
+        "releaseCheck": {
+          "blocked": false,
+          "blockerCount": 0,
+          "blockers": [],
+          "caseCount": 5,
+          "failedCount": 0
+        },
+        "postPublishRisk": {
+          "active": false,
+          "blocked": false,
+          "issueCount": 0,
+          "blockedIssueCount": 0,
+          "issues": [],
+          "blockers": []
+        },
+        "gate": {
+          "blocked": false,
+          "blockerCount": 0,
+          "blockers": [],
+          "caseCount": 5,
+          "failedCount": 0
+        }
+      }
+    ],
+    "page": 1,
+    "pageSize": 1,
+    "total": 2,
+    "summary": {
+      "totalCount": 2,
+      "builtCount": 1,
+      "canaryCount": 0,
+      "publishedCount": 1
+    },
+    "filteredSummary": {
+      "totalCount": 2,
+      "builtCount": 1,
+      "canaryCount": 0,
+      "publishedCount": 1
+    }
+  },
+  "runtimeNodes": {
+    "items": [
+      {
+        "nodeId": "<id>",
+        "nodeName": "Contract Node 001",
+        "env": "test",
+        "address": "http://127.0.0.1:9901",
+        "registry": {
+          "enabled": true,
+          "status": "enabled",
+          "label": "备案已启用",
+          "updatedAt": "<timestamp>",
+          "remarks": "",
+          "secretFingerprint": "<fingerprint>"
+        },
+        "registration": {
+          "status": "registered",
+          "label": "已注册",
+          "detail": "admin 已收到注册与心跳。",
+          "lastRegisterAt": "<timestamp>"
+        },
+        "realtime": {
+          "status": "online",
+          "statusReason": "heartbeat_ok",
+          "runtimeVersion": "0.5.0",
+          "lastHeartbeatAt": "<timestamp>",
+          "heartbeatAgeSeconds": "<number>",
+          "offlineThresholdSeconds": 120
+        },
+        "target": {
+          "desiredVersion": "<version>",
+          "currentVersion": "<version>",
+          "alignmentStatus": "aligned",
+          "alignmentLabel": "已对齐"
+        },
+        "recentAction": {
+          "lastApplyStatus": "",
+          "lastApplyAt": null
+        },
+        "issues": {
+          "current": null,
+          "history": null,
+          "lastError": ""
+        },
+        "requestSummary": {
+          "requestCount24h": 0,
+          "hitTermCount24h": 0
+        },
+        "peak": {
+          "peakConcurrency": 0,
+          "peakAt": null,
+          "updatedAt": null
+        },
+        "updatedAt": "<timestamp>",
+        "runtimeStatsCursor": "",
+        "isRegistryOnly": false,
+        "registrationStatus": "registered",
+        "registrationLabel": "已注册",
+        "registryEnabled": true,
+        "status": "online",
+        "statusReason": "heartbeat_ok",
+        "runtimeVersion": "0.5.0",
+        "currentVersion": "<version>",
+        "desiredVersion": "<version>",
+        "lastHeartbeatAt": "<timestamp>",
+        "heartbeatAgeSeconds": "<number>",
+        "offlineThresholdSeconds": 120,
+        "lastApplyAt": null,
+        "lastApplyStatus": "",
+        "lastError": "",
+        "issue": {
+          "lifecycle": "none",
+          "status": "healthy",
+          "title": "当前无异常",
+          "detail": "",
+          "recovery": ""
+        }
+      }
+    ],
+    "issueSummary": {
+      "activeCount": 0,
+      "warningCount": 0,
+      "recoveredCount": 0,
+      "healthyCount": 1,
+      "notRegisteredCount": 0,
+      "disabledRegistryCount": 0,
+      "orphanRuntimeCount": 0
+    },
+    "summary": {
+      "totalCount": 1,
+      "disabledRegistryCount": 0,
+      "notRegisteredCount": 0,
+      "onlineCount": 1,
+      "offlineCount": 0,
+      "activeIssueCount": 0,
+      "orphanRuntimeCount": 0
+    },
+    "filteredSummary": {
+      "totalCount": 1,
+      "disabledRegistryCount": 0,
+      "notRegisteredCount": 0,
+      "onlineCount": 1,
+      "offlineCount": 0,
+      "activeIssueCount": 0,
+      "orphanRuntimeCount": 0
+    },
+    "orphanRuntimeCount": 0,
+    "orphanRuntimeEvents": [],
+    "page": 1,
+    "pageSize": 1,
+    "total": 1
+  },
+  "runtimeVerifyCurrent": {
+    "stable": {
+      "version": "<version>",
+      "builtAt": "<timestamp>",
+      "schemaVersion": 1,
+      "normalizerVersion": "v1",
+      "termCount": 8767,
+      "literalPatternCount": 412,
+      "pinyinKeyCount": 8788
+    },
+    "canary": null,
+    "grayPolicy": null
+  }
+}

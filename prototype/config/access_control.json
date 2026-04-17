@@ -1,0 +1,185 @@
+{
+  "permissions": [
+    "auth.read",
+    "health.read",
+    "runtime.read",
+    "runtime.reload",
+    "runtime.correct",
+    "simulate.run",
+    "validation.read",
+    "validation.write",
+    "dashboard.read",
+    "term.read",
+    "term.write",
+    "term.review.submit",
+    "term.review.decide",
+    "pinyin.read",
+    "pinyin.write",
+    "pinyin.candidate.generate",
+    "pinyin.candidate.submit",
+    "pinyin.compare.read",
+    "pinyin.conflict.read",
+    "review.read",
+    "review.decide",
+    "release.read",
+    "release.review.submit",
+    "release.build",
+    "release.publish",
+    "release.rollback",
+    "gray.read",
+    "gray.write",
+    "audit.read",
+    "runtime.node.read",
+    "runtime.node.registry.read",
+    "runtime.node.registry.manage",
+    "runtime.node.control",
+    "runtime.stats.read",
+    "system.user.read",
+    "system.user.manage",
+    "system.role.read",
+    "system.role.manage",
+    "system.permission.read",
+    "system.governance.read",
+    "system.governance.manage"
+  ],
+  "roles": {
+    "dict_viewer": {
+      "displayName": "只读查看员",
+      "description": "查看主数据、审核、发布与系统概况，但不执行写操作。",
+      "permissions": [
+        "auth.read",
+        "health.read",
+        "runtime.read",
+        "runtime.correct",
+        "simulate.run",
+        "validation.read",
+        "dashboard.read",
+        "term.read",
+        "pinyin.read",
+        "pinyin.compare.read",
+        "pinyin.conflict.read",
+        "review.read",
+        "release.read",
+        "gray.read",
+        "audit.read",
+        "runtime.node.read",
+        "runtime.node.registry.read",
+        "runtime.stats.read",
+        "system.user.read",
+        "system.role.read",
+        "system.permission.read",
+        "system.governance.read"
+      ]
+    },
+    "dict_editor": {
+      "displayName": "词条编辑员",
+      "description": "负责主数据录入、修改与拼音候选提交。",
+      "permissions": [
+        "term.write",
+        "term.review.submit",
+        "pinyin.write",
+        "pinyin.candidate.generate",
+        "pinyin.candidate.submit",
+        "validation.write"
+      ]
+    },
+    "dict_reviewer": {
+      "displayName": "词典审核员",
+      "description": "负责词条与拼音内容审核。",
+      "permissions": [
+        "term.review.decide",
+        "review.decide"
+      ]
+    },
+    "dict_publisher": {
+      "displayName": "词典发布员",
+      "description": "负责构建版本、提审与正式发布。",
+      "permissions": [
+        "release.review.submit",
+        "release.build",
+        "release.publish"
+      ]
+    },
+    "dict_operator": {
+      "displayName": "词典运营员",
+      "description": "负责灰度、回滚与节点运行控制。",
+      "permissions": [
+        "runtime.reload",
+        "release.rollback",
+        "gray.write",
+        "runtime.node.registry.read",
+        "runtime.node.control"
+      ]
+    },
+    "dict_admin": {
+      "displayName": "词典管理员",
+      "description": "拥有全部功能权限，负责系统治理与配置维护。",
+      "permissions": [
+        "*"
+      ]
+    }
+  },
+  "users": {
+    "console_user": {
+      "userId": "console_user",
+      "displayName": "控制台试用用户",
+      "defaultRole": "dict_admin",
+      "assignedRoles": [
+        "dict_admin",
+        "dict_publisher",
+        "dict_operator",
+        "dict_reviewer",
+        "dict_editor",
+        "dict_viewer"
+      ]
+    },
+    "editor_user": {
+      "userId": "editor_user",
+      "displayName": "词条编辑员",
+      "defaultRole": "dict_editor",
+      "assignedRoles": [
+        "dict_editor"
+      ]
+    },
+    "reviewer_user": {
+      "userId": "reviewer_user",
+      "displayName": "审核员",
+      "defaultRole": "dict_reviewer",
+      "assignedRoles": [
+        "dict_reviewer"
+      ]
+    },
+    "reviewer_user2": {
+      "userId": "reviewer_user2",
+      "displayName": "审核员 2",
+      "defaultRole": "dict_reviewer",
+      "assignedRoles": [
+        "dict_reviewer"
+      ]
+    },
+    "publisher_user": {
+      "userId": "publisher_user",
+      "displayName": "发布员",
+      "defaultRole": "dict_publisher",
+      "assignedRoles": [
+        "dict_publisher"
+      ]
+    },
+    "operator_user": {
+      "userId": "operator_user",
+      "displayName": "运营员",
+      "defaultRole": "dict_operator",
+      "assignedRoles": [
+        "dict_operator"
+      ]
+    },
+    "viewer_user": {
+      "userId": "viewer_user",
+      "displayName": "只读查看员",
+      "defaultRole": "dict_viewer",
+      "assignedRoles": [
+        "dict_viewer"
+      ]
+    }
+  }
+}

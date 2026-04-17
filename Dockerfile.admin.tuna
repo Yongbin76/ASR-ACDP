@@ -1,0 +1,19 @@
+FROM docker.m.daocloud.io/library/node:22-bookworm-slim
+
+WORKDIR /app
+
+COPY package.json ./
+COPY prototype ./prototype
+COPY console ./console
+COPY data_sources ./data_sources
+COPY docs/help_manuals ./docs/help_manuals
+COPY docs/25-console宿主环境联调与smoke执行说明.md ./docs/25-console宿主环境联调与smoke执行说明.md
+COPY docs/26-console内部试用说明.md ./docs/26-console内部试用说明.md
+
+RUN npm install --omit=dev
+
+EXPOSE 8788
+
+ENV ACDP_ADMIN_PORT=8788
+
+CMD ["sh", "-lc", "npm run setup:prototype && npm run start:admin"]

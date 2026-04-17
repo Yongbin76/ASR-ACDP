@@ -1,0 +1,32 @@
+﻿[
+  {
+    "categoryCode": "poi_road",
+    "canonicalText": "祁顺路",
+    "aliases": ["旗顺路", "其顺路"],
+    "replaceMode": "replace",
+    "priority": 95,
+    "baseConfidence": 0.96,
+    "sourceType": "demo_seed",
+    "pinyinRuntimeMode": "replace"
+  },
+  {
+    "categoryCode": "gov_term",
+    "canonicalText": "工伤认定",
+    "aliases": ["工商认定"],
+    "replaceMode": "replace",
+    "priority": 92,
+    "baseConfidence": 0.94,
+    "sourceType": "demo_seed",
+    "pinyinRuntimeMode": "candidate"
+  },
+  {
+    "categoryCode": "proper_noun",
+    "canonicalText": "婚姻介绍所",
+    "aliases": ["婚姻检查所"],
+    "replaceMode": "replace",
+    "priority": 85,
+    "baseConfidence": 0.93,
+    "sourceType": "demo_seed",
+    "pinyinRuntimeMode": "candidate"
+  }
+]
