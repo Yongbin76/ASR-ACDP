@@ -27,7 +27,7 @@ test('import template registry stays aligned with template/example assets and do
   const config = createAppConfig();
   const importTemplateDir = path.join(config.projectRoot, 'prototype', 'config', 'import_templates');
   const templateIndex = JSON.parse(readText(path.join(importTemplateDir, 'index.json')));
-  const templateDoc = readText(path.join(config.projectRoot, 'docs', '19-导入模板字段规范与示例文件定义.md'));
+  const templateDoc = readText(path.join(config.projectRoot, 'docs', '2026-04-17-v1.0正式文档工作区', '11-配置项与部署运行说明.md'));
 
   assert.ok(Array.isArray(templateIndex));
   assert.ok(templateIndex.length >= 6);
@@ -53,7 +53,7 @@ test('validation feed example payloads stay aligned with current docs', () => {
   const config = createAppConfig();
   const examplePath = path.join(config.projectRoot, 'prototype', 'config', 'validation_feed_examples.json');
   const validationExamples = JSON.parse(readText(examplePath));
-  const capabilityDoc = readText(path.join(config.projectRoot, 'docs', '12-原型实现与当前能力.md'));
+  const capabilityDoc = readText(path.join(config.projectRoot, 'docs', '2026-04-17-v1.0正式文档工作区', '11-配置项与部署运行说明.md'));
   const prototypeReadme = readText(path.join(config.projectRoot, 'prototype', 'README.md'));
 
   const expectedShapes = [

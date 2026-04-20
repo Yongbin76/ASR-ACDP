@@ -2,7 +2,7 @@
 
 > 此文件由 `project_management/source_of_truth.json` 自动生成。
 > 请勿直接手改；如需更新状态，请修改单一真源后执行 `npm run pm:sync`。
-> 口径说明：本清单同时保留历史已关单 job 的原始命名与详情，因此正文中会出现旧目录、旧术语和旧路由；当前直接编码时，请优先以进行中 job、`docs/131 ~ docs/135` 和现行帮助文档为准。
+> 口径说明：本清单同时保留历史已关单 job 的原始命名与详情，因此正文中会出现旧目录、旧术语和旧路由；当前直接编码时，请优先以进行中 job、当前正式文档工作区与现行帮助文档为准。
 
 ## 1. 文档目的
 
@@ -25,10 +25,10 @@
 
 | 状态 | 含义 |
 |---|---|
-| `done` | 已启动，仍需继续推进 |
-| `done` | 已完成，当前无需继续推进 |
-| `in_progress` | 已识别，但尚未开始 |
+| `pending` | 已识别，未启动 |
+| `in_progress` | 已启动，正在执行 |
 | `blocked` | 已确认需要做，但被外部条件阻塞 |
+| `done` | 已完成，当前无需继续推进 |
 | `maintenance` | 长期维护项，不是一次性关闭任务 |
 
 ## 3. Job 总表
@@ -87,6 +87,9 @@
 | `JOB-099` | `Release-v1.0` | 零数据底座初始化与系统清库 | `done` | `P1` | Codex | `2026-04-14` | 已完成 ACDP 主工作区与 runtime 实例工作区清理，并把系统切换为不会自动回灌默认词条、样本和 release 的零数据底座 | 已完成；后续若需要恢复标准初始化态或再次执行零数据化，按 `docs/137` 单独执行，不复用 `JOB-099` 的运行结果 | 当前 workspace、自动种子回灌逻辑、运行态目录与 service 状态 | 是 | 如果只清 `platform.db` 但不同时置空 `seed_terms.json` 和 `release_validation_cases.json`，服务启动后会再次自动回灌默认词条和样本，造成“看起来清库了，实际不是零数据底座”的假象 |
 | `JOB-100` | `Release-v1.0` | `v1.0` 最终发布包组成与发布包装清理 | `done` | `P1` | Codex | `2026-04-13` | 已完成最终发布包边界收紧、交付模板目录、release bundle 生成脚本和三条正式镜像构建验证 | 已完成；后续若发布包边界、镜像内容或交付模板发生变化，按新批次重开，不复用 `JOB-100` | `JOB-030` 发布准备基线、当前 Docker 打包方式、帮助与发布文档目录 | 是 | 如果不在正式发布前把打包边界和交付物边界收紧，过程文档、handoff 文档、测试脚本和无关资产可能继续进入正式镜像，导致交付边界不清 |
 | `JOB-090` | `Release-v1.0` | `v1.0` 测试体系建设与流水线验证准备 | `in_progress` | `P0` | Codex / 待定测试与运维协作人 | `2026-04-15` | 已完成包含 `JOB-036 admin_http_signed` 在内的本地回归确认：`test:unit`、`test:console`、`smoke:console`、`check:api-contracts`、`test:unit:coverage`、`check:v1-local-readiness` 已通过；当前本地阶段已无阻塞，下一步等待外部条件进入 `L4 ~ L6` | 若真实部署与压测资源就绪，则按 `docs/105`~`docs/107` 进入 `L4 ~ L6`；否则保持当前本地 readiness 全绿基线，等待外部条件 | 本地执行无额外依赖；进入 `L4 ~ L6` 时仍依赖外部资源与工具获取授权、真实部署与压测环境 | 否 | 若继续只在修功能后被动跑零散回归，`v1.0` 风险会在真实发布前集中暴露，且无法形成稳定的测试证据链 |
+| `JOB-101` | `Governance` | `v1.0` 正式文档工作区与单一真源绑定 | `done` | `P1` | Codex | `2026-04-17` | 已建立封闭边界的正式文档工作区，并完成与单一真源、JOBLIST、CHECKLIST 和 pm:sync / pm:check 的首轮绑定。 | 后续若要继续自动化扩展到更多工作区或版本快照治理，按新批次重开，不复用当前关单。 | 无 | 是 | 若后续不继续沿本工作区和真源规则新增文档，仍可能重新长出目录外散落文档。 |
+| `JOB-102` | `Governance` | `v1.0` docs 历史文档首批归档收边 | `done` | `P1` | Codex | `2026-04-17` | 已完成 `docs/` 根目录历史文档两批归档分层：保留现行与在用文档，把已被当前正式文档工作区覆盖的旧基线、旧设计、已关单阶段文档迁入 `docs/archive/`。 | 后续若还有第三批特殊归档需求，只按新增依赖盘点结果新开 job，不再重用当前关单。 | 无 | 是 | 若后续不继续遵守“现行 / 在用 / 历史归档”三层规则，`docs/` 根目录仍可能重新堆积旧文档。 |
+| `JOB-103` | `Governance` | `v1.0` 正式文档工作区详细设计化与 Codex 开发依据补齐 | `done` | `P0` | Codex | `2026-04-18` | 已完成详细设计层、数据字典层、接口规范层、页面设计层和 Codex 开发依据层的首版补齐。 | 后续若要继续加深字段级案例、页面交互细节或开发矩阵颗粒度，按新批次重开，不复用当前关单。 | 无 | 是 | 若后续只改代码而不继续同步这些详细设计文档，工作区仍可能重新失去开发依据价值。 |
 
 ## 3.1 分组说明
 
@@ -181,8 +184,8 @@
   - 异常发现、定位、处理和消项具备最小闭环
   - 宿主自动化验证通过，且人工浏览器验证完成并留档
 - 关键文档：
-  - [31-console现有功能收尾与独立性约束](./31-console现有功能收尾与独立性约束.md)
-  - [34-console收尾待办清单](./34-console收尾待办清单.md)
+  - [31-console现有功能收尾与独立性约束](./archive/2026-04-17-v1早期基线与已替代设计文档/31-console现有功能收尾与独立性约束.md)
+  - [34-console收尾待办清单](./archive/2026-04-17-v1早期基线与已替代设计文档/34-console收尾待办清单.md)
 
 子任务 checklist：
 
@@ -241,7 +244,7 @@
   - 待办事项可直接跳转到可执行页面
   - `test:console` / `smoke:console` / `test:unit` 保持通过
 - 关键文档：
-  - [40-控制面数据面实施分解与开发前自审](./40-控制面数据面实施分解与开发前自审.md)
+  - [40-控制面数据面实施分解与开发前自审](./archive/2026-04-17-v1早期基线与已替代设计文档/40-控制面数据面实施分解与开发前自审.md)
 
 子任务 checklist：
 
@@ -297,7 +300,7 @@
   - 可在 `/console` 内看到节点收敛状态
   - `test:console` / `smoke:console` / `test:unit` / 控制面验证回归通过
 - 关键文档：
-  - [39-控制面数据面架构与RBAC重构方案](./39-控制面数据面架构与RBAC重构方案.md)
+  - [39-控制面数据面架构与RBAC重构方案](./archive/2026-04-17-v1早期基线与已替代设计文档/39-控制面数据面架构与RBAC重构方案.md)
 
 子任务 checklist：
 
@@ -353,7 +356,7 @@
   - 异常节点、验证失败和阻塞项可直接回到处理入口
   - 自测与回归通过
 - 关键文档：
-  - [40-控制面数据面实施分解与开发前自审](./40-控制面数据面实施分解与开发前自审.md)
+  - [40-控制面数据面实施分解与开发前自审](./archive/2026-04-17-v1早期基线与已替代设计文档/40-控制面数据面实施分解与开发前自审.md)
 
 子任务 checklist：
 
@@ -714,7 +717,7 @@
   - 高优先级体验问题关闭或明确转移
   - 自测与回归通过
 - 关键文档：
-  - [30-console宿主反馈问题修复计划](./30-console宿主反馈问题修复计划.md)
+  - [30-console宿主反馈问题修复计划](./archive/2026-04-17-v1早期基线与已替代设计文档/30-console宿主反馈问题修复计划.md)
 
 子任务 checklist：
 
@@ -759,7 +762,7 @@
   - 手工记录完整
   - 关键截图已归档
 - 关键文档：
-  - [32-console宿主机测试执行与记录方案](./32-console宿主机测试执行与记录方案.md)
+  - [32-console宿主机测试执行与记录方案](./archive/2026-04-17-v1早期基线与已替代设计文档/32-console宿主机测试执行与记录方案.md)
   - [27-console联调记录模板](./27-console联调记录模板.md)
 
 子任务 checklist：
@@ -794,7 +797,7 @@
   - 关键节点确认完毕
   - 本方案文档可作为实现基线
 - 关键文档：
-  - [39-控制面数据面架构与RBAC重构方案](./39-控制面数据面架构与RBAC重构方案.md)
+  - [39-控制面数据面架构与RBAC重构方案](./archive/2026-04-17-v1早期基线与已替代设计文档/39-控制面数据面架构与RBAC重构方案.md)
 
 子任务 checklist：
 
@@ -865,8 +868,8 @@
     - `k8s/runtime-deployment.yaml`
     - `k8s/admin-deployment.yaml`
   - 已同步运维/部署文档：
-    - `docs/35-拆分部署资产使用说明.md`
-    - `docs/36-拆分部署首轮验证执行清单.md`
+    - `docs/archive/2026-04-17-v1早期基线与已替代设计文档/35-拆分部署资产使用说明.md`
+    - `docs/archive/2026-04-17-v1早期基线与已替代设计文档/36-拆分部署首轮验证执行清单.md`
     - `docs/37-runtime-admin服务运维手册.md`
   - 已在本机用 docker 拉起本地 MinIO，并按配置生成本地开发凭据回写到 `artifact_store.config.json`
   - 已新增真实控制面模式验证脚本：
@@ -934,7 +937,7 @@
   - 实现阶段全部从配置读取，不写死
   - 真实 MinIO 配置模式验证通过
 - 关键文档：
-  - [39-控制面数据面架构与RBAC重构方案](./39-控制面数据面架构与RBAC重构方案.md)
+  - [39-控制面数据面架构与RBAC重构方案](./archive/2026-04-17-v1早期基线与已替代设计文档/39-控制面数据面架构与RBAC重构方案.md)
 
 子任务 checklist：
 
@@ -985,7 +988,7 @@
   - 节点表和最小接口设计完成
   - 节点在线/离线口径明确
 - 关键文档：
-  - [39-控制面数据面架构与RBAC重构方案](./39-控制面数据面架构与RBAC重构方案.md)
+  - [39-控制面数据面架构与RBAC重构方案](./archive/2026-04-17-v1早期基线与已替代设计文档/39-控制面数据面架构与RBAC重构方案.md)
 
 子任务 checklist：
 
@@ -1042,7 +1045,7 @@
   - 版本状态模型明确
   - runtime 拉取控制状态模型明确
 - 关键文档：
-  - [39-控制面数据面架构与RBAC重构方案](./39-控制面数据面架构与RBAC重构方案.md)
+  - [39-控制面数据面架构与RBAC重构方案](./archive/2026-04-17-v1早期基线与已替代设计文档/39-控制面数据面架构与RBAC重构方案.md)
 
 子任务 checklist：
 
@@ -1101,7 +1104,7 @@
   - runtime 可以从本地制品独立启动
   - runtime 不再依赖共享 volume 中的 `latest`
 - 关键文档：
-  - [39-控制面数据面架构与RBAC重构方案](./39-控制面数据面架构与RBAC重构方案.md)
+  - [39-控制面数据面架构与RBAC重构方案](./archive/2026-04-17-v1早期基线与已替代设计文档/39-控制面数据面架构与RBAC重构方案.md)
 
 子任务 checklist：
 
@@ -1160,7 +1163,7 @@
   - admin 可收到多节点批量回传
   - 重复上报不产生重复统计
 - 关键文档：
-  - [39-控制面数据面架构与RBAC重构方案](./39-控制面数据面架构与RBAC重构方案.md)
+  - [39-控制面数据面架构与RBAC重构方案](./archive/2026-04-17-v1早期基线与已替代设计文档/39-控制面数据面架构与RBAC重构方案.md)
 
 子任务 checklist：
 
@@ -1207,7 +1210,7 @@
 - 完成标准：
   - `/console/runtime-nodes` 可查看节点、版本和基本状态
 - 关键文档：
-  - [39-控制面数据面架构与RBAC重构方案](./39-控制面数据面架构与RBAC重构方案.md)
+  - [39-控制面数据面架构与RBAC重构方案](./archive/2026-04-17-v1早期基线与已替代设计文档/39-控制面数据面架构与RBAC重构方案.md)
 
 子任务 checklist：
 
@@ -1279,7 +1282,7 @@
   - 用户/角色/权限/页面功能关系清楚
   - 首轮权限矩阵可直接落代码
 - 关键文档：
-  - [39-控制面数据面架构与RBAC重构方案](./39-控制面数据面架构与RBAC重构方案.md)
+  - [39-控制面数据面架构与RBAC重构方案](./archive/2026-04-17-v1早期基线与已替代设计文档/39-控制面数据面架构与RBAC重构方案.md)
 
 子任务 checklist：
 
@@ -1309,7 +1312,7 @@
   - 组合服务行为不变
   - surface 独立边界测试通过
 - 关键文档：
-  - [33-运行时对外服务与后台服务拆分建议](./33-运行时对外服务与后台服务拆分建议.md)
+  - [33-运行时对外服务与后台服务拆分建议](./archive/2026-04-17-v1早期基线与已替代设计文档/33-运行时对外服务与后台服务拆分建议.md)
 
 子任务 checklist：
 
@@ -1372,8 +1375,8 @@
   - Docker 级验证通过
   - 本地 `kind` K8S 验证通过
 - 关键文档：
-  - [35-拆分部署资产使用说明](./35-拆分部署资产使用说明.md)
-  - [36-拆分部署首轮验证执行清单](./36-拆分部署首轮验证执行清单.md)
+  - [35-拆分部署资产使用说明](./archive/2026-04-17-v1早期基线与已替代设计文档/35-拆分部署资产使用说明.md)
+  - [36-拆分部署首轮验证执行清单](./archive/2026-04-17-v1早期基线与已替代设计文档/36-拆分部署首轮验证执行清单.md)
 
 子任务 checklist：
 
@@ -1416,7 +1419,7 @@
   - split 部署验证通过
   - 证据留档完成
 - 关键文档：
-  - [36-拆分部署首轮验证执行清单](./36-拆分部署首轮验证执行清单.md)
+  - [36-拆分部署首轮验证执行清单](./archive/2026-04-17-v1早期基线与已替代设计文档/36-拆分部署首轮验证执行清单.md)
   - [37-runtime-admin服务运维手册](./37-runtime-admin服务运维手册.md)
 
 - 当前负责人：待指定运维 / Codex 支持
@@ -1486,7 +1489,7 @@
     - error 目录支持 replay envelope
     - `import-feeds` 已支持 `replayErrors`
   - 已新增首轮外部 connector 契约文档：
-    - [45-validation-feed外部connector首轮契约](./45-validation-feed外部connector首轮契约.md)
+    - [45-validation-feed外部connector首轮契约](./archive/2026-04-17-v1早期基线与已替代设计文档/45-validation-feed外部connector首轮契约.md)
   - 已明确首个优先真实接入源：
     - `cg3`
   - 已完成本批代码落点：
@@ -1525,7 +1528,7 @@
   - 确认真实 endpoint / token / ack 语义
   - 留档真实联通、ack、replay 证据
 - 外部条件清单：
-  - [46-JOB-007与JOB-009外部条件清单](./46-JOB-007与JOB-009外部条件清单.md)
+  - [46-JOB-007与JOB-009外部条件清单](./archive/2026-04-17-v1早期基线与已替代设计文档/46-JOB-007与JOB-009外部条件清单.md)
 - 依赖 / 风险：
   - 依赖外部系统访问条件
   - 依赖对接协议和网络策略
@@ -1555,8 +1558,8 @@
   - 已复核 `prototype/config/import_templates/index.json` 与 `prototype/config/import_templates/` 下的模板 / 示例文件
   - 已复核 `prototype/config/validation_feed_examples.json` 与当前仓库文档中的 payload 说明
   - 已确认以下文档/说明与当前资产一致：
-    - `docs/19-导入模板字段规范与示例文件定义.md`
-    - `docs/12-原型实现与当前能力.md`
+    - `docs/archive/2026-04-17-v1早期基线与已替代设计文档/19-导入模板字段规范与示例文件定义.md`
+    - `docs/archive/2026-04-17-v1早期基线与已替代设计文档/12-原型实现与当前能力.md`
     - `prototype/README.md`
   - 已新增 `prototype/tests/unit/template-assets-docs.test.js`，把模板注册、模板/示例文件、validation feed 示例 payload 与文档引用绑进 `test:unit`
 - 后续要做：
@@ -1611,7 +1614,7 @@
   - 跑 `--target-rps 200` 的真实吞吐测试
   - 记录延迟、错误率、峰值并发
 - 外部条件清单：
-  - [46-JOB-007与JOB-009外部条件清单](./46-JOB-007与JOB-009外部条件清单.md)
+  - [46-JOB-007与JOB-009外部条件清单](./archive/2026-04-17-v1早期基线与已替代设计文档/46-JOB-007与JOB-009外部条件清单.md)
 - 依赖 / 风险：
   - 需要真实宿主机环境，不适合沙箱
 - 完成标准：
@@ -1637,7 +1640,7 @@
 - 已完成：
   - 当前共享 PVC + SQLite 方案仅适合 MVP 的边界已明确
   - 已新增状态管理升级路线文档：
-    - [44-SQLite之后状态管理升级路线](./44-SQLite之后状态管理升级路线.md)
+    - [44-SQLite之后状态管理升级路线](./archive/2026-04-17-v1早期基线与已替代设计文档/44-SQLite之后状态管理升级路线.md)
   - 已梳理三类核心状态：
     - 控制面事务状态
     - 发布产物 / 不可变证据
@@ -1763,7 +1766,7 @@
     - `npm run test:unit`
     - 最新结果：`23/23` 单测文件通过
   - 已新增一份受控视觉维护执行文档：
-    - `docs/20260404_console-visual-only-plan.md` 已重写为 `JOB-012` 约束文档
+    - `docs/archive/2026-04-17-v1关闭批次与阶段文档/20260404_console-visual-only-plan.md` 已重写为 `JOB-012` 约束文档
     - 已明确第一轮只允许收口 token、背景、圆角、阴影、按钮 hover 和 `label` 字号
     - 已明确 dense-section、表格结构、页面结构和主视觉节奏不在本轮维护范围内
   - 已完成该视觉维护文档的首轮实现：
@@ -1786,7 +1789,7 @@
     - `/console/reviews` 与 `/console/reviews/:taskId` 现在会明确区分“提交人与审核人为同一操作人”和“高风险双人审批中同一审核人重复审批”两类阻断
     - release 详情页已补齐已通过审核人与剩余审批数量提示
     - 当前不再需要把该问题单独挂在 `34-console收尾待办清单.md`
-  - `docs/34-console收尾待办清单.md` 已清理到“当前无挂起项”
+  - `docs/archive/2026-04-17-v1早期基线与已替代设计文档/34-console收尾待办清单.md` 已清理到“当前无挂起项”
 - 后续要做：
   - 当前批次无剩余动作
   - 若后续再收到 `/console` 回归反馈，以新的维护批次重开，不继续沿用当前关单
@@ -1794,7 +1797,7 @@
   - 当前截图反馈与文档挂起项已清账
   - 当前 `/console` 维护项不再阻塞主线关闭
 - 关键文档：
-  - [34-console收尾待办清单](./34-console收尾待办清单.md)
+  - [34-console收尾待办清单](./archive/2026-04-17-v1早期基线与已替代设计文档/34-console收尾待办清单.md)
 
 子任务 checklist：
 
@@ -2225,15 +2228,15 @@
     - `alias_sources`
   - 已确认政府部门模板中的 `district/address/level/category/remark` 等字段当前不进入词典核心主数据，不应继续作为主合同字段保留
   - 已新增设计文档：
-    - [2026-04-02/04-数据库字典与字段说明](./2026-04-02/04-数据库字典与字段说明.md)
-    - [48-导入中心统一结构化词条导入重构方案](./48-导入中心统一结构化词条导入重构方案.md)
+    - [2026-04-02/04-数据库字典与字段说明](./archive/2026-04-17-v1早期基线与已替代设计文档/2026-04-02/04-数据库字典与字段说明.md)
+    - [48-导入中心统一结构化词条导入重构方案](./archive/2026-04-17-v1早期基线与已替代设计文档/48-导入中心统一结构化词条导入重构方案.md)
   - 已完成模板和合同收敛：
     - `prototype/config/import_templates/index.json` 已新增 `structured_terms_csv_v2` 作为统一词条导入主模板
     - `raw_roads_text_v1`、`gov_departments_csv_v1`、`structured_terms_csv_v1` 已标记为 legacy
     - 已新增统一模板资产：
       - `structured_terms_csv_v2.template.csv`
       - `structured_terms_csv_v2.example.csv`
-    - `docs/19-导入模板字段规范与示例文件定义.md` 已改为 `v2` 主路径 + legacy 兼容说明口径
+    - `docs/archive/2026-04-17-v1早期基线与已替代设计文档/19-导入模板字段规范与示例文件定义.md` 已改为 `v2` 主路径 + legacy 兼容说明口径
   - 已完成词条导入解析主路径收敛：
     - `structured_terms_csv_v2` 与 `structured_terms_csv_v1` 统一走同一条结构化词条解析路径
     - 支持批次级 `defaultCategoryCode`
@@ -2346,7 +2349,7 @@
   - 已新增 `/console/runtime-verify` 页面、导航与动作渲染
   - 已将总览中的重交互 demo 收口为轻摘要入口
   - 已预留 `targetMode/nodeId/trafficKey` 扩展位，并对非 `cluster_current` 返回 `runtime_verify_target_mode_invalid`
-  - 已更新 `docs/14`、`docs/12`、`docs/2026-04-02/03`
+  - 已更新 `docs/archive/2026-04-17-v1早期基线与已替代设计文档/14-正式对外纠错接口说明.md`、`docs/archive/2026-04-17-v1早期基线与已替代设计文档/12-原型实现与当前能力.md`、`docs/archive/2026-04-17-v1早期基线与已替代设计文档/2026-04-02/03-接口与命令速查.md`
   - 已补 `console-api.test.js`、`console-read.test.js`、`console-workflows.test.js` 及 runtime 相关回归
   - 已完成 `smoke:console`、`test:console`、`test:unit` 回归
 - 非关单前置项：
@@ -2375,7 +2378,7 @@
 - [x] `T05-B` 在 `app.js` 中新增 `run-runtime-verify-correct` / `run-runtime-verify-correct-cand` 动作与结果渲染
 - [x] `T05-C` 将总览 `renderOverviewSimulationPanel()` 收口为轻摘要与跳转入口
 - [x] `T06` 预留 `targetMode/nodeId/trafficKey` 扩展位，不在第一阶段实现节点代理与灰度对比
-- [x] `T07-A` 更新 `docs/14`、`docs/12`、`docs/2026-04-02/03`
+- [x] `T07-A` 更新 `docs/archive/2026-04-17-v1早期基线与已替代设计文档/14-正式对外纠错接口说明.md`、`docs/archive/2026-04-17-v1早期基线与已替代设计文档/12-原型实现与当前能力.md`、`docs/archive/2026-04-17-v1早期基线与已替代设计文档/2026-04-02/03-接口与命令速查.md
 - [x] `T07-B` 补 `console-api.test.js`、`console-read.test.js`、`console-workflows.test.js`
 - [x] `T07-C` 运行 `npm run smoke:console`、`npm run test:console`、`npm run test:unit` 并完成关单
 
@@ -2396,8 +2399,8 @@
   - 已将 `register / heartbeat / runtime-control/me / apply-result / stats-upload` 全部接入备案校验
   - 已新增 `verify-multi-runtime.js` 并产出本机 `1 admin + 2 runtime` 成功报告
   - 已补 `runtime-instance-config.test.js`、`runtime-node-registry.test.js`，并补强 `runtime-control.test.js`、`runtime-nodes.test.js`、`runtime-stats-sync.test.js`、`console-api.test.js`、`console-read.test.js`、`console-workflows.test.js`
-  - 已更新 `docs/37`、`docs/12`、`docs/2026-04-02/03`
-  - 已补充 `docs/138-v1.0运行快照下发模式对照与admin_http_signed落地方案.md`，明确当前已落地模式为 `file / minio`，`admin_http_signed` 属于后续可选简化方案，不代表当前代码已实现
+  - 已更新 `docs/37-runtime-admin服务运维手册.md`、`docs/archive/2026-04-17-v1早期基线与已替代设计文档/12-原型实现与当前能力.md`、`docs/archive/2026-04-17-v1早期基线与已替代设计文档/2026-04-02/03-接口与命令速查.md`
+  - 已补充 `docs/archive/2026-04-17-v1关闭批次与阶段文档/138-v1.0运行快照下发模式对照与admin_http_signed落地方案.md`，明确当前已落地模式为 `file / minio`，`admin_http_signed` 属于后续可选简化方案，不代表当前代码已实现
   - 已完成 `smoke:console`、`test:console`、`test:unit` 回归
 - 非关单前置项：
   - 不要求当前内建正式 LB / Ingress
@@ -2426,7 +2429,7 @@
 - [x] `T05-A` 新增 `prototype/src/cli/verify-multi-runtime.js`
 - [x] `T05-B` 产出至少一份 `1 admin + 2 runtime` 宿主验证报告
 - [x] `T06` 收口 `/console/runtime-node-registry` 与 `/console/runtime-nodes` 的状态提示与跳转关系
-- [x] `T07-A` 更新 `docs/37`、`docs/12`、`docs/2026-04-02/03` 等文档
+- [x] `T07-A` 更新 `docs/37-runtime-admin服务运维手册.md`、`docs/archive/2026-04-17-v1早期基线与已替代设计文档/12-原型实现与当前能力.md`、`docs/archive/2026-04-17-v1早期基线与已替代设计文档/2026-04-02/03-接口与命令速查.md` 等文档
 - [x] `T07-B` 补 `runtime-node-registry.test.js`、`runtime-control.test.js`、`runtime-nodes.test.js`、`console-api.test.js`、`console-read.test.js`、`console-workflows.test.js`
 - [x] `T07-C` 运行 `npm run smoke:console`、`npm run test:console`、`npm run test:unit` 并完成关单
 
@@ -2444,14 +2447,14 @@
   - 已确认灰度/流量状态应单独建模和展示，不应继续借用 release badge
   - 已确认审核中心中的 release publish review 也要按同一规则收口，不能继续保留旧的混合状态摘要
   - 已输出方案文档：
-    - `docs/59-发布中心状态分层与页面收口方案.md`
-    - `docs/60-JOB-022发布中心状态分层与页面收口实施拆解与验收标准.md`
-    - `docs/61-发布中心状态分层文档索引.md`
+    - `docs/archive/2026-04-17-v1早期基线与已替代设计文档/59-发布中心状态分层与页面收口方案.md`
+    - `docs/archive/2026-04-17-v1早期基线与已替代设计文档/60-JOB-022发布中心状态分层与页面收口实施拆解与验收标准.md`
+    - `docs/archive/2026-04-17-v1早期基线与已替代设计文档/61-发布中心状态分层文档索引.md`
   - 已在 `console-service` 收口 release list/detail 与 release review target summary 的三层状态聚合
   - 已在 `/console/releases` 中拆开版本状态、发布审批、流量状态与门禁展示
   - 已在 `/console/releases/:id` 中新增“版本状态 / 发布审批 / 流量状态”三块主区，并收口动作区判断逻辑
   - 已在 `/console/reviews` 与 release review 详情中同步接入同一套三层状态语义
-  - 已更新 `docs/12-原型实现与当前能力.md`、`docs/18-后台管理系统首批接口清单与字段定义.md`
+  - 已更新 `docs/archive/2026-04-17-v1早期基线与已替代设计文档/12-原型实现与当前能力.md`、`docs/archive/2026-04-17-v1早期基线与已替代设计文档/18-后台管理系统首批接口清单与字段定义.md`
   - 已完成回归：
     - `npm run smoke:console`
     - `npm run test:console`
@@ -2470,8 +2473,8 @@
   - 动作区可见性与禁用态和分层语义一致
   - `smoke:console` / `test:console` / `test:unit` 通过
 - 关键文档：
-  - [59-发布中心状态分层与页面收口方案](./59-发布中心状态分层与页面收口方案.md)
-  - [60-JOB-022发布中心状态分层与页面收口实施拆解与验收标准](./60-JOB-022发布中心状态分层与页面收口实施拆解与验收标准.md)
+  - [59-发布中心状态分层与页面收口方案](./archive/2026-04-17-v1早期基线与已替代设计文档/59-发布中心状态分层与页面收口方案.md)
+  - [60-JOB-022发布中心状态分层与页面收口实施拆解与验收标准](./archive/2026-04-17-v1早期基线与已替代设计文档/60-JOB-022发布中心状态分层与页面收口实施拆解与验收标准.md)
 
 子任务 checklist：
 
@@ -2599,8 +2602,8 @@
   - 节点部署说明、token、secret、指纹说明清晰
   - 运行治理相关回归通过
 - 关键文档：
-  - [72-v1.0重构原则定稿版](./72-v1.0重构原则定稿版.md)
-  - [77-R1运行治理域重构实施拆解草案](./77-R1运行治理域重构实施拆解草案.md)
+  - [72-v1.0重构原则定稿版](./archive/2026-04-17-v1早期基线与已替代设计文档/72-v1.0重构原则定稿版.md)
+  - [77-R1运行治理域重构实施拆解草案](./archive/2026-04-17-v1早期基线与已替代设计文档/77-R1运行治理域重构实施拆解草案.md)
 
 子任务 checklist：
 
@@ -3312,7 +3315,7 @@
   - 后续若执行 `npm run prepare:data`、`npm run bootstrap:db` 或 `npm run setup:prototype`，系统会退出零数据底座并重新生成标准初始化数据
   - 如需恢复标准初始化态，应按 `docs/137` 中记录的标准初始化链路单独执行
 - 关键文档：
-  - [137-JOB-099零数据底座初始化与系统清库实施说明](./137-JOB-099零数据底座初始化与系统清库实施说明.md)
+  - [137-JOB-099零数据底座初始化与系统清库实施说明](./archive/2026-04-17-v1关闭批次与阶段文档/137-JOB-099零数据底座初始化与系统清库实施说明.md)
 
 子任务 checklist：
 
@@ -3343,8 +3346,8 @@
   - 已更新 `.dockerignore`，排除 `project_management`、`prototype/tests`、交接文档和非必要 `docs`
   - 已新增 `prototype/tests/unit/docker-packaging-boundary.test.js`，锁定打包边界回归
   - 已补齐镜像 tag 规则、部署交付包目录模板和发布说明包文档快照清单：
-    - `docs/124-v1.0镜像标签与部署交付包目录模板.md`
-    - `docs/125-v1.0发布说明包与文档快照清单.md`
+    - `docs/archive/2026-04-17-v1关闭批次与阶段文档/124-v1.0镜像标签与部署交付包目录模板.md`
+    - `docs/archive/2026-04-17-v1关闭批次与阶段文档/125-v1.0发布说明包与文档快照清单.md`
   - 已落仓库模板目录：
     - `release_bundle_templates/deployment_bundle/`
     - `release_bundle_templates/release_notes_bundle/`
@@ -3360,7 +3363,7 @@
     - `prototype/workspace/job100_docker_build_logs/admin-build.log`
     - `prototype/workspace/job100_docker_build_logs/runtime-build.log`
     - `prototype/workspace/job100_docker_build_logs/prototype-build.log`
-  - 已更新 `docs/86`、`docs/122`、`docs/123` 以及索引文档，使最终发布包边界和交付目录口径一致
+  - 已更新 `docs/86-v1.0发布手册.md`、`docs/archive/2026-04-17-v1关闭批次与阶段文档/122-v1.0最终发布包组成与发布包装清理清单.md`、`docs/archive/2026-04-17-v1关闭批次与阶段文档/123-JOB-100最终发布包组成与发布包装清理实施拆解.md` 以及索引文档，使最终发布包边界和交付目录口径一致
   - 已完成本地回归：
     - `node --test --test-concurrency=1 ./prototype/tests/unit/docker-packaging-boundary.test.js`
     - `node --test --test-concurrency=1 ./prototype/tests/unit/release-bundle-templates.test.js`
@@ -3492,27 +3495,171 @@
 - [x] 输出首轮缺陷结论与回流建议
 - [ ] 确认真实部署与压测资源
 
+### JOB-101 `v1.0` 正式文档工作区与单一真源绑定
+
+- 当前负责人：Codex
+- 最近更新时间：`2026-04-17`
+- 外部依赖：无
+- 是否可关闭：是
+- 目标：
+  建立一套封闭边界的正式文档工作区，并把它接入单一真源、JOBLIST、CHECKLIST 和 `pm:sync / pm:check` 管理链。
+- 本轮完成：
+  - 已新增 `docs/2026-04-17-v1.0正式文档工作区/`
+  - 已补齐正式基线文档 14 份
+  - 已补齐治理文档、ADR、模板和归档入口
+  - 已在 `source_of_truth.json` 中新增：
+    - `docWorkspace`
+    - `docRegistry`
+    - `jobDocBindings`
+    - `adrRegistry`
+    - `docChangeLog`
+    - `docRules`
+  - 已扩展 `project_management/lib/project-docs.js`，让 `pm:sync / pm:check` 覆盖新工作区的生成视图与一致性校验
+  - 已新增自动生成视图：
+    - 工作区 `JOB 与文档绑定矩阵`
+    - 工作区 `文档变更记录`
+    - 工作区 `真源文档注册表视图`
+    - 工作区 `ADR 索引`
+    - 工作区 `JOB 索引`
+  - 已同步更新工作区内治理规则和总索引
+- 完成标准：
+  - 新工作区形成封闭边界
+  - 正式文档与真源建立结构化绑定
+  - `pm:sync / pm:check` 能覆盖新工作区生成视图
+  - 后续 Codex 可直接按新工作区继续衍生开发与文档维护
+
+子任务 checklist：
+
+- [x] 建立正式文档工作区
+- [x] 建立正式基线文档
+- [x] 建立治理规则、ADR、模板和归档入口
+- [x] 设计 `docWorkspace / docRegistry / jobDocBindings / adrRegistry / docChangeLog / docRules`
+- [x] 将新工作区接入单一真源
+- [x] 扩展 `pm:sync / pm:check`
+- [x] 生成工作区内的真源派生视图
+- [x] 同步治理文档与索引
+- [x] 完成本轮闭环自检
+
+### JOB-102 `v1.0` docs 历史文档首批归档收边
+
+- 当前负责人：Codex
+- 最近更新时间：`2026-04-17`
+- 外部依赖：无
+- 是否可关闭：是
+- 目标：
+  对 `docs/` 根目录下的老旧文档做首批安全归档，保留当前仍被代码、镜像、帮助系统、测试脚本和 open job 使用的文档，把已关单且已被当前正式文档工作区覆盖的阶段文档迁入 `docs/archive/`。
+- 本轮完成：
+  - 已建立归档目录：`docs/archive/`
+  - 已新增归档总索引：`docs/archive/00-归档总索引.md`
+  - 已新增首批归档批次说明：`docs/archive/2026-04-17-v1关闭批次与阶段文档/00-归档说明.md`
+  - 已完成首批安全迁移：把 `108~127` 中不再被运行链直接使用的阶段文档、`129~141` 的已完成批次拆解/映射/收尾文档，以及 `20260404_console-visual-only-plan.md` 迁入归档目录
+  - 已保留在根目录不动的现行/在用文档包括：
+    - `38-项目JobList与状态清单.md`
+    - `47-单一真源项目管理与Codex衔接说明.md`
+    - `25-console宿主环境联调与smoke执行说明.md`
+    - `26-console内部试用说明.md`
+    - `help_manuals/`
+    - open job 仍在使用的 runbook、测试与发布准备文档
+  - 已同步单一真源中对首批归档文档的引用路径，避免生成文档出现失效链接
+- 完成标准：
+  - `docs/` 根目录完成首批现行/在用/历史分层
+  - 首批归档后的文档有索引和批次说明
+  - 仓库级与工作区级派生文档不再指向失效路径
+  - `pm:sync / pm:check` 通过
+
+子任务 checklist：
+
+- [x] 盘点代码、镜像、帮助系统、测试脚本和 open job 的文档依赖
+- [x] 新增 docs 归档总索引
+- [x] 新增首批归档批次说明
+- [x] 执行首批安全归档迁移
+- [x] 保留现行与在用文档在根目录
+- [x] 同步单一真源中的归档文档引用路径
+- [x] `npm run pm:sync`
+- [x] `npm run pm:check`
+- 第二批已完成：
+  - 已更新 `README.md`，把旧总列表收口为“现行正式文档 / 项目管理与状态 / 在用手册 / 历史归档”四层入口
+  - 已更新 `prototype/README.md`，补正式文档工作区入口
+  - 已将 `01~24` 中除 `25/26` 外的早期基线、`29~36` 的早期 console/拆分部署文档、`39~82` 中已被新工作区替代的设计与阶段文档，以及 `2026-04-02/` 早期收敛目录整体迁入 `docs/archive/2026-04-17-v1早期基线与已替代设计文档/`
+  - 已同步单一真源中对第二批归档文档的引用路径
+
+### JOB-103 `v1.0` 正式文档工作区详细设计化与 Codex 开发依据补齐
+
+- 当前负责人：Codex
+- 最近更新时间：`2026-04-17`
+- 外部依赖：无
+- 是否可关闭：否
+- 目标：
+  将当前正式文档工作区从“正式基线文档集”升级为“详细设计说明书 + Codex 可直接编码的开发依据文档集”。
+- 本轮已完成：
+  - 已确认详细设计化方向与目录结构
+  - 已建立以下子目录：
+    - `design/`
+    - `data_dictionary/`
+    - `api_specs/`
+    - `pages/`
+    - `codex_dev/`
+  - 已建立 5 份索引骨架：
+    - `design/00-详细设计索引.md`
+    - `data_dictionary/00-数据字典索引.md`
+    - `api_specs/00-接口规范索引.md`
+    - `pages/00-页面设计索引.md`
+    - `codex_dev/00-Codex开发索引.md`
+  - 已建立本 job 文档：
+    - `jobs/JOB-103-v1.0正式文档工作区详细设计化与Codex开发依据补齐.md`
+  - 已将上述索引骨架接入工作区总索引与单一真源注册表
+- 目标交付：
+  - `data_dictionary/`：表结构、字段类型、约束、索引、案例、改造影响
+  - `api_specs/`：参数、响应、错误码、样例、代码入口、测试入口
+  - `design/`：业务域和技术链路详细设计
+  - `pages/`：页面区块、按钮、状态、权限、接口来源
+  - `codex_dev/`：后续 Codex 开发阅读顺序与改动矩阵
+- 完成标准：
+  - 其他 Codex 不翻聊天记录也能直接按文档开工
+  - 详细设计文档可指导数据库、接口、页面和配置修改
+  - 文档、真源、索引和 checklist 保持同步
+
+子任务 checklist：
+
+- [x] 确认详细设计层目录结构
+- [x] 建立 `design/` 索引骨架
+- [x] 建立 `data_dictionary/` 索引骨架
+- [x] 建立 `api_specs/` 索引骨架
+- [x] 建立 `pages/` 索引骨架
+- [x] 建立 `codex_dev/` 索引骨架
+- [x] 建立 `JOB-103` 文档并挂单
+- [x] 将新目录接入总索引与真源
+- [x] 补 `data_dictionary/` 详细正文
+- [x] 补 `api_specs/` 详细正文（核心层已完成）
+- [x] 补 `design/` 详细正文
+- [x] 补 `codex_dev/` 详细正文
+- [x] 补 `pages/` 详细正文
+- [x] 更新工作区总索引与变更记录
+- [x] `npm run pm:sync`
+- [x] `npm run pm:check`
+
 ## 5. 当前建议优先级
 
-1. `JOB-024` `v1.0` R1 运行治理域重构
-2. `JOB-025` `v1.0` R2 版本发布域重构
-3. `JOB-026` `v1.0` R3 主数据域重构
-4. `JOB-027` `v1.0` R4 系统配置域重构
-5. `JOB-028` `v1.0` R5 帮助域与接口文档体系
-6. `JOB-029` `v1.0` R6 工作台重构
-7. `JOB-090` `v1.0` 测试体系建设与流水线验证准备
-8. `JOB-031` `v1.0` 控制台导航、标题与中文化最终收口
-9. `JOB-032` `v1.0` 控制台页面职责与二级工作页最终收口
-10. `JOB-033` `v1.0` 控制台帮助入口与页面内引导最终收口
-11. `JOB-100` `v1.0` 最终发布包组成与发布包装清理
-12. `JOB-030` `v1.0` R7 真实环境验证与发布准备
-13. `JOB-007` validation feeds 真实外部系统集成
-14. `JOB-009` 并发与吞吐验证
-15. `JOB-006` 保持挂起，直到真实目标集群访问条件恢复
-16. 若后续再收到 `/console` 系统管理、发布生命周期或导航 IA 的扩展反馈，按新批次重开，不复用已关闭 `JOB-023`。
-17. 若后续再收到发布中心 / 审核中心中 release 状态扩展反馈，按新批次重开，不复用已关闭 `JOB-022`。
-18. 若后续要把 `/console/runtime-verify` 扩到 `targetMode=runtime_node`，先完成 `JOB-021` 的节点备案与多 runtime 基线，再扩 `JOB-020`。
-19. 若后续再收到 runtime 候选输出、节点验证或灰度验证扩展反馈，按新批次重开，不直接回改已关闭接口合同
-20. 若后续再收到导入中心分类、legacy 曝光或词条业务属性细分反馈，按新批次重开，不复用已关闭 `JOB-018`
-21. 若后续再收到新的 `/console` 视觉系统升级反馈，按新批次重开，不复用已关闭 `JOB-017`
-22. 若后续再收到 `/console` 回归反馈，再新开维护批次处理
+1. `JOB-103` `v1.0` 正式文档工作区详细设计化与 Codex 开发依据补齐
+2. `JOB-024` `v1.0` R1 运行治理域重构
+3. `JOB-025` `v1.0` R2 版本发布域重构
+4. `JOB-026` `v1.0` R3 主数据域重构
+5. `JOB-027` `v1.0` R4 系统配置域重构
+6. `JOB-028` `v1.0` R5 帮助域与接口文档体系
+7. `JOB-029` `v1.0` R6 工作台重构
+8. `JOB-090` `v1.0` 测试体系建设与流水线验证准备
+9. `JOB-031` `v1.0` 控制台导航、标题与中文化最终收口
+10. `JOB-032` `v1.0` 控制台页面职责与二级工作页最终收口
+11. `JOB-033` `v1.0` 控制台帮助入口与页面内引导最终收口
+12. `JOB-100` `v1.0` 最终发布包组成与发布包装清理
+13. `JOB-030` `v1.0` R7 真实环境验证与发布准备
+14. `JOB-007` validation feeds 真实外部系统集成
+15. `JOB-009` 并发与吞吐验证
+16. `JOB-006` 保持挂起，直到真实目标集群访问条件恢复
+17. 若后续再收到 `/console` 系统管理、发布生命周期或导航 IA 的扩展反馈，按新批次重开，不复用已关闭 `JOB-023`。
+18. 若后续再收到发布中心 / 审核中心中 release 状态扩展反馈，按新批次重开，不复用已关闭 `JOB-022`。
+19. 若后续要把 `/console/runtime-verify` 扩到 `targetMode=runtime_node`，先完成 `JOB-021` 的节点备案与多 runtime 基线，再扩 `JOB-020`。
+20. 若后续再收到 runtime 候选输出、节点验证或灰度验证扩展反馈，按新批次重开，不直接回改已关闭接口合同
+21. 若后续再收到导入中心分类、legacy 曝光或词条业务属性细分反馈，按新批次重开，不复用已关闭 `JOB-018`
+22. 若后续再收到新的 `/console` 视觉系统升级反馈，按新批次重开，不复用已关闭 `JOB-017`
+23. 若后续再收到 `/console` 回归反馈，再新开维护批次处理

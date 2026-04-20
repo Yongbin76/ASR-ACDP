@@ -17,6 +17,89 @@ function readSourceOfTruth(sourcePath = SOURCE_PATH) {
 }
 
 /**
+ * 功能：解析当前正式文档工作区绝对路径。
+ * 输入：单一真源对象。
+ * 输出：工作区绝对路径；未配置时返回空字符串。
+ */
+function resolveDocWorkspaceRoot(state) {
+  const workspacePath = String((((state || {}).docWorkspace) || {}).workspacePath || '').trim();
+  if (!workspacePath) {
+    return '';
+  }
+  return path.join(REPO_ROOT, workspacePath);
+}
+
+/**
+ * 功能：解析工作区内某个文档的绝对路径。
+ * 输入：单一真源对象与工作区内相对片段。
+ * 输出：绝对路径；工作区缺失时返回空字符串。
+ */
+function resolveWorkspaceDocPath(state, ...segments) {
+  const root = resolveDocWorkspaceRoot(state);
+  if (!root) {
+    return '';
+  }
+  return path.join(root, ...segments);
+}
+
+/**
+ * 功能：返回当前由 pm:sync 自动生成的工作区文档路径集合。
+ * 输入：单一真源对象。
+ * 输出：绝对路径数组。
+ */
+function listGeneratedWorkspaceDocPaths(state) {
+  return [
+    resolveWorkspaceDocPath(state, 'governance', '92-JOB与文档绑定矩阵.md'),
+    resolveWorkspaceDocPath(state, 'governance', '94-文档变更记录.md'),
+    resolveWorkspaceDocPath(state, 'governance', '96-真源文档注册表视图.md'),
+    resolveWorkspaceDocPath(state, 'adr', '00-ADR索引.md'),
+    resolveWorkspaceDocPath(state, 'jobs', '00-JOB索引.md'),
+  ].filter(Boolean);
+}
+
+/**
+ * 功能：判断某个绝对路径是否属于当前自动生成的工作区文档。
+ * 输入：单一真源对象与绝对路径。
+ * 输出：布尔值。
+ */
+function isGeneratedWorkspaceDocPath(state, absolutePath) {
+  return listGeneratedWorkspaceDocPaths(state).includes(absolutePath);
+}
+
+/**
+ * 功能：返回全部 pm:sync 管理的派生文档路径。
+ * 输入：单一真源对象。
+ * 输出：绝对路径数组。
+ */
+function listManagedDocumentPaths(state) {
+  return [
+    DOC_38_PATH,
+    SESSION_HANDOFF_PATH,
+    NEXT_STEPS_PATH,
+    ...listGeneratedWorkspaceDocPaths(state),
+  ];
+}
+
+/**
+ * 功能：把绝对路径转换为仓库相对路径。
+ * 输入：任意绝对路径。
+ * 输出：仓库相对路径字符串。
+ */
+function toRepoRelative(filePath = '') {
+  return path.relative(REPO_ROOT, filePath).replace(/\\/g, '/');
+}
+
+/**
+ * 功能：从一个文档位置生成指向另一个文档的相对链接。
+ * 输入：源文件绝对路径、目标文件绝对路径、标签。
+ * 输出：Markdown 链接字符串。
+ */
+function renderRelativeLink(fromFilePath, targetFilePath, label) {
+  const relative = path.relative(path.dirname(fromFilePath), targetFilePath).replace(/\\/g, '/');
+  return `[${label}](${relative.startsWith('.') ? relative : `./${relative}`})`;
+}
+
+/**
  * 功能：按当前项目定义的优先级顺序比较两个优先级值。
  * 输入：单一真源对象、两个优先级字符串。
  * 输出：用于排序的数字；越小优先级越高。
@@ -186,7 +269,7 @@ function renderDocs38(state) {
     '',
     '> 此文件由 `project_management/source_of_truth.json` 自动生成。',
     '> 请勿直接手改；如需更新状态，请修改单一真源后执行 `npm run pm:sync`。',
-    '> 口径说明：本清单同时保留历史已关单 job 的原始命名与详情，因此正文中会出现旧目录、旧术语和旧路由；当前直接编码时，请优先以进行中 job、`docs/131 ~ docs/135` 和现行帮助文档为准。',
+    '> 口径说明：本清单同时保留历史已关单 job 的原始命名与详情，因此正文中会出现旧目录、旧术语和旧路由；当前直接编码时，请优先以进行中 job、当前正式文档工作区与现行帮助文档为准。',
     '',
     '## 1. 文档目的',
     '',
@@ -243,7 +326,7 @@ function renderSessionHandoff(state) {
     : '- 当前没有标记为近期关闭的批次。';
   const newSessionSteps = (workflow.newSession && workflow.newSession.steps) || [];
   const sessionExitSteps = (workflow.beforeExit && workflow.beforeExit.steps) || [];
-  const syncRules = (workflow.inSessionSyncRules || []);
+  const syncRules = workflow.inSessionSyncRules || [];
   const syncRuleTable = [
     '| 场景 | Codex 需要说的话 | 然后做什么 |',
     '|---|---|---|',
@@ -353,16 +436,240 @@ function renderNextSteps(state) {
 }
 
 /**
+ * 功能：按 docId 查找文档注册项。
+ * 输入：单一真源对象与 docId。
+ * 输出：文档注册项或 `null`。
+ */
+function findDocById(state, docId) {
+  return (state.docRegistry || []).find((item) => String(item.docId || '').trim() === String(docId || '').trim()) || null;
+}
+
+/**
+ * 功能：渲染工作区文档注册表视图。
+ * 输入：单一真源对象。
+ * 输出：Markdown 字符串。
+ */
+function renderDocRegistryView(state) {
+  const outputPath = resolveWorkspaceDocPath(state, 'governance', '96-真源文档注册表视图.md');
+  const workspace = state.docWorkspace || {};
+  const docs = [...(state.docRegistry || [])].sort((left, right) => String(left.docId || '').localeCompare(String(right.docId || '')));
+  const rows = docs.map((item) => {
+    const targetPath = path.join(REPO_ROOT, String(item.path || '').trim());
+    const titleLink = fs.existsSync(targetPath)
+      ? renderRelativeLink(outputPath, targetPath, item.title || item.docId || '')
+      : escapeTableCell(item.title || item.docId || '');
+    return `| \`${escapeTableCell(item.docId)}\` | ${titleLink} | \`${escapeTableCell(item.docType)}\` | \`${escapeTableCell(item.status)}\` | \`${escapeTableCell(item.domain)}\` | \`${escapeTableCell((item.relatedJobs || []).join(', '))}\` | \`${escapeTableCell(String(item.path || ''))}\` |`;
+  });
+  return [
+    '# 真源文档注册表视图',
+    '',
+    '- 文档状态：active',
+    `- 适用版本：${workspace.versionScope || 'unknown'}`,
+    '- 文档类型：generated_view',
+    `- 所属工作区：${workspace.workspacePath || ''}`,
+    `- 最后更新时间：${workspace.updatedAt || ''}`,
+    '- 责任对象：当前正式文档工作区注册表',
+    '',
+    '> 此文件由 `project_management/source_of_truth.json` 自动生成。',
+    '',
+    '## 1. 工作区摘要',
+    '',
+    `- 工作区 ID：\`${workspace.workspaceId || ''}\``,
+    `- 工作区路径：\`${workspace.workspacePath || ''}\``,
+    `- 适用版本：\`${workspace.versionScope || ''}\``,
+    `- 工作区状态：\`${workspace.status || ''}\``,
+    '',
+    '## 2. 文档注册表',
+    '',
+    '| 文档 ID | 标题 | 类型 | 状态 | 域 | 关联 Job | 路径 |',
+    '|---|---|---|---|---|---|---|',
+    ...rows,
+    '',
+  ].join('\n');
+}
+
+/**
+ * 功能：渲染工作区 JOB 与文档绑定矩阵。
+ * 输入：单一真源对象。
+ * 输出：Markdown 字符串。
+ */
+function renderJobDocBindingMatrix(state) {
+  const bindings = state.jobDocBindings || [];
+  const docRows = (state.docRegistry || [])
+    .filter((item) => /^DOC-|^GOV-|^ADR-|^JOB-/.test(String(item.docId || '')))
+    .sort((left, right) => String(left.docId || '').localeCompare(String(right.docId || '')))
+    .map((item) => `| \`${escapeTableCell(item.docId)}\` | ${escapeTableCell(item.title)} | \`${escapeTableCell(item.docType)}\` | \`${escapeTableCell(item.domain)}\` |`);
+  const bindingRows = bindings.map((binding) => {
+    const job = (state.jobs || []).find((item) => item.jobId === binding.jobId) || {};
+    return `| \`${escapeTableCell(binding.jobId)}\` | \`${escapeTableCell(job.status || '')}\` | \`${escapeTableCell((binding.docImpact || []).join(' '))}\` | \`${escapeTableCell((binding.docDeliverables || []).join(' '))}\` | ${escapeTableCell(binding.summary || '')} |`;
+  });
+  return [
+    '# JOB 与文档绑定矩阵',
+    '',
+    '- 文档状态：active',
+    `- 适用版本：${(((state || {}).docWorkspace) || {}).versionScope || 'unknown'}`,
+    '- 文档类型：generated_view',
+    `- 所属工作区：${(((state || {}).docWorkspace) || {}).workspacePath || ''}`,
+    `- 最后更新时间：${(((state || {}).docWorkspace) || {}).updatedAt || ''}`,
+    '- 责任对象：当前主要 job 与正式文档之间的绑定关系',
+    '',
+    '> 此文件由 `project_management/source_of_truth.json` 自动生成。',
+    '',
+    '## 1. 文档编号',
+    '',
+    '| 文档编号 | 文档 | 类型 | 域 |',
+    '|---|---|---|---|',
+    ...docRows,
+    '',
+    '## 2. 当前主要 job 绑定关系',
+    '',
+    '| Job | 当前状态 | 影响文档 | 交付文档 | 说明 |',
+    '|---|---|---|---|---|',
+    ...bindingRows,
+    '',
+  ].join('\n');
+}
+
+/**
+ * 功能：渲染文档变更记录视图。
+ * 输入：单一真源对象。
+ * 输出：Markdown 字符串。
+ */
+function renderDocChangeLog(state) {
+  const rows = (state.docChangeLog || []).map((entry) => {
+    return `| ${escapeTableCell(entry.date)} | \`${escapeTableCell(entry.changeId)}\` | \`${escapeTableCell(entry.jobId)}\` | \`${escapeTableCell((entry.affectedDocs || []).join(' '))}\` | \`${escapeTableCell(entry.changeType)}\` | ${escapeTableCell(entry.summary)} |`;
+  });
+  return [
+    '# 文档变更记录',
+    '',
+    '- 文档状态：active',
+    `- 适用版本：${(((state || {}).docWorkspace) || {}).versionScope || 'unknown'}`,
+    '- 文档类型：generated_view',
+    `- 所属工作区：${(((state || {}).docWorkspace) || {}).workspacePath || ''}`,
+    `- 最后更新时间：${(((state || {}).docWorkspace) || {}).updatedAt || ''}`,
+    '- 责任对象：本工作区内正式文档的变更留痕',
+    '',
+    '> 此文件由 `project_management/source_of_truth.json` 自动生成。',
+    '',
+    '## 1. 变更记录',
+    '',
+    '| 日期 | 变更编号 | 关联 job | 影响文档 | 变更类型 | 摘要 |',
+    '|---|---|---|---|---|---|',
+    ...(rows.length ? rows : ['| - | - | - | - | - | 当前暂无变更记录。 |']),
+    '',
+  ].join('\n');
+}
+
+/**
+ * 功能：渲染 ADR 索引。
+ * 输入：单一真源对象。
+ * 输出：Markdown 字符串。
+ */
+function renderAdrIndex(state) {
+  const outputPath = resolveWorkspaceDocPath(state, 'adr', '00-ADR索引.md');
+  const rows = (state.adrRegistry || []).map((item) => {
+    const targetPath = path.join(REPO_ROOT, String(item.path || '').trim());
+    const link = fs.existsSync(targetPath)
+      ? renderRelativeLink(outputPath, targetPath, item.title || item.adrId || '')
+      : escapeTableCell(item.title || item.adrId || '');
+    return `| ${link} | \`${escapeTableCell(item.status)}\` | ${escapeTableCell(item.summary || '')} |`;
+  });
+  return [
+    '# ADR 索引',
+    '',
+    '- 文档状态：active',
+    `- 适用版本：${(((state || {}).docWorkspace) || {}).versionScope || 'unknown'}`,
+    '- 文档类型：generated_view',
+    `- 所属工作区：${(((state || {}).docWorkspace) || {}).workspacePath || ''}`,
+    `- 最后更新时间：${(((state || {}).docWorkspace) || {}).updatedAt || ''}`,
+    '- 责任对象：本工作区内架构决策记录',
+    '',
+    '> 此文件由 `project_management/source_of_truth.json` 自动生成。',
+    '',
+    '## 1. 当前 ADR 列表',
+    '',
+    '| ADR | 状态 | 主题 |',
+    '|---|---|---|',
+    ...(rows.length ? rows : ['| - | - | 当前暂无 ADR。 |']),
+    '',
+  ].join('\n');
+}
+
+/**
+ * 功能：渲染工作区 JOB 索引。
+ * 输入：单一真源对象。
+ * 输出：Markdown 字符串。
+ */
+function renderWorkspaceJobIndex(state) {
+  const jobIds = Array.from(new Set((state.jobDocBindings || []).map((item) => item.jobId).filter(Boolean)));
+  const rows = jobIds.map((jobId) => {
+    const job = (state.jobs || []).find((item) => item.jobId === jobId) || {};
+    return `| \`${escapeTableCell(jobId)}\` | \`${escapeTableCell(job.status || '')}\` | ${escapeTableCell(job.currentGoal || job.title || '')} |`;
+  });
+  return [
+    '# JOB 索引',
+    '',
+    '- 文档状态：active',
+    `- 适用版本：${(((state || {}).docWorkspace) || {}).versionScope || 'unknown'}`,
+    '- 文档类型：generated_view',
+    `- 所属工作区：${(((state || {}).docWorkspace) || {}).workspacePath || ''}`,
+    `- 最后更新时间：${(((state || {}).docWorkspace) || {}).updatedAt || ''}`,
+    '- 责任对象：本工作区内 job 文档组织方式',
+    '',
+    '> 此文件由 `project_management/source_of_truth.json` 自动生成。',
+    '',
+    '## 1. 当前与本工作区直接相关的主要 job',
+    '',
+    '| Job | 状态 | 说明 |',
+    '|---|---|---|',
+    ...(rows.length ? rows : ['| - | - | 当前暂无关联 job。 |']),
+    '',
+  ].join('\n');
+}
+
+/**
  * 功能：渲染全部派生文档内容。
  * 输入：单一真源对象。
  * 输出：以绝对路径为键、文档内容为值的对象。
  */
 function renderAllDocuments(state) {
-  return {
+  const rendered = {
     [DOC_38_PATH]: renderDocs38(state),
     [SESSION_HANDOFF_PATH]: renderSessionHandoff(state),
     [NEXT_STEPS_PATH]: renderNextSteps(state),
   };
+
+  const bindingPath = resolveWorkspaceDocPath(state, 'governance', '92-JOB与文档绑定矩阵.md');
+  const changeLogPath = resolveWorkspaceDocPath(state, 'governance', '94-文档变更记录.md');
+  const registryPath = resolveWorkspaceDocPath(state, 'governance', '96-真源文档注册表视图.md');
+  const adrIndexPath = resolveWorkspaceDocPath(state, 'adr', '00-ADR索引.md');
+  const jobIndexPath = resolveWorkspaceDocPath(state, 'jobs', '00-JOB索引.md');
+
+  if (bindingPath) {
+    rendered[bindingPath] = renderJobDocBindingMatrix(state);
+  }
+  if (changeLogPath) {
+    rendered[changeLogPath] = renderDocChangeLog(state);
+  }
+  if (registryPath) {
+    rendered[registryPath] = renderDocRegistryView(state);
+  }
+  if (adrIndexPath) {
+    rendered[adrIndexPath] = renderAdrIndex(state);
+  }
+  if (jobIndexPath) {
+    rendered[jobIndexPath] = renderWorkspaceJobIndex(state);
+  }
+  return rendered;
+}
+
+/**
+ * 功能：统一派生文档写入与校验时的内容规范。
+ * 输入：原始 Markdown 字符串。
+ * 输出：规范化后的 Markdown 字符串。
+ */
+function normalizeRenderedDocument(content = '') {
+  return String(content).replace(/\n{3,}/g, '\n\n');
 }
 
 /**
@@ -372,16 +679,34 @@ function renderAllDocuments(state) {
  */
 function validateState(state) {
   const errors = [];
-  const seen = new Set();
+  const seenJobIds = new Set();
+  const seenStatuses = new Set();
+  const seenDocIds = new Set();
+  const seenDocPaths = new Set();
+  const seenAdrIds = new Set();
+  const workspaceRoot = resolveDocWorkspaceRoot(state);
+
+  for (const item of (state.statusDefinitions || [])) {
+    const status = String(item.status || '').trim();
+    if (!status) {
+      errors.push('存在空白状态定义。');
+      continue;
+    }
+    if (seenStatuses.has(status)) {
+      errors.push(`状态定义重复：${status}`);
+    }
+    seenStatuses.add(status);
+  }
+
   for (const job of (state.jobs || [])) {
     if (!job.jobId) {
       errors.push('存在未设置 jobId 的 job。');
       continue;
     }
-    if (seen.has(job.jobId)) {
+    if (seenJobIds.has(job.jobId)) {
       errors.push(`存在重复 jobId：${job.jobId}`);
     }
-    seen.add(job.jobId);
+    seenJobIds.add(job.jobId);
     if (!job.detailMarkdown) {
       errors.push(`${job.jobId} 缺少 detailMarkdown。`);
     }
@@ -392,6 +717,96 @@ function validateState(state) {
       errors.push(`${job.jobId} 缺少 title。`);
     }
   }
+
+  if (!workspaceRoot) {
+    errors.push('缺少 docWorkspace.workspacePath。');
+  } else if (!fs.existsSync(workspaceRoot)) {
+    errors.push(`正式文档工作区不存在：${workspaceRoot}`);
+  }
+
+  for (const doc of (state.docRegistry || [])) {
+    const docId = String(doc.docId || '').trim();
+    const relativePath = String(doc.path || '').trim();
+    if (!docId) {
+      errors.push('文档注册表存在空白 docId。');
+      continue;
+    }
+    if (seenDocIds.has(docId)) {
+      errors.push(`存在重复 docId：${docId}`);
+    }
+    seenDocIds.add(docId);
+    if (!relativePath) {
+      errors.push(`${docId} 缺少 path。`);
+      continue;
+    }
+    if (seenDocPaths.has(relativePath)) {
+      errors.push(`存在重复文档 path：${relativePath}`);
+    }
+    seenDocPaths.add(relativePath);
+    const absolutePath = path.join(REPO_ROOT, relativePath);
+    if (!fs.existsSync(absolutePath) && !isGeneratedWorkspaceDocPath(state, absolutePath)) {
+      errors.push(`${docId} 对应文档不存在：${relativePath}`);
+    }
+  }
+
+  for (const binding of (state.jobDocBindings || [])) {
+    const jobId = String(binding.jobId || '').trim();
+    if (!jobId) {
+      errors.push('jobDocBindings 存在空白 jobId。');
+      continue;
+    }
+    if (!seenJobIds.has(jobId)) {
+      errors.push(`jobDocBindings 引用了未知 job：${jobId}`);
+    }
+    for (const docId of (binding.docImpact || [])) {
+      if (!seenDocIds.has(String(docId || '').trim())) {
+        errors.push(`jobDocBindings ${jobId} 引用了未知文档：${docId}`);
+      }
+    }
+    for (const docId of (binding.docDeliverables || [])) {
+      if (!seenDocIds.has(String(docId || '').trim())) {
+        errors.push(`jobDocBindings ${jobId} 引用了未知交付文档：${docId}`);
+      }
+    }
+  }
+
+  for (const adr of (state.adrRegistry || [])) {
+    const adrId = String(adr.adrId || '').trim();
+    if (!adrId) {
+      errors.push('adrRegistry 存在空白 adrId。');
+      continue;
+    }
+    if (seenAdrIds.has(adrId)) {
+      errors.push(`存在重复 adrId：${adrId}`);
+    }
+    seenAdrIds.add(adrId);
+    const relativePath = String(adr.path || '').trim();
+    if (!relativePath) {
+      errors.push(`${adrId} 缺少 path。`);
+      continue;
+    }
+    const absolutePath = path.join(REPO_ROOT, relativePath);
+    if (!fs.existsSync(absolutePath) && !isGeneratedWorkspaceDocPath(state, absolutePath)) {
+      errors.push(`${adrId} 对应 ADR 文档不存在：${relativePath}`);
+    }
+  }
+
+  for (const entry of (state.docChangeLog || [])) {
+    const changeId = String(entry.changeId || '').trim();
+    if (!changeId) {
+      errors.push('docChangeLog 存在空白 changeId。');
+      continue;
+    }
+    if (entry.jobId && !seenJobIds.has(String(entry.jobId || '').trim())) {
+      errors.push(`docChangeLog ${changeId} 引用了未知 job：${entry.jobId}`);
+    }
+    for (const docId of (entry.affectedDocs || [])) {
+      if (!seenDocIds.has(String(docId || '').trim())) {
+        errors.push(`docChangeLog ${changeId} 引用了未知文档：${docId}`);
+      }
+    }
+  }
+
   return { ok: errors.length === 0, errors };
 }
 
@@ -403,7 +818,8 @@ function validateState(state) {
 function writeAllDocuments(state) {
   const rendered = renderAllDocuments(state);
   Object.entries(rendered).forEach(([filePath, content]) => {
-    fs.writeFileSync(filePath, `${content}`.replace(/\n{3,}/g, '\n\n'));
+    fs.mkdirSync(path.dirname(filePath), { recursive: true });
+    fs.writeFileSync(filePath, normalizeRenderedDocument(content));
   });
 }
 
@@ -413,6 +829,8 @@ module.exports = {
   REPO_ROOT,
   SESSION_HANDOFF_PATH,
   SOURCE_PATH,
+  isGeneratedWorkspaceDocPath,
+  listManagedDocumentPaths,
   listOpenJobs,
   listRecentClosedJobs,
   readSourceOfTruth,
@@ -420,6 +838,8 @@ module.exports = {
   renderDocs38,
   renderNextSteps,
   renderSessionHandoff,
+  resolveDocWorkspaceRoot,
+  normalizeRenderedDocument,
   validateState,
   writeAllDocuments,
 };

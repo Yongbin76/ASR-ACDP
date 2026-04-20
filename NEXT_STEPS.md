@@ -23,11 +23,12 @@
 
 ## Closed Batches
 
+- `JOB-102` | `v1.0` docs 历史文档首批归档收边
+- `JOB-101` | `v1.0` 正式文档工作区与单一真源绑定
 - `JOB-013` | `/console` B01 信息架构与视觉层级优化批次
 - `JOB-014` | `/console` B02 二级工作页与详情页层级一致性批次
 - `JOB-015` | `/console` B03 跨页模式收敛与系统感一致性批次
 - `JOB-016` | `/console` B04 收尾批次与低风险视觉基础增强
-- `JOB-017` | `/console` B05 视觉系统升级批次
 
 ## External Preconditions
 

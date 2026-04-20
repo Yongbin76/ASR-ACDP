@@ -19,6 +19,10 @@
 - 为避免过程文档、handoff 文档和无关测试资产进入正式镜像，已新增 `JOB-100`（最终发布包组成与发布包装清理）。
 - `JOB-090` 当前已完成 `/console` 产品面相关本地测试与总复核；下一步在外部条件就绪后进入 `L4 ~ L6`，或视需要补可选增强项。
 - 旧版超长交接文档已归档到 `project_management/legacy/`，只在需要追旧上下文时再查阅。
+- 已建立 `docs/2026-04-17-v1.0正式文档工作区/`，并将其接入单一真源与 `pm:sync / pm:check` 的管理链。
+- `docs/` 根目录已完成首批历史文档归档分层；已关单且被正式文档工作区覆盖的阶段文档已迁入 `docs/archive/`。
+- 已新开 `JOB-103`，开始把正式文档工作区细化为详细设计说明书与 Codex 开发依据文档集。
+- `JOB-103` 已完成首版详细设计化：当前正式文档工作区已经覆盖详细设计、数据字典、接口规范、页面设计和 Codex 开发依据。
 
 ## Open Jobs
 
@@ -40,31 +44,34 @@
 
 ## Recently Closed Console Batches
 
+- `JOB-102` | `v1.0` docs 历史文档首批归档收边
+- `JOB-101` | `v1.0` 正式文档工作区与单一真源绑定
 - `JOB-013` | `/console` B01 信息架构与视觉层级优化批次
 - `JOB-014` | `/console` B02 二级工作页与详情页层级一致性批次
 - `JOB-015` | `/console` B03 跨页模式收敛与系统感一致性批次
 - `JOB-016` | `/console` B04 收尾批次与低风险视觉基础增强
-- `JOB-017` | `/console` B05 视觉系统升级批次
 
 ## New Session
 
 1. 进入仓库后先执行 `cd /Codex/ACDP && npm run pm:brief`，不要先翻旧长文档。
 2. 先阅读生成后的 `docs/38-项目JobList与状态清单.md`、`SESSION_HANDOFF.md`、`NEXT_STEPS.md`，再决定是否需要查 `project_management/legacy/`。
-3. 如果本轮要开新批次或切状态，先修改 `project_management/source_of_truth.json`，再执行 `npm run pm:sync`，然后再动代码。
-4. 如果只是继续已有未关闭 job，先确认它在 `pm:brief` 输出里仍是 active/blocker 状态，再开始实现。
+3. 如需理解当前正式口径，优先阅读 `docs/2026-04-17-v1.0正式文档工作区/00-文档总索引.md`，不要再回目录外旧文档里找现行依据。
+4. 如果本轮要开新批次或切状态，先修改 `project_management/source_of_truth.json`，再执行 `npm run pm:sync`，然后再动代码。
+5. 如果只是继续已有未关闭 job，先确认它在 `pm:brief` 输出里仍是 active/blocker 状态，再开始实现。
 
 ### Prompt Template
 
 ```text
-继续 ACDP 工作。先运行 `cd /Codex/ACDP && npm run pm:brief`，再阅读自动生成的 `docs/38-项目JobList与状态清单.md`、`SESSION_HANDOFF.md`、`NEXT_STEPS.md`。如需变更状态，先改 `project_management/source_of_truth.json` 并执行 `npm run pm:sync`，然后再开始代码或文档实现。
+继续 ACDP 工作。先运行 `cd /Codex/ACDP && npm run pm:brief`，再阅读自动生成的 `docs/38-项目JobList与状态清单.md`、`SESSION_HANDOFF.md`、`NEXT_STEPS.md`，以及当前正式文档工作区 `docs/2026-04-17-v1.0正式文档工作区/00-文档总索引.md`。如需变更状态，先改 `project_management/source_of_truth.json` 并执行 `npm run pm:sync`，然后再开始代码或文档实现。
 ```
 
 ## Before Exit
 
 1. 在退出当前 Codex session 前，先把本轮涉及的 job/batch 状态更新到 `project_management/source_of_truth.json`。
 2. 执行 `cd /Codex/ACDP && npm run pm:sync`，确保 `docs/38`、`SESSION_HANDOFF.md`、`NEXT_STEPS.md` 与单一真源同步。
-3. 如果本轮动了代码或正式改了文档，按项目约束补跑 `npm run smoke:console`、`npm run test:console`、`npm run test:unit`。
-4. 在最终回传里明确说明：本轮状态变化、回归结果、以及是否还有未关闭 follow-up。
+3. 如果本轮改了正式文档工作区内容，同时确认工作区内生成视图和治理文档已同步。
+4. 如果本轮动了代码或正式改了文档，按项目约束补跑 `npm run smoke:console`、`npm run test:console`、`npm run test:unit`。
+5. 在最终回传里明确说明：本轮状态变化、回归结果、以及是否还有未关闭 follow-up。
 
 ## In-Session Sync Rules
 

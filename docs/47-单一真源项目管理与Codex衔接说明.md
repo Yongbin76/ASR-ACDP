@@ -2,19 +2,24 @@
 
 ## 1. 目的
 
-本说明用于替代过去“`docs/38 + SESSION_HANDOFF.md + NEXT_STEPS.md` 三份手工同步”的旧做法。
+本说明用于替代过去“只靠手工同步项目状态文档”的旧做法。
 
 现在的唯一真源只有一份：
 
 - `project_management/source_of_truth.json`
 
-以下 3 份文档全部改为派生视图，不再手工维护：
+以下仓库级与工作区级视图都已改为派生视图，不再手工维护：
 
 - `docs/38-项目JobList与状态清单.md`
 - `SESSION_HANDOFF.md`
 - `NEXT_STEPS.md`
+- `docs/2026-04-17-v1.0正式文档工作区/governance/92-JOB与文档绑定矩阵.md`
+- `docs/2026-04-17-v1.0正式文档工作区/governance/94-文档变更记录.md`
+- `docs/2026-04-17-v1.0正式文档工作区/governance/96-真源文档注册表视图.md`
+- `docs/2026-04-17-v1.0正式文档工作区/adr/00-ADR索引.md`
+- `docs/2026-04-17-v1.0正式文档工作区/jobs/00-JOB索引.md`
 
-如果直接改这 3 份派生文档，状态迟早会再次漂移。
+如果直接手改这些派生视图，状态和文档迟早会再次漂移。
 
 ## 2. 新结构
 
@@ -26,6 +31,11 @@
 
 - 全部 job 摘要字段
 - `docs/38` 详情区正文
+- 正式文档工作区元数据
+- 文档注册表
+- job 与文档绑定关系
+- ADR 注册表
+- 文档变更记录
 - 当前活动 job 与外部阻塞
 - 新 session 接力说明
 - 退出 session 前检查清单
@@ -38,6 +48,11 @@
 - `docs/38-项目JobList与状态清单.md`
 - `SESSION_HANDOFF.md`
 - `NEXT_STEPS.md`
+- `docs/2026-04-17-v1.0正式文档工作区/governance/92-JOB与文档绑定矩阵.md`
+- `docs/2026-04-17-v1.0正式文档工作区/governance/94-文档变更记录.md`
+- `docs/2026-04-17-v1.0正式文档工作区/governance/96-真源文档注册表视图.md`
+- `docs/2026-04-17-v1.0正式文档工作区/adr/00-ADR索引.md`
+- `docs/2026-04-17-v1.0正式文档工作区/jobs/00-JOB索引.md`
 
 ### 2.3 旧版归档
 
@@ -65,7 +80,7 @@ npm run pm:brief
 - 看外部前提
 - 看下一步建议命令
 
-### 3.2 重新生成 3 份派生文档
+### 3.2 重新生成全部受管派生文档
 
 ```bash
 cd /Codex/ACDP
@@ -79,7 +94,7 @@ npm run pm:sync
 
 也就是说：
 
-- 先根据真源重写 `docs/38`、`SESSION_HANDOFF.md`、`NEXT_STEPS.md`
+- 先根据真源重写仓库级与工作区级受管派生视图
 - 再校验派生文档是否和真源一致
 
 ### 3.3 只做一致性检查
@@ -120,11 +135,12 @@ cd /Codex/ACDP
 npm run pm:brief
 ```
 
-2. 阅读这 3 份自动生成文档：
+2. 阅读这几份自动生成文档：
 
 - `docs/38-项目JobList与状态清单.md`
 - `SESSION_HANDOFF.md`
 - `NEXT_STEPS.md`
+- `docs/2026-04-17-v1.0正式文档工作区/00-文档总索引.md`
 
 3. 如果需要更旧的上下文，再去看：
 
@@ -140,7 +156,7 @@ npm run pm:brief
 ### 推荐给新 session Codex 的开场提示词
 
 ```text
-继续 ACDP 工作。先运行 `cd /Codex/ACDP && npm run pm:brief`，再阅读自动生成的 `docs/38-项目JobList与状态清单.md`、`SESSION_HANDOFF.md`、`NEXT_STEPS.md`。如需变更状态，先改 `project_management/source_of_truth.json` 并执行 `npm run pm:sync`，然后再开始代码或文档实现。
+继续 ACDP 工作。先运行 `cd /Codex/ACDP && npm run pm:brief`，再阅读自动生成的 `docs/38-项目JobList与状态清单.md`、`SESSION_HANDOFF.md`、`NEXT_STEPS.md`，以及 `docs/2026-04-17-v1.0正式文档工作区/00-文档总索引.md`。如需变更状态，先改 `project_management/source_of_truth.json` 并执行 `npm run pm:sync`，然后再开始代码或文档实现。
 ```
 
 ## 5. 退出当前 Session 前必须做什么

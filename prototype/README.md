@@ -109,6 +109,7 @@ MinIO helper commands:
 Reference:
 
 - `docs/41-本地MinIO与制品仓凭据注入说明.md`
+- `docs/2026-04-17-v1.0正式文档工作区/11-配置项与部署运行说明.md`
 
 ## Browser Entry
 
@@ -247,6 +248,7 @@ Console implementation/docs entry points:
 - `prototype/src/cli/console-e2e.js`
 - `prototype/src/cli/console-smoke.js`
 - `docs/25-console宿主环境联调与smoke执行说明.md`
+- `docs/2026-04-17-v1.0正式文档工作区/00-文档总索引.md`
 
 ## Current Rule Model
 
