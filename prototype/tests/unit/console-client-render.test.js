@@ -513,6 +513,8 @@ test('console client major routes finish rendering without staying in loading st
         subtest.diagnostic(`rendered import detail preview in ${result.durationMs}ms`);
         assert.equal(result.ok, true);
         const html = String(fakeBrowser.app.innerHTML || '');
+        assert.ok(html.includes('批次类型'));
+        assert.ok(html.includes('提交人'));
         assert.ok(html.includes('按系统建议处理'));
         assert.ok(html.includes('下载阻断报表'));
         assert.ok(html.includes('可导入总数'));
@@ -553,10 +555,13 @@ test('console client major routes finish rendering without staying in loading st
         subtest.diagnostic(`rendered import detail imported in ${result.durationMs}ms`);
         assert.equal(result.ok, true);
         const html = String(fakeBrowser.app.innerHTML || '');
+        assert.ok(html.includes('批次结果'));
+        assert.ok(html.includes('导入执行人'));
         assert.ok(html.includes('替换导入'));
         assert.ok(html.includes('候选导入'));
         assert.ok(html.includes('跳过阻断'));
         assert.ok(html.includes('阻断未导入'));
+        assert.ok(!html.includes('<pre class="mono">{'));
       }
     });
   } finally {

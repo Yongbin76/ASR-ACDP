@@ -4127,6 +4127,71 @@ function renderRecommendationSummaryCards(summary = {}) {
   `;
 }
 
+function renderImportJobMetaSummary(item = {}, options = {}) {
+  const template = options.template || null;
+  const validationImport = options.validationImport === true;
+  const businessCategorySummary = String(options.businessCategorySummary || '').trim();
+  const job = item.job || {};
+  const jobTypeLabel = validationImport ? '验证样本导入批次' : '词典导入批次';
+  return `
+    <div class="summary-list">
+      <div class="summary-row"><span class="subtle">批次 ID</span><span>${escapeHtml(job.jobId || '')}</span></div>
+      <div class="summary-row"><span class="subtle">批次状态</span><span>${renderBadge(job.status)}</span></div>
+      <div class="summary-row"><span class="subtle">批次类型</span><span>${escapeHtml(jobTypeLabel)}</span></div>
+      <div class="summary-row"><span class="subtle">模板名称</span><span>${escapeHtml(template ? (template.templateName || job.templateCode || '') : (job.templateCode || '未记录'))}</span></div>
+      <div class="summary-row"><span class="subtle">模板版本</span><span>${escapeHtml(template ? (template.templateVersion || job.templateVersion || '') : (job.templateVersion || '未记录'))}</span></div>
+      <div class="summary-row"><span class="subtle">来源类型</span><span>${escapeHtml(sourceTypeLabel(job.sourceType, job.sourceType || '未记录'))}</span></div>
+      <div class="summary-row"><span class="subtle">提交人</span><span>${escapeHtml(job.submittedBy || '未记录')}</span></div>
+      <div class="summary-row"><span class="subtle">创建时间</span><span>${escapeHtml(formatDateTime(job.createdAt))}</span></div>
+      <div class="summary-row"><span class="subtle">确认人</span><span>${escapeHtml(job.confirmedBy || '未确认')}</span></div>
+      <div class="summary-row"><span class="subtle">确认时间</span><span>${escapeHtml(formatDateTime(job.confirmedAt))}</span></div>
+      <div class="summary-row"><span class="subtle">完成时间</span><span>${escapeHtml(formatDateTime(job.finishedAt))}</span></div>
+      ${!validationImport ? `<div class="summary-row"><span class="subtle">涉及业务属性</span><span>${escapeHtml(businessCategorySummary || '未识别')}</span></div>` : ''}
+    </div>
+  `;
+}
+
+function renderImportJobResultSummary(item = {}, options = {}) {
+  const validationImport = options.validationImport === true;
+  const jobStatus = String(((item || {}).job || {}).status || '').trim();
+  const resultSummary = item.resultSummary || {};
+  if (jobStatus !== 'imported') {
+    return `
+      <section class="callout">
+        <h3 class="callout-title">当前还未生成批次结果</h3>
+        <p>该批次仍处于预览阶段，结果统计应以真正执行“按系统建议处理”后的数据为准。</p>
+      </section>
+    `;
+  }
+  if (validationImport) {
+    return `
+      <div class="summary-list">
+        <div class="summary-row"><span class="subtle">新增样本</span><span>${escapeHtml(String(resultSummary.newTermCount || 0))}</span></div>
+        <div class="summary-row"><span class="subtle">更新样本</span><span>${escapeHtml(String(resultSummary.updatedTermCount || 0))}</span></div>
+        <div class="summary-row"><span class="subtle">跳过样本</span><span>${escapeHtml(String(resultSummary.skippedCount || 0))}</span></div>
+        <div class="summary-row"><span class="subtle">错误数</span><span>${escapeHtml(String(resultSummary.errorCount || 0))}</span></div>
+        <div class="summary-row"><span class="subtle">导入执行人</span><span>${escapeHtml(resultSummary.importedBy || '未记录')}</span></div>
+        <div class="summary-row"><span class="subtle">导入完成时间</span><span>${escapeHtml(formatDateTime(resultSummary.importedAt))}</span></div>
+      </div>
+    `;
+  }
+  return `
+    <div class="summary-list">
+      <div class="summary-row"><span class="subtle">替换导入</span><span>${escapeHtml(String(resultSummary.replaceImportedCount || 0))}</span></div>
+      <div class="summary-row"><span class="subtle">候选导入</span><span>${escapeHtml(String(resultSummary.candidateImportedCount || 0))}</span></div>
+      <div class="summary-row"><span class="subtle">并入已有</span><span>${escapeHtml(String(resultSummary.mergedExistingCount || 0))}</span></div>
+      <div class="summary-row"><span class="subtle">补录已有</span><span>${escapeHtml(String(resultSummary.aliasAppendedCount || 0))}</span></div>
+      <div class="summary-row"><span class="subtle">跳过阻断</span><span>${escapeHtml(String(resultSummary.skippedBlockedCount || 0))}</span></div>
+      <div class="summary-row"><span class="subtle">新增词条</span><span>${escapeHtml(String(resultSummary.newTermCount || 0))}</span></div>
+      <div class="summary-row"><span class="subtle">更新词条</span><span>${escapeHtml(String(resultSummary.updatedTermCount || 0))}</span></div>
+      <div class="summary-row"><span class="subtle">新增错误词</span><span>${escapeHtml(String(resultSummary.newAliasCount || 0))}</span></div>
+      <div class="summary-row"><span class="subtle">更新错误词</span><span>${escapeHtml(String(resultSummary.updatedAliasCount || 0))}</span></div>
+      <div class="summary-row"><span class="subtle">导入执行人</span><span>${escapeHtml(resultSummary.importedBy || '未记录')}</span></div>
+      <div class="summary-row"><span class="subtle">导入完成时间</span><span>${escapeHtml(formatDateTime(resultSummary.importedAt))}</span></div>
+    </div>
+  `;
+}
+
 function renderAdmissionSummaryBlock(summary = {}, title = '统一准入摘要') {
   const issues = Array.isArray(summary.issues) ? summary.issues : [];
   if (!issues.length && summary.level !== 'blocked') {
@@ -6996,17 +7061,10 @@ async function renderImportJobDetail(jobId) {
           <div class="section-head">
             <div>
               <h2 class="section-title">批次摘要</h2>
-              <div class="section-desc">批次状态和关键入口都集中在这里。</div>
+              <div class="section-desc">这里只保留批次本身的元信息，不再混入预览统计或导入结果。</div>
             </div>
           </div>
-          <div class="summary-list">
-            <div class="summary-row"><span class="subtle">批次 ID</span><span>${escapeHtml(item.job.jobId)}</span></div>
-            <div class="summary-row"><span class="subtle">批次状态</span><span>${renderBadge(item.job.status)}</span></div>
-            <div class="summary-row"><span class="subtle">模板编码</span><span>${escapeHtml(item.job.templateCode)}</span></div>
-            <div class="summary-row"><span class="subtle">模板状态</span><span>${template ? (template.legacy ? '兼容旧版' : '主路径') : '未记录'}</span></div>
-            <div class="summary-row"><span class="subtle">来源类型</span><span>${escapeHtml(sourceTypeLabel(item.job.sourceType, item.job.sourceType || '未记录'))}</span></div>
-            ${!validationImport ? `<div class="summary-row"><span class="subtle">业务属性</span><span>${escapeHtml(businessCategorySummary)}</span></div>` : ''}
-          </div>
+          ${renderImportJobMetaSummary(item, { template, validationImport, businessCategorySummary })}
           <div class="inline-actions" style="margin-top:14px;">
             ${item.job.status === 'preview_ready' ? `
               ${canConfirm
@@ -7061,11 +7119,11 @@ async function renderImportJobDetail(jobId) {
         <section class="panel">
           <div class="section-head">
             <div>
-              <h2 class="section-title">导入结果</h2>
-              <div class="section-desc">${validationImport ? '样本模板导入后，这里会显示新增 / 更新 / 跳过统计。' : '只有确认导入之后，这里的统计才会真实变化。'}</div>
+              <h2 class="section-title">批次结果</h2>
+              <div class="section-desc">${validationImport ? '这里展示验证样本批次的最终处理结果。' : '这里只展示导入执行后的最终结果，不再直接显示原始 JSON。'}</div>
             </div>
           </div>
-          <pre class="mono">${escapeHtml(JSON.stringify(item.resultSummary || {}, null, 2))}</pre>
+          ${renderImportJobResultSummary(item, { validationImport })}
         </section>
         ${validationImport
           ? `

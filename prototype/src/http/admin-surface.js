@@ -1426,12 +1426,13 @@ async function handleAdminRequest(req, res, context = {}) {
         return `${item.rowNo},"${canonicalText.replace(/"/g, '""')}","${String(item.errorCode || '').replace(/"/g, '""')}","${String(item.errorMessage || '').replace(/"/g, '""')}","${issueCodes.replace(/"/g, '""')}","${issueMessages.replace(/"/g, '""')}","${traceSummary.replace(/"/g, '""')}"`;
       }))
       .join('\n');
+    const output = `\uFEFF${body}`;
     res.writeHead(200, {
       'Content-Type': 'text/csv; charset=utf-8',
-      'Content-Length': Buffer.byteLength(body),
+      'Content-Length': Buffer.byteLength(output),
       'Content-Disposition': `attachment; filename="${jobId}_errors.csv"; filename*=UTF-8''${encodeURIComponent(`${jobId}_错误报表.csv`)}`,
     });
-    res.end(body);
+    res.end(output);
     return true;
   }
 
