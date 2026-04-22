@@ -25,6 +25,116 @@ test('PrototypeRuntime corrects known literal aliases from snapshot', () => {
   assert.equal(result.matches.length, 1);
 });
 
+test('PrototypeRuntime keeps candidate literal hits out of correctedText but exposes them as candidates', () => {
+  const snapshot = buildSnapshot([{
+    termId: 'term_candidate_1',
+    categoryCode: 'poi_road',
+    canonicalText: '祁候选顺路',
+    aliases: ['旗候选顺路'],
+    replaceMode: 'candidate',
+    baseConfidence: 0.92,
+    pinyinRuntimeMode: 'candidate',
+    rules: {
+      candidateOnly: true,
+    },
+    pinyinProfile: {
+      fullPinyinNoTone: 'qihouxuanshunlu',
+      initials: 'qhxsl',
+      syllables: ['qi', 'hou', 'xuan', 'shun', 'lu'],
+      runtimeMode: 'candidate',
+      polyphoneMode: 'default',
+      customFullPinyinNoTone: '',
+      alternativeReadings: [],
+      notes: '',
+    },
+  }]);
+  const runtime = new PrototypeRuntime(snapshot, '/tmp/snapshot.json');
+  const detail = runtime.matchDetailed('我想去旗候选顺路');
+  assert.equal(detail.correctedText, '我想去旗候选顺路');
+  assert.equal(detail.matches.length, 0);
+  assert.equal(detail.candidates.length, 1);
+  assert.equal(detail.candidates[0].canonical, '祁候选顺路');
+});
+
+test('PrototypeRuntime disables pinyin replacement when pinyinRuntimeMode is off', () => {
+  const snapshot = buildSnapshot([{
+    termId: 'term_candidate_2',
+    categoryCode: 'poi_road',
+    canonicalText: '祁静默顺路',
+    aliases: [],
+    replaceMode: 'replace',
+    baseConfidence: 0.94,
+    pinyinRuntimeMode: 'off',
+    rules: {},
+    pinyinProfile: {
+      fullPinyinNoTone: 'qijingmoshunlu',
+      initials: 'qjmsl',
+      syllables: ['qi', 'jing', 'mo', 'shun', 'lu'],
+      runtimeMode: 'off',
+      polyphoneMode: 'default',
+      customFullPinyinNoTone: '',
+      alternativeReadings: [],
+      notes: '',
+    },
+  }]);
+  const runtime = new PrototypeRuntime(snapshot, '/tmp/snapshot.json');
+  const detail = runtime.matchDetailed('我想找旗静默顺路');
+  assert.equal(detail.correctedText, '我想找旗静默顺路');
+  assert.equal(detail.candidates.length, 0);
+});
+
+test('PrototypeRuntime prefers replace over candidate on the same span', () => {
+  const snapshot = buildSnapshot([
+    {
+      termId: 'term_replace',
+      categoryCode: 'poi_road',
+      canonicalText: '祁同位顺路',
+      aliases: ['旗同位顺路'],
+      replaceMode: 'replace',
+      baseConfidence: 0.95,
+      pinyinRuntimeMode: 'candidate',
+      rules: {},
+      pinyinProfile: {
+        fullPinyinNoTone: 'qitongweishunlu',
+        initials: 'qtwsl',
+        syllables: ['qi', 'tong', 'wei', 'shun', 'lu'],
+        runtimeMode: 'candidate',
+        polyphoneMode: 'default',
+        customFullPinyinNoTone: '',
+        alternativeReadings: [],
+        notes: '',
+      },
+    },
+    {
+      termId: 'term_candidate_overlap',
+      categoryCode: 'poi_road',
+      canonicalText: '岐同位顺路',
+      aliases: ['旗同位顺路'],
+      replaceMode: 'candidate',
+      baseConfidence: 0.99,
+      pinyinRuntimeMode: 'candidate',
+      rules: {
+        candidateOnly: true,
+      },
+      pinyinProfile: {
+        fullPinyinNoTone: 'qitongweishunlu',
+        initials: 'qtwsl',
+        syllables: ['qi', 'tong', 'wei', 'shun', 'lu'],
+        runtimeMode: 'candidate',
+        polyphoneMode: 'default',
+        customFullPinyinNoTone: '',
+        alternativeReadings: [],
+        notes: '',
+      },
+    },
+  ]);
+  const runtime = new PrototypeRuntime(snapshot, '/tmp/snapshot.json');
+  const detail = runtime.matchDetailed('我想去旗同位顺路');
+  assert.equal(detail.correctedText, '我想去祁同位顺路');
+  assert.equal(detail.matches.length, 1);
+  assert.equal(detail.matches[0].canonical, '祁同位顺路');
+});
+
 test('latestSnapshotPath resolves from config object', () => {
   const appConfig = createAppConfig();
   const expected = path.join(appConfig.resolvedPaths.latestReleaseDir, 'snapshot.json');

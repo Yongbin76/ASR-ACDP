@@ -73,6 +73,39 @@ function hasCharTypeBoundary(text, start, end) {
   return leftOk && rightOk;
 }
 
+function effectiveLiteralMode(termMeta = {}) {
+  const replaceMode = String(termMeta.replaceMode || 'replace').trim() || 'replace';
+  if (replaceMode === 'block') {
+    return 'block';
+  }
+  if (replaceMode === 'candidate') {
+    return 'candidate';
+  }
+  return 'replace';
+}
+
+function effectivePinyinMode(termMeta = {}) {
+  const replaceMode = String(termMeta.replaceMode || 'replace').trim() || 'replace';
+  const pinyinRuntimeMode = String(termMeta.pinyinRuntimeMode || 'candidate').trim() || 'candidate';
+  if (replaceMode === 'block') {
+    return 'off';
+  }
+  if (pinyinRuntimeMode === 'off') {
+    return 'off';
+  }
+  if (replaceMode === 'candidate') {
+    return 'candidate';
+  }
+  return pinyinRuntimeMode === 'replace' ? 'replace' : 'candidate';
+}
+
+function actionRank(action = '') {
+  if (action === 'replace') return 0;
+  if (action === 'candidate') return 1;
+  if (action === 'block') return 2;
+  return 3;
+}
+
 /**
  * 功能：原型运行时匹配引擎，负责字面召回、拼音召回、规则评估与文本修正。
  * 输入：构造时接收快照 bundle 和 snapshotPath；运行时通过 `match()` 接收文本。
@@ -189,7 +222,7 @@ class PrototypeRuntime {
         category: payload.categoryCode,
         channel: 'literal',
         confidence: payload.baseConfidence,
-        action: payload.replaceMode === 'block' ? 'block' : 'replace',
+        action: effectiveLiteralMode(payload),
         termId: payload.termId,
         variantText: payload.pattern,
         reasons: ['literal_match'],
@@ -228,11 +261,19 @@ class PrototypeRuntime {
           continue;
         }
         for (const candidate of candidates) {
+          const termMeta = this.termMetaMap.get(candidate.termId) || candidate;
+          const pinyinMode = effectivePinyinMode(termMeta);
+          if (pinyinMode === 'off') {
+            continue;
+          }
           if (candidate.sourceText === window) {
             continue;
           }
           const confidence = this.computePinyinConfidence(candidate, window, len, options);
-          const allowReplace = Boolean(options.enablePinyinAutoReplace) && len >= 3 && confidence >= 0.88;
+          const allowReplace = Boolean(options.enablePinyinAutoReplace)
+            && pinyinMode === 'replace'
+            && len >= 3
+            && confidence >= 0.88;
           hits.push({
             start: mapped.start,
             end: mapped.end,
@@ -358,6 +399,7 @@ class PrototypeRuntime {
     const ordered = [...matches].sort((a, b) => {
       if (a.start !== b.start) return a.start - b.start;
       if (a.length !== b.length) return b.length - a.length;
+      if (actionRank(a.action) !== actionRank(b.action)) return actionRank(a.action) - actionRank(b.action);
       if (a.confidence !== b.confidence) return b.confidence - a.confidence;
       if (a.channel !== b.channel) return a.channel === 'literal' ? -1 : 1;
       return a.canonical.localeCompare(b.canonical, 'zh-CN');

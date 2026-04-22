@@ -13,10 +13,10 @@ const {
 const {
   evaluateTermAdmission,
   summarizeTermAdmission,
-  createBlockedAdmissionError,
 } = require('./term-admission');
 
 const DEFAULT_TERM_IMPORT_RUNTIME_MODE = 'candidate';
+const SYSTEM_RECOMMENDATION_KEY = '__systemRecommendation';
 
 /**
  * 功能：处理`nowIso`相关逻辑。
@@ -91,11 +91,79 @@ function primaryIssueSummary(issues = []) {
   return summary.primaryIssue || null;
 }
 
+function buildRecommendationSummary(rows = []) {
+  const summary = {
+    saveReplaceCount: 0,
+    saveCandidateCount: 0,
+    mergeExistingCount: 0,
+    appendAliasCount: 0,
+    skipBlockedCount: 0,
+  };
+  for (const row of rows || []) {
+    const action = String((row && row.recommendedAction) || '').trim();
+    if (action === 'save_replace') {
+      summary.saveReplaceCount += 1;
+    } else if (action === 'save_candidate') {
+      summary.saveCandidateCount += 1;
+    } else if (action === 'merge_existing') {
+      summary.mergeExistingCount += 1;
+    } else if (action === 'append_alias_to_existing') {
+      summary.appendAliasCount += 1;
+    } else if (action === 'skip_blocked') {
+      summary.skipBlockedCount += 1;
+    }
+  }
+  return summary;
+}
+
+function buildStoredImportRowPayload(normalizedPayload = {}, row = {}) {
+  return {
+    ...normalizedPayload,
+    [SYSTEM_RECOMMENDATION_KEY]: {
+      recommendedAction: String(row.recommendedAction || '').trim(),
+      runtimeSuitability: String(row.runtimeSuitability || '').trim(),
+      reasonCodes: Array.isArray(row.reasonCodes) ? row.reasonCodes : [],
+      reasonSummary: String(row.reasonSummary || '').trim(),
+      reviewHints: Array.isArray(row.reviewHints) ? row.reviewHints : [],
+      targetTermId: String(row.targetTermId || '').trim(),
+      targetCanonicalText: String(row.targetCanonicalText || '').trim(),
+    },
+  };
+}
+
+function extractStoredImportRowPayload(storedPayload = {}) {
+  const payload = { ...(storedPayload || {}) };
+  const meta = payload[SYSTEM_RECOMMENDATION_KEY] && typeof payload[SYSTEM_RECOMMENDATION_KEY] === 'object'
+    ? payload[SYSTEM_RECOMMENDATION_KEY]
+    : {};
+  delete payload[SYSTEM_RECOMMENDATION_KEY];
+  return {
+    normalizedPayload: payload,
+    systemRecommendation: {
+      recommendedAction: String(meta.recommendedAction || '').trim(),
+      runtimeSuitability: String(meta.runtimeSuitability || '').trim(),
+      reasonCodes: Array.isArray(meta.reasonCodes) ? meta.reasonCodes : [],
+      reasonSummary: String(meta.reasonSummary || '').trim(),
+      reviewHints: Array.isArray(meta.reviewHints) ? meta.reviewHints : [],
+      targetTermId: String(meta.targetTermId || '').trim(),
+      targetCanonicalText: String(meta.targetCanonicalText || '').trim(),
+    },
+  };
+}
+
 function importRowFromAdmission(rowNo, rawPayload, normalizedPayload, admission = {}) {
   const primaryIssue = primaryIssueSummary(admission.issues);
-  const mergedExisting = Array.isArray(admission.issues)
-    && admission.issues.some((entry) => entry && entry.code === 'exact_match_existing');
-  const admissionLevel = admission.level || 'ready';
+  const recommendedAction = String(admission.recommendedAction || '').trim() || 'save_replace';
+  const admissionLevel = admission.level || (recommendedAction === 'skip_blocked' ? 'blocked' : 'ready');
+  const needsAttention = recommendedAction !== 'save_replace'
+    || (Array.isArray(admission.issues) && admission.issues.some((entry) => entry && entry.level === 'warning'));
+  const decision = recommendedAction === 'merge_existing'
+    ? 'merge_existing'
+    : recommendedAction === 'append_alias_to_existing'
+      ? 'append_alias_to_existing'
+      : recommendedAction === 'skip_blocked'
+        ? 'skipped_blocked'
+        : 'accept';
   return {
     rowNo,
     rawPayload,
@@ -104,10 +172,17 @@ function importRowFromAdmission(rowNo, rawPayload, normalizedPayload, admission 
     targetTermKey: admission.normalizedInput && admission.normalizedInput.categoryCode && admission.normalizedInput.canonicalText
       ? `${admission.normalizedInput.categoryCode}|${admission.normalizedInput.canonicalText}`
       : '',
-    status: admissionLevel === 'blocked' ? 'error' : (admissionLevel === 'warning' ? 'warning' : 'ready'),
-    decision: admissionLevel === 'blocked' ? 'pending' : (mergedExisting ? 'merge_existing' : 'accept'),
+    status: admissionLevel === 'blocked' ? 'error' : (needsAttention ? 'warning' : 'ready'),
+    decision,
+    recommendedAction,
+    runtimeSuitability: String(admission.runtimeSuitability || (admissionLevel === 'blocked' ? 'blocked' : 'replace')).trim() || 'replace',
+    reasonCodes: Array.isArray(admission.reasonCodes) ? admission.reasonCodes : [],
+    reasonSummary: String(admission.reasonSummary || '').trim(),
+    reviewHints: Array.isArray(admission.reviewHints) ? admission.reviewHints : [],
+    targetTermId: String(admission.targetTermId || '').trim(),
+    targetCanonicalText: String(admission.targetCanonicalText || '').trim(),
     errorCode: primaryIssue ? primaryIssue.code : '',
-    errorMessage: primaryIssue ? primaryIssue.message : (mergedExisting ? 'term already exists and will be merged' : ''),
+    errorMessage: primaryIssue ? primaryIssue.message : (admissionLevel === 'blocked' ? String(admission.reasonSummary || '').trim() : ''),
   };
 }
 
@@ -179,15 +254,47 @@ function buildImportedTermReviewOptions(job = {}, row = {}, file = null, term = 
       rowNo: row.row_no == null ? null : Number(row.row_no),
       issues,
       admissionLevel: blockedCount > 0 ? 'blocked' : (warningCount > 0 ? 'warning' : 'ready'),
+      recommendedAction: row.recommendedAction || '',
+      runtimeSuitability: row.runtimeSuitability || '',
+      targetTermId: row.targetTermId || '',
+      targetCanonicalText: row.targetCanonicalText || '',
+      reasonSummary: row.reasonSummary || '',
+      reviewHints: Array.isArray(row.reviewHints) ? row.reviewHints : [],
     },
     admissionSummary: {
       admissionLevel: blockedCount > 0 ? 'blocked' : (warningCount > 0 ? 'warning' : 'ready'),
       blockedCount,
       warningCount,
       issues,
+      recommendedAction: row.recommendedAction || '',
+      runtimeSuitability: row.runtimeSuitability || '',
+      reasonSummary: row.reasonSummary || '',
+      reviewHints: Array.isArray(row.reviewHints) ? row.reviewHints : [],
+      targetTermId: row.targetTermId || '',
+      targetCanonicalText: row.targetCanonicalText || '',
     },
     conflictSummary: buildConflictSummaryFromIssues(issues),
   };
+}
+
+/**
+ * 功能：把确认阶段被跳过的阻断行写回数据库。
+ * 输入：数据库连接、导入行对象、错误码、错误信息。
+ * 输出：无显式返回。
+ */
+function markImportRowSkippedBlocked(db, row, errorCode, errorMessage) {
+  db.prepare(`
+    UPDATE import_job_rows
+    SET status = ?, decision = ?, error_code = ?, error_message = ?, updated_at = ?
+    WHERE row_id = ?
+  `).run(
+    'error',
+    'skipped_blocked',
+    String(errorCode || row.error_code || '').trim(),
+    String(errorMessage || row.error_message || '').trim(),
+    nowIso(),
+    row.row_id,
+  );
 }
 
 /**
@@ -519,7 +626,7 @@ function createImportJob(db, appConfig, payload = {}, operator = 'console_user')
         jobId,
         row.rowNo,
         JSON.stringify(row.rawPayload || {}),
-        JSON.stringify(row.normalizedPayload || {}),
+        JSON.stringify(buildStoredImportRowPayload(row.normalizedPayload || {}, row)),
         JSON.stringify(row.issues || []),
         row.targetTermKey || '',
         row.status,
@@ -543,6 +650,8 @@ function createImportJob(db, appConfig, payload = {}, operator = 'console_user')
       readyRows: rows.filter((item) => item.status === 'ready').length,
       warningRows: rows.filter((item) => item.status === 'warning').length,
       errorRows: rows.filter((item) => item.status === 'error').length,
+      importableRows: rows.filter((item) => ['ready', 'warning'].includes(item.status)).length,
+      recommendationSummary: buildRecommendationSummary(rows),
       newTermCount: rows.filter((item) => item.status === 'ready' && item.targetTermKey).length,
       updatedTermCount: rows.filter((item) => item.decision === 'merge_existing').length,
       newAliasCount: rows.reduce((sum, item) => sum + ((item.normalizedPayload && item.normalizedPayload.aliases) ? item.normalizedPayload.aliases.length : (item.normalizedPayload && item.normalizedPayload.aliasText ? 1 : 0)), 0),
@@ -609,6 +718,40 @@ function upsertAliasSource(db, termId, aliasText, payload) {
   );
 }
 
+function admissionTargetMatchesCurrent(currentTerm = null, payload = {}) {
+  if (!currentTerm) {
+    return false;
+  }
+  return String(currentTerm.categoryCode || '').trim() === String(payload.categoryCode || '').trim()
+    && String(currentTerm.canonicalText || '').trim() === String(payload.canonicalText || '').trim();
+}
+
+function buildPersistableImportedTermPayload(payload = {}, admission = {}, currentTerm = null) {
+  const next = {
+    ...payload,
+  };
+  const currentRules = currentTerm && currentTerm.rules ? currentTerm.rules : {};
+  if (String(admission.runtimeSuitability || '').trim() === 'candidate') {
+    next.replaceMode = 'candidate';
+    if (String(next.pinyinRuntimeMode || '').trim() !== 'off') {
+      next.pinyinRuntimeMode = 'candidate';
+    }
+    next.rules = {
+      ...currentRules,
+      ...(payload.rules || {}),
+      candidateOnly: true,
+    };
+    return next;
+  }
+  if (payload && payload.rules) {
+    next.rules = {
+      ...currentRules,
+      ...payload.rules,
+    };
+  }
+  return next;
+}
+
 /**
  * 功能：确认`import job`相关逻辑。
  * 输入：`db`（数据库连接）、`appConfig`（应用配置对象）、`jobId`（导入批次 ID）、`operator`（操作人标识）。
@@ -630,83 +773,54 @@ function confirmImportJob(db, appConfig, jobId, operator = 'console_user') {
   }
   const file = db.prepare(`SELECT * FROM import_job_files WHERE job_id = ? AND file_role = 'source_file' ORDER BY uploaded_at ASC LIMIT 1`).get(jobId);
   const rows = db.prepare(`SELECT * FROM import_job_rows WHERE job_id = ? ORDER BY row_no ASC`).all(jobId);
-  if (rows.some((item) => item.status === 'error')) {
-    const error = new Error('当前批次仍存在 blocked/error 行，请先修正文件后重新上传。');
+  const importableRows = rows.filter((item) => ['ready', 'warning'].includes(String(item.status || '').trim()));
+  if (importableRows.length === 0) {
+    const error = new Error('当前批次没有可导入记录，仅剩阻断行，请修正后重新预览。');
     error.statusCode = 409;
     error.code = 'import_job_blocked_rows';
     error.payload = {
       error: `${error.code}: ${error.message}`,
       blockedRowCount: rows.filter((item) => item.status === 'error').length,
       warningRowCount: rows.filter((item) => item.status === 'warning').length,
+      importableRowCount: 0,
       issues: [],
     };
     throw error;
   }
-  for (const row of rows) {
-    if (job.template_code === 'validation_cases_csv_v1') {
-      continue;
-    }
-    const payload = JSON.parse(row.normalized_payload_json || '{}');
-    if (job.template_code === 'term_aliases_csv_v1') {
-      const target = db.prepare('SELECT term_id FROM terms WHERE category_code = ? AND canonical_text = ?').get(payload.categoryCode, payload.canonicalText);
-      if (!target) {
-        const error = new Error('确认导入时发现 alias 目标词条不存在，请重新生成预览。');
-        error.statusCode = 409;
-        error.code = 'import_job_alias_target_missing';
-        throw error;
-      }
-      const current = getTerm(db, target.term_id);
-      const admission = evaluateTermAdmission(db, {
-        ...current,
-        aliases: Array.from(new Set([...(current.aliases || []), payload.aliasText])),
-        pinyinProfile: current.pinyinProfile || {},
-      }, {
-        currentTermId: current.termId,
-        currentTerm: current,
-        sourceMode: 'import',
-      });
-      if (admission.level === 'blocked') {
-        throw createBlockedAdmissionError(admission, {
-          code: 'import_job_term_admission_blocked',
-          message: `导入第 ${row.row_no} 行在确认阶段触发准入阻断，请重新生成预览后再导入。`,
-        });
-      }
-      continue;
-    }
-    const existingRow = payload.categoryCode && payload.canonicalText
-      ? db.prepare('SELECT term_id FROM terms WHERE category_code = ? AND canonical_text = ?').get(payload.categoryCode, payload.canonicalText)
-      : null;
-    const currentTerm = existingRow ? getTerm(db, existingRow.term_id) : null;
-    const admission = evaluateTermAdmission(db, payload, {
-      currentTermId: currentTerm ? currentTerm.termId : '',
-      currentTerm,
-      sourceMode: 'import',
-    });
-    if (admission.level === 'blocked') {
-      throw createBlockedAdmissionError(admission, {
-        code: 'import_job_term_admission_blocked',
-        message: `导入第 ${row.row_no} 行在确认阶段触发准入阻断，请重新生成预览后再导入。`,
-      });
-    }
-  }
+
   const changedTermIds = new Set();
   const reviewOptionsByTermId = new Map();
   const summary = {
     newTermCount: 0,
+    replaceImportedCount: 0,
+    candidateImportedCount: 0,
+    mergedExistingCount: 0,
+    aliasAppendedCount: 0,
     updatedTermCount: 0,
     newAliasCount: 0,
     updatedAliasCount: 0,
+    importedReadyCount: 0,
+    importedWarningCount: 0,
+    skippedBlockedCount: 0,
     createdCount: 0,
     updatedCount: 0,
     skippedCount: 0,
-    errorCount: rows.filter((item) => item.status === 'error').length,
+    errorCount: 0,
     changedTermIds: [],
   };
+
   for (const row of rows) {
     if (row.status === 'error') {
+      markImportRowSkippedBlocked(db, row, row.error_code || 'import_job_row_blocked', row.error_message || 'preview blocked row skipped during confirm');
+      summary.skippedBlockedCount += 1;
+      summary.skippedCount += 1;
       continue;
     }
-    const payload = JSON.parse(row.normalized_payload_json || '{}');
+
+    const { normalizedPayload: payload } = extractStoredImportRowPayload(JSON.parse(row.normalized_payload_json || '{}'));
+    const originalStatus = String(row.status || '').trim();
+    let finalDecision = String(row.decision || 'accept').trim() || 'accept';
+
     if (job.template_code === 'validation_cases_csv_v1') {
       const result = importValidationCases(db, {
         sourceType: payload.sourceType || job.source_type || 'validation_import',
@@ -715,27 +829,54 @@ function confirmImportJob(db, appConfig, jobId, operator = 'console_user') {
       }, operator);
       summary.createdCount += Number(result.createdCount || 0);
       summary.updatedCount += Number(result.updatedCount || 0);
-      summary.skippedCount += result.skippedCount;
+      summary.skippedCount += Number(result.skippedCount || 0);
     } else if (job.template_code === 'term_aliases_csv_v1') {
-      const existingRow = db.prepare('SELECT term_id FROM terms WHERE category_code = ? AND canonical_text = ?').get(payload.categoryCode, payload.canonicalText);
-      if (!existingRow) {
-        db.prepare('UPDATE import_job_rows SET status = ?, error_code = ?, error_message = ?, updated_at = ? WHERE row_id = ?')
-          .run('error', 'target_term_not_found', 'target term not found during confirm', nowIso(), row.row_id);
+      const existingAliasTarget = db.prepare('SELECT term_id FROM terms WHERE category_code = ? AND canonical_text = ?').get(payload.categoryCode, payload.canonicalText);
+      if (!existingAliasTarget) {
+        markImportRowSkippedBlocked(db, row, 'target_term_not_found', 'target term not found during confirm');
+        summary.skippedBlockedCount += 1;
+        summary.skippedCount += 1;
         summary.errorCount += 1;
         continue;
       }
-      const current = getTerm(db, existingRow.term_id);
+      const current = getTerm(db, existingAliasTarget.term_id);
       const mergedAliases = Array.from(new Set([...(current.aliases || []), payload.aliasText])).sort((a, b) => a.localeCompare(b, 'zh-CN'));
+      const admission = evaluateTermAdmission(db, {
+        ...current,
+        aliases: mergedAliases,
+        pinyinProfile: current.pinyinProfile || {},
+      }, {
+        currentTermId: current.termId,
+        currentTerm: current,
+        sourceMode: 'import',
+      });
+      if (admission.level === 'blocked') {
+        const admissionSummary = summarizeTermAdmission(admission);
+        const blockedIssue = (admissionSummary.issues || [])[0] || {};
+        markImportRowSkippedBlocked(
+          db,
+          row,
+          blockedIssue.code || 'import_job_term_admission_blocked',
+          blockedIssue.message || `导入第 ${row.row_no} 行在确认阶段触发准入阻断，请重新生成预览后再导入。`,
+        );
+        summary.skippedBlockedCount += 1;
+        summary.skippedCount += 1;
+        summary.errorCount += 1;
+        continue;
+      }
       const beforeCount = (current.aliases || []).length;
-      const updated = updateTerm(db, existingRow.term_id, {
+      const updated = updateTerm(db, existingAliasTarget.term_id, {
         aliases: mergedAliases,
       }, operator);
       changedTermIds.add(updated.termId);
       if (mergedAliases.length > beforeCount) {
-        summary.newAliasCount += mergedAliases.length - beforeCount;
+        const appendedCount = mergedAliases.length - beforeCount;
+        summary.newAliasCount += appendedCount;
+        summary.aliasAppendedCount += appendedCount;
       } else {
         summary.updatedAliasCount += 1;
       }
+      finalDecision = 'append_alias_to_existing';
       upsertAliasSource(db, updated.termId, payload.aliasText, {
         sourceType: payload.sourceType || job.source_type,
         importJobId: jobId,
@@ -745,18 +886,54 @@ function confirmImportJob(db, appConfig, jobId, operator = 'console_user') {
       });
       reviewOptionsByTermId.set(updated.termId, buildImportedTermReviewOptions(job, row, file, updated));
     } else {
-      const existingRow = db.prepare('SELECT term_id FROM terms WHERE category_code = ? AND canonical_text = ?').get(payload.categoryCode, payload.canonicalText);
-      if (existingRow) {
-        const current = getTerm(db, existingRow.term_id);
+      const exactExistingRow = payload.categoryCode && payload.canonicalText
+        ? db.prepare('SELECT term_id FROM terms WHERE category_code = ? AND canonical_text = ?').get(payload.categoryCode, payload.canonicalText)
+        : null;
+      const exactCurrentTerm = exactExistingRow ? getTerm(db, exactExistingRow.term_id) : null;
+      const admission = evaluateTermAdmission(db, payload, {
+        currentTermId: exactCurrentTerm ? exactCurrentTerm.termId : '',
+        currentTerm: exactCurrentTerm,
+        sourceMode: 'import',
+      });
+      const action = String(admission.recommendedAction || '').trim();
+      if (admission.level === 'blocked' || action === 'skip_blocked') {
+        const admissionSummary = summarizeTermAdmission(admission);
+        const blockedIssue = (admissionSummary.issues || [])[0] || {};
+        markImportRowSkippedBlocked(
+          db,
+          row,
+          blockedIssue.code || (admissionSummary.reasonCodes || [])[0] || 'import_job_term_admission_blocked',
+          blockedIssue.message || admissionSummary.reasonSummary || `导入第 ${row.row_no} 行在确认阶段触发准入阻断，请重新生成预览后再导入。`,
+        );
+        summary.skippedBlockedCount += 1;
+        summary.skippedCount += 1;
+        summary.errorCount += 1;
+        continue;
+      }
+
+      if (action === 'merge_existing') {
+        finalDecision = 'merge_existing';
+        const targetTermId = String(admission.targetTermId || '').trim();
+        const current = targetTermId ? getTerm(db, targetTermId) : null;
+        if (!current) {
+          markImportRowSkippedBlocked(db, row, 'merge_target_missing', 'merge target missing during confirm');
+          summary.skippedBlockedCount += 1;
+          summary.skippedCount += 1;
+          summary.errorCount += 1;
+          continue;
+        }
         const mergedAliases = Array.from(new Set([...(current.aliases || []), ...(payload.aliases || [])])).sort((a, b) => a.localeCompare(b, 'zh-CN'));
         const beforeAliasCount = (current.aliases || []).length;
-        const updated = updateTerm(db, existingRow.term_id, {
-          ...payload,
-          aliases: mergedAliases,
-          sourceType: payload.sourceType || current.sourceType,
+        const updated = updateTerm(db, current.termId, {
+          ...buildPersistableImportedTermPayload({
+            ...payload,
+            aliases: mergedAliases,
+            sourceType: payload.sourceType || current.sourceType,
+          }, admission, current),
         }, operator);
         changedTermIds.add(updated.termId);
         summary.updatedTermCount += 1;
+        summary.mergedExistingCount += 1;
         if (mergedAliases.length > beforeAliasCount) {
           summary.newAliasCount += mergedAliases.length - beforeAliasCount;
         }
@@ -776,24 +953,42 @@ function confirmImportJob(db, appConfig, jobId, operator = 'console_user') {
             sourceRef: `${job.template_code}:${row.row_no}`,
           });
         }
-        reviewOptionsByTermId.set(updated.termId, buildImportedTermReviewOptions(job, row, file, updated));
-      } else {
-        const created = createTerm(db, {
-          ...payload,
-          status: 'draft',
+        reviewOptionsByTermId.set(updated.termId, buildImportedTermReviewOptions(job, {
+          ...row,
+          recommendedAction: action,
+          runtimeSuitability: admission.runtimeSuitability,
+          targetTermId: admission.targetTermId,
+          targetCanonicalText: admission.targetCanonicalText,
+          reasonSummary: admission.reasonSummary,
+          reviewHints: admission.reviewHints,
+        }, file, updated));
+      } else if (action === 'append_alias_to_existing') {
+        finalDecision = 'append_alias_to_existing';
+        const targetTermId = String(admission.targetTermId || '').trim();
+        const current = targetTermId ? getTerm(db, targetTermId) : null;
+        if (!current) {
+          markImportRowSkippedBlocked(db, row, 'append_target_missing', 'append target missing during confirm');
+          summary.skippedBlockedCount += 1;
+          summary.skippedCount += 1;
+          summary.errorCount += 1;
+          continue;
+        }
+        const appendedAliases = Array.from(new Set([payload.canonicalText, ...(payload.aliases || [])])).filter(Boolean);
+        const mergedAliases = Array.from(new Set([...(current.aliases || []), ...appendedAliases])).sort((a, b) => a.localeCompare(b, 'zh-CN'));
+        const beforeAliasCount = (current.aliases || []).length;
+        const updated = updateTerm(db, current.termId, {
+          aliases: mergedAliases,
         }, operator);
-        changedTermIds.add(created.termId);
-        summary.newTermCount += 1;
-        summary.newAliasCount += (payload.aliases || []).length;
-        upsertTermSource(db, created.termId, {
-          sourceType: payload.sourceType || job.source_type,
-          importJobId: jobId,
-          sourceFileName: file ? file.original_name : '',
-          sourceRowNo: row.row_no,
-          sourceRef: `${job.template_code}:${row.row_no}`,
-        });
-        for (const aliasText of (payload.aliases || [])) {
-          upsertAliasSource(db, created.termId, aliasText, {
+        changedTermIds.add(updated.termId);
+        if (mergedAliases.length > beforeAliasCount) {
+          const appendedCount = mergedAliases.length - beforeAliasCount;
+          summary.newAliasCount += appendedCount;
+          summary.aliasAppendedCount += appendedCount;
+        } else {
+          summary.updatedAliasCount += 1;
+        }
+        for (const aliasText of appendedAliases) {
+          upsertAliasSource(db, updated.termId, aliasText, {
             sourceType: payload.sourceType || job.source_type,
             importJobId: jobId,
             sourceFileName: file ? file.original_name : '',
@@ -801,12 +996,110 @@ function confirmImportJob(db, appConfig, jobId, operator = 'console_user') {
             sourceRef: `${job.template_code}:${row.row_no}`,
           });
         }
-        reviewOptionsByTermId.set(created.termId, buildImportedTermReviewOptions(job, row, file, created));
+        reviewOptionsByTermId.set(updated.termId, buildImportedTermReviewOptions(job, {
+          ...row,
+          recommendedAction: action,
+          runtimeSuitability: admission.runtimeSuitability,
+          targetTermId: admission.targetTermId,
+          targetCanonicalText: admission.targetCanonicalText,
+          reasonSummary: admission.reasonSummary,
+          reviewHints: admission.reviewHints,
+        }, file, updated));
+      } else {
+        finalDecision = 'accept';
+        if (exactExistingRow) {
+          const current = getTerm(db, exactExistingRow.term_id);
+          const mergedAliases = Array.from(new Set([...(current.aliases || []), ...(payload.aliases || [])])).sort((a, b) => a.localeCompare(b, 'zh-CN'));
+          const beforeAliasCount = (current.aliases || []).length;
+          const updated = updateTerm(db, exactExistingRow.term_id, buildPersistableImportedTermPayload({
+            ...payload,
+            aliases: mergedAliases,
+            sourceType: payload.sourceType || current.sourceType,
+          }, admission, current), operator);
+          changedTermIds.add(updated.termId);
+          summary.updatedTermCount += 1;
+          if (mergedAliases.length > beforeAliasCount) {
+            summary.newAliasCount += mergedAliases.length - beforeAliasCount;
+          }
+          upsertTermSource(db, updated.termId, {
+            sourceType: payload.sourceType || job.source_type,
+            importJobId: jobId,
+            sourceFileName: file ? file.original_name : '',
+            sourceRowNo: row.row_no,
+            sourceRef: `${job.template_code}:${row.row_no}`,
+          });
+          for (const aliasText of (payload.aliases || [])) {
+            upsertAliasSource(db, updated.termId, aliasText, {
+              sourceType: payload.sourceType || job.source_type,
+              importJobId: jobId,
+              sourceFileName: file ? file.original_name : '',
+              sourceRowNo: row.row_no,
+              sourceRef: `${job.template_code}:${row.row_no}`,
+            });
+          }
+          reviewOptionsByTermId.set(updated.termId, buildImportedTermReviewOptions(job, {
+            ...row,
+            recommendedAction: action,
+            runtimeSuitability: admission.runtimeSuitability,
+            targetTermId: admission.targetTermId,
+            targetCanonicalText: admission.targetCanonicalText,
+            reasonSummary: admission.reasonSummary,
+            reviewHints: admission.reviewHints,
+          }, file, updated));
+        } else {
+          const created = createTerm(db, {
+            ...buildPersistableImportedTermPayload({
+              ...payload,
+              status: 'draft',
+            }, admission, null),
+          }, operator);
+          changedTermIds.add(created.termId);
+          summary.newTermCount += 1;
+          summary.newAliasCount += (payload.aliases || []).length;
+          upsertTermSource(db, created.termId, {
+            sourceType: payload.sourceType || job.source_type,
+            importJobId: jobId,
+            sourceFileName: file ? file.original_name : '',
+            sourceRowNo: row.row_no,
+            sourceRef: `${job.template_code}:${row.row_no}`,
+          });
+          for (const aliasText of (payload.aliases || [])) {
+            upsertAliasSource(db, created.termId, aliasText, {
+              sourceType: payload.sourceType || job.source_type,
+              importJobId: jobId,
+              sourceFileName: file ? file.original_name : '',
+              sourceRowNo: row.row_no,
+              sourceRef: `${job.template_code}:${row.row_no}`,
+            });
+          }
+          reviewOptionsByTermId.set(created.termId, buildImportedTermReviewOptions(job, {
+            ...row,
+            recommendedAction: action,
+            runtimeSuitability: admission.runtimeSuitability,
+            targetTermId: admission.targetTermId,
+            targetCanonicalText: admission.targetCanonicalText,
+            reasonSummary: admission.reasonSummary,
+            reviewHints: admission.reviewHints,
+          }, file, created));
+        }
+      }
+
+      if (action === 'save_candidate') {
+        summary.candidateImportedCount += 1;
+      } else if (action === 'save_replace') {
+        summary.replaceImportedCount += 1;
       }
     }
+
+    if (originalStatus === 'warning') {
+      summary.importedWarningCount += 1;
+    } else {
+      summary.importedReadyCount += 1;
+    }
     db.prepare('UPDATE import_job_rows SET status = ?, decision = ?, updated_at = ? WHERE row_id = ?')
-      .run('imported', 'accept', nowIso(), row.row_id);
+      .run('imported', finalDecision, nowIso(), row.row_id);
   }
+
   const createdReviewTaskIds = [];
   if (job.template_code !== 'validation_cases_csv_v1') {
     for (const termId of changedTermIds) {
@@ -823,14 +1116,23 @@ function confirmImportJob(db, appConfig, jobId, operator = 'console_user') {
     }
     db.prepare(`
       INSERT INTO import_job_results(
-        result_id, job_id, new_term_count, updated_term_count, new_alias_count,
-        updated_alias_count, skipped_count, error_count, imported_by, imported_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        result_id, job_id, new_term_count, replace_imported_count, candidate_imported_count,
+        merged_existing_count, alias_appended_count, updated_term_count, new_alias_count,
+        updated_alias_count, imported_ready_count, imported_warning_count, skipped_blocked_count,
+        skipped_count, error_count, imported_by, imported_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(job_id) DO UPDATE SET
         new_term_count = excluded.new_term_count,
+        replace_imported_count = excluded.replace_imported_count,
+        candidate_imported_count = excluded.candidate_imported_count,
+        merged_existing_count = excluded.merged_existing_count,
+        alias_appended_count = excluded.alias_appended_count,
         updated_term_count = excluded.updated_term_count,
         new_alias_count = excluded.new_alias_count,
         updated_alias_count = excluded.updated_alias_count,
+        imported_ready_count = excluded.imported_ready_count,
+        imported_warning_count = excluded.imported_warning_count,
+        skipped_blocked_count = excluded.skipped_blocked_count,
         skipped_count = excluded.skipped_count,
         error_count = excluded.error_count,
         imported_by = excluded.imported_by,
@@ -839,9 +1141,16 @@ function confirmImportJob(db, appConfig, jobId, operator = 'console_user') {
       generateId('import_result'),
       jobId,
       summary.newTermCount,
+      summary.replaceImportedCount,
+      summary.candidateImportedCount,
+      summary.mergedExistingCount,
+      summary.aliasAppendedCount,
       summary.updatedTermCount,
       summary.newAliasCount,
       summary.updatedAliasCount,
+      summary.importedReadyCount,
+      summary.importedWarningCount,
+      summary.skippedBlockedCount,
       summary.skippedCount,
       summary.errorCount,
       operator,
@@ -854,14 +1163,23 @@ function confirmImportJob(db, appConfig, jobId, operator = 'console_user') {
   } else {
     db.prepare(`
       INSERT INTO import_job_results(
-        result_id, job_id, new_term_count, updated_term_count, new_alias_count,
-        updated_alias_count, skipped_count, error_count, imported_by, imported_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        result_id, job_id, new_term_count, replace_imported_count, candidate_imported_count,
+        merged_existing_count, alias_appended_count, updated_term_count, new_alias_count,
+        updated_alias_count, imported_ready_count, imported_warning_count, skipped_blocked_count,
+        skipped_count, error_count, imported_by, imported_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(job_id) DO UPDATE SET
         new_term_count = excluded.new_term_count,
+        replace_imported_count = excluded.replace_imported_count,
+        candidate_imported_count = excluded.candidate_imported_count,
+        merged_existing_count = excluded.merged_existing_count,
+        alias_appended_count = excluded.alias_appended_count,
         updated_term_count = excluded.updated_term_count,
         new_alias_count = excluded.new_alias_count,
         updated_alias_count = excluded.updated_alias_count,
+        imported_ready_count = excluded.imported_ready_count,
+        imported_warning_count = excluded.imported_warning_count,
+        skipped_blocked_count = excluded.skipped_blocked_count,
         skipped_count = excluded.skipped_count,
         error_count = excluded.error_count,
         imported_by = excluded.imported_by,
@@ -870,9 +1188,16 @@ function confirmImportJob(db, appConfig, jobId, operator = 'console_user') {
       generateId('import_result'),
       jobId,
       summary.createdCount,
+      0,
+      0,
+      0,
+      0,
       summary.updatedCount,
       0,
       0,
+      summary.importedReadyCount,
+      summary.importedWarningCount,
+      summary.skippedBlockedCount,
       summary.skippedCount,
       summary.errorCount,
       operator,

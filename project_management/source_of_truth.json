@@ -960,21 +960,43 @@
       ]
     },
     {
+      "jobId": "JOB-098",
+      "stageGroup": "Release-v1.0",
+      "title": "测试/验证工作区历史副产物清理",
+      "status": "done",
+      "priority": "P1",
+      "owner": "Codex",
+      "updatedAt": "2026-04-21",
+      "currentGoal": "已完成 `prototype/workspace-*` 历史测试/验证工作区清理，回收约 `63G` 空间，且未触碰主工作区与 runtime 实例工作区。",
+      "nextAction": "已完成；后续若测试再次产生大规模 `workspace-*` 副产物，按同口径重复执行，不需要重开更大范围清库任务。",
+      "externalDependencies": "无",
+      "closable": true,
+      "primaryRisk": "如果把 `prototype/workspace-*`、`prototype/workspace` 和 `prototype/runtime_instances/*/workspace` 混为一谈，容易在清理磁盘时误删主系统数据或 runtime 实例数据。",
+      "detailHeading": "JOB-098 测试/验证工作区历史副产物清理",
+      "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-21`\n- 外部依赖：无\n- 是否可关闭：是\n- 目标：\n  只清理 `prototype/workspace-*` 这类测试、验证、调试、contract snapshot 和临时回归副产物，回收磁盘空间，但不改变当前主系统数据底座。\n- 本轮完成：\n  - 已识别 `prototype/` 目录中体积主要由 `prototype/workspace-*` 撑大，而不是代码或正式配置文件\n  - 已确认 `prototype/workspace-*` 总量约 `63G`\n  - 已确认主工作区 `prototype/workspace` 与 `prototype/runtime_instances/*/workspace` 不在本 job 清理范围\n  - 已执行历史 `workspace-*` 清理，当前 `prototype/` 总量已回落到约 `1.2G`\n- 范围边界：\n  - 清理对象：`prototype/workspace-*`\n  - 不清理：`prototype/workspace`\n  - 不清理：`prototype/runtime_instances/*/workspace`\n  - 不修改：数据库结构、种子文件、配置文件、代码、文档\n- 与 `JOB-099` 的关系：\n  - 本 job 对应 `JOB-099` 三步流程中的第一步\n  - 它可以独立执行，用于磁盘瘦身\n  - 它本身不等于“零数据底座”，也不自动完成主系统清库\n- 完成标准：\n  - `prototype/workspace-*` 已清空\n  - `prototype/workspace` 保持不动\n  - `prototype/runtime_instances/*/workspace` 保持不动\n  - 已记录清理后的体积变化\n- 关键文档：\n  - [142-JOB-098测试验证工作区历史副产物清理实施说明](./archive/2026-04-17-v1关闭批次与阶段文档/142-JOB-098测试验证工作区历史副产物清理实施说明.md)\n  - [137-JOB-099零数据底座初始化与系统清库实施说明](./archive/2026-04-17-v1关闭批次与阶段文档/137-JOB-099零数据底座初始化与系统清库实施说明.md)\n\n子任务 checklist：\n\n- [x] 识别 `prototype/workspace-*` 的体积占比\n- [x] 确认主工作区与实例工作区不在本 job 范围内\n- [x] 执行 `prototype/workspace-*` 清理\n- [x] 回查剩余目录与体积变化\n- [x] 同步 JobList 与文档边界说明",
+      "links": [
+        "docs/archive/2026-04-17-v1关闭批次与阶段文档/142-JOB-098测试验证工作区历史副产物清理实施说明.md",
+        "docs/archive/2026-04-17-v1关闭批次与阶段文档/137-JOB-099零数据底座初始化与系统清库实施说明.md",
+        "docs/38-项目JobList与状态清单.md"
+      ]
+    },
+    {
       "jobId": "JOB-099",
       "stageGroup": "Release-v1.0",
       "title": "零数据底座初始化与系统清库",
       "status": "done",
       "priority": "P1",
       "owner": "Codex",
-      "updatedAt": "2026-04-14",
-      "currentGoal": "已完成 ACDP 主工作区与 runtime 实例工作区清理，并把系统切换为不会自动回灌默认词条、样本和 release 的零数据底座",
-      "nextAction": "已完成；后续若需要恢复标准初始化态或再次执行零数据化，按 `docs/137` 单独执行，不复用 `JOB-099` 的运行结果",
-      "externalDependencies": "当前 workspace、自动种子回灌逻辑、运行态目录与 service 状态",
+      "updatedAt": "2026-04-21",
+      "currentGoal": "已把零数据底座收口为三步流程：历史测试工作区清理、runtime 实例工作区清理、主工作区零数据化；其中第一步可独立由 `JOB-098` 执行。备份口径已明确为执行前必须留存 1 份主库备份、1 份 `seed_terms.json` 备份和 1 份 `release_validation_cases.json` 备份。",
+      "nextAction": "已完成；后续若需要再次执行零数据化，可先复用 `JOB-098` 完成第一步，再按 `docs/137` 执行第二步和第三步。若当前系统已重新产生词条、版本或实例运行态，应把 `JOB-099` 作为重置 runbook 重新执行。",
+      "externalDependencies": "当前 workspace、`JOB-098` 清理结果（可选）、自动种子回灌逻辑、运行态目录与 service 状态",
       "closable": true,
-      "primaryRisk": "如果只清 `platform.db` 但不同时置空 `seed_terms.json` 和 `release_validation_cases.json`，服务启动后会再次自动回灌默认词条和样本，造成“看起来清库了，实际不是零数据底座”的假象",
+      "primaryRisk": "如果把三步流程混成一次粗暴删目录，容易误删主工作区或实例工作区；如果只做第一步而不同时置空 `seed_terms.json` 和 `release_validation_cases.json`，系统仍不是真正的零数据底座；如果在清库前不保留主库和两个自动回灌源的备份，会失去回滚到清库前状态的入口。",
       "detailHeading": "JOB-099 零数据底座初始化与系统清库",
-      "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-14`\n- 外部依赖：无\n- 是否可关闭：是\n- 目标：\n  把当前 ACDP 恢复为真正的“零数据底座”，确保 admin 启动后不会自动回灌默认词条、默认样本或初始 release。\n- 本轮完成：\n  - 已备份主库与零数据化前的默认种子配置\n  - 已确认 `prototype/src/server.js` 的空库自动回灌依赖 `prototype/workspace/catalog/seed_terms.json`\n  - 已确认 `prototype/src/lib/platform-db.js` 的默认样本自动回灌依赖 `prototype/config/release_validation_cases.json`\n  - 已清空主工作区数据库与运行态目录：`releases / import_jobs / runtime_artifacts / runtime_state / validation_feeds / host_verification / test_runs / release_bundle_preview`\n  - 已清空 `ACDP_AGENT_001` 与 `ACDP_AGENT_002` 的实例工作区\n  - 已将 `prototype/workspace/catalog/seed_terms.json` 置为空数组 `[]`\n  - 已将 `prototype/config/release_validation_cases.json` 置为空数组 `[]`\n  - 已重新建立空表结构，并验证主库关键表计数全部为 `0`\n  - 已验证 service 管理脚本下当前无运行中的 `prototype/admin/runtime` 进程\n- 完成标准：\n  - `terms / aliases / import_jobs / review_tasks / releases / validation_cases / runtime_nodes / runtime_node_registry` 全部为 `0`\n  - `seed_terms.json` 与 `release_validation_cases.json` 都是 `[]`\n  - 启动 `npm run start:admin` 后，系统仍保持零数据，不会自动回灌默认词条、默认样本和 release\n  - 主工作区与 runtime 实例工作区无历史运行态残留\n  - 备份和恢复入口明确\n- 注意事项：\n  - 后续若执行 `npm run prepare:data`、`npm run bootstrap:db` 或 `npm run setup:prototype`，系统会退出零数据底座并重新生成标准初始化数据\n  - 如需恢复标准初始化态，应按 `docs/137` 中记录的标准初始化链路单独执行\n- 关键文档：\n  - [137-JOB-099零数据底座初始化与系统清库实施说明](./archive/2026-04-17-v1关闭批次与阶段文档/137-JOB-099零数据底座初始化与系统清库实施说明.md)\n\n子任务 checklist：\n\n- [x] 备份当前主库\n- [x] 识别自动种子回灌入口\n- [x] 清空主工作区数据库与运行态目录\n- [x] 清空 runtime 实例工作区\n- [x] 置空 `seed_terms.json`\n- [x] 置空 `release_validation_cases.json`\n- [x] 重建空表结构\n- [x] 回读关键表计数为 `0`\n- [x] 验证 service 处于停止状态\n- [x] 新增零数据底座执行说明文档\n- [x] 同步索引与真源",
+      "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-21`\n- 外部依赖：无\n- 是否可关闭：是\n- 目标：\n  把当前 ACDP 恢复为真正的“零数据底座”，确保 admin 启动后不会自动回灌默认词条、默认样本或初始 release。\n- 三步流程：\n  - 第一步：清理 `prototype/workspace-*` 历史测试/验证工作区\n  - 第二步：清理 `prototype/runtime_instances/*/workspace` 实例工作区\n  - 第三步：清理 `prototype/workspace` 主工作区数据库与运行态，并完成零数据重建\n- 与 `JOB-098` 的关系：\n  - `JOB-098` 只负责第一步，可单独执行，用于磁盘瘦身\n  - `JOB-099` 定义三步全流程，其中第一步可以直接复用 `JOB-098` 结果\n  - 只完成第一步，不等于完成零数据底座\n- 当前状态说明：\n  - `JOB-099` 记录的是一次已经完成的零数据化执行\n  - 后续只要重新录入词条、导入批次、创建 release、启动 runtime 实例或执行初始化命令，当前系统就可能再次离开零数据态\n  - 因此它是“可重复执行的重置 runbook”，不是“持续保持当前系统为零数据”的永久状态声明\n- 备份口径：\n  - 执行 `JOB-099` 前，必须备份 1 份主库 `platform.db`\n  - 执行 `JOB-099` 前，必须备份 1 份 `prototype/workspace/catalog/seed_terms.json`\n  - 执行 `JOB-099` 前，必须备份 1 份 `prototype/config/release_validation_cases.json`\n  - 不再把两份大体量主库备份同时保留作为标准动作\n  - 当前历史备份文件如已确认无回滚价值，可在文档口径明确后单独清理，不影响 `JOB-099` 作为 runbook 的完整性\n- 本轮完成：\n  - 已确认 `prototype/src/server.js` 的空库自动回灌依赖 `prototype/workspace/catalog/seed_terms.json`\n  - 已确认 `prototype/src/lib/platform-db.js` 的默认样本自动回灌依赖 `prototype/config/release_validation_cases.json`\n  - 已完成第一步：清理 `prototype/workspace-*` 历史测试/验证工作区，释放约 `63G` 空间\n  - 已完成第二步：清空当时已存在的 `prototype/runtime_instances/*/workspace` 实例工作区\n  - 已完成第三步：清空主工作区数据库与运行态目录：`releases / import_jobs / runtime_artifacts / runtime_state / validation_feeds / host_verification / test_runs / release_bundle_preview`\n  - 已将 `prototype/workspace/catalog/seed_terms.json` 置为空数组 `[]`\n  - 已将 `prototype/config/release_validation_cases.json` 置为空数组 `[]`\n  - 已重新建立空表结构，并验证主库关键表计数全部为 `0`\n  - 已验证 service 管理脚本下当前无运行中的 `prototype/admin/runtime` 进程\n- 完成标准：\n  - `prototype/workspace-*` 已清理，或已有 `JOB-098` 执行结果可复用\n  - 执行清库前已留存主库、`seed_terms.json`、`release_validation_cases.json` 的备份\n  - `terms / aliases / import_jobs / review_tasks / releases / validation_cases / runtime_nodes / runtime_node_registry` 全部为 `0`\n  - `seed_terms.json` 与 `release_validation_cases.json` 都是 `[]`\n  - 启动 `npm run start:admin` 后，系统仍保持零数据，不会自动回灌默认词条、默认样本和 release\n  - 主工作区与 `prototype/runtime_instances/*/workspace` 无历史运行态残留\n  - 备份和恢复入口明确\n- 注意事项：\n  - 后续若执行 `npm run prepare:data`、`npm run bootstrap:db` 或 `npm run setup:prototype`，系统会退出零数据底座并重新生成标准初始化数据\n  - 后续若重新启动 runtime 实例，其各自 `workspace` 中也会重新生成本地状态和制品目录\n  - 如需恢复标准初始化态，应按 `docs/137` 中记录的标准初始化链路单独执行\n- 关键文档：\n  - [142-JOB-098测试验证工作区历史副产物清理实施说明](./archive/2026-04-17-v1关闭批次与阶段文档/142-JOB-098测试验证工作区历史副产物清理实施说明.md)\n  - [137-JOB-099零数据底座初始化与系统清库实施说明](./archive/2026-04-17-v1关闭批次与阶段文档/137-JOB-099零数据底座初始化与系统清库实施说明.md)\n\n子任务 checklist：\n\n- [x] 识别并执行第一步历史测试/验证工作区清理（可由 `JOB-098` 独立完成）\n- [x] 备份当前主库\n- [x] 备份 `seed_terms.json`\n- [x] 备份 `release_validation_cases.json`\n- [x] 识别自动种子回灌入口\n- [x] 清空 runtime 实例工作区\n- [x] 清空主工作区数据库与运行态目录\n- [x] 置空 `seed_terms.json`\n- [x] 置空 `release_validation_cases.json`\n- [x] 重建空表结构\n- [x] 回读关键表计数为 `0`\n- [x] 验证 service 处于停止状态\n- [x] 新增零数据底座执行说明文档\n- [x] 同步索引与真源",
       "links": [
+        "docs/archive/2026-04-17-v1关闭批次与阶段文档/142-JOB-098测试验证工作区历史副产物清理实施说明.md",
         "docs/archive/2026-04-17-v1关闭批次与阶段文档/137-JOB-099零数据底座初始化与系统清库实施说明.md",
         "docs/archive/2026-04-17-v1早期基线与已替代设计文档/68-v1.0重构文档索引.md",
         "docs/archive/2026-04-17-v1关闭批次与阶段文档/135-v1.0现行文档与历史文档分层清单.md",
@@ -988,14 +1010,14 @@
       "status": "done",
       "priority": "P1",
       "owner": "Codex",
-      "updatedAt": "2026-04-13",
-      "currentGoal": "已完成最终发布包边界收紧、交付模板目录、release bundle 生成脚本和三条正式镜像构建验证",
+      "updatedAt": "2026-04-21",
+      "currentGoal": "已完成最终发布包边界收紧、交付模板目录、release bundle 生成脚本和三条正式镜像构建验证，并补充真实环境最小交付建议：只交付 admin/runtime 镜像与 release bundle，默认 `1 admin + N runtime + admin_http_signed`。",
       "nextAction": "已完成；后续若发布包边界、镜像内容或交付模板发生变化，按新批次重开，不复用 `JOB-100`",
       "externalDependencies": "`JOB-030` 发布准备基线、当前 Docker 打包方式、帮助与发布文档目录",
       "closable": true,
       "primaryRisk": "如果不在正式发布前把打包边界和交付物边界收紧，过程文档、handoff 文档、测试脚本和无关资产可能继续进入正式镜像，导致交付边界不清",
       "detailHeading": "JOB-100 `v1.0` 最终发布包组成与发布包装清理",
-      "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-13`\n- 外部依赖：`JOB-030` 发布准备基线、当前镜像与部署资产\n- 是否可关闭：是\n- 目标：\n  在 `v1.0` 正式发布前，把运行制品包、部署交付包、发布证据包边界彻底分清，并完成正式打包清理。\n- 本轮完成：\n  - 已收紧 `Dockerfile`，补齐 `console/` 并只复制最小帮助文档集合\n  - 已收紧 `Dockerfile.admin`，仅复制 `docs/help_manuals` 与 `docs/25`、`docs/26`\n  - 已收紧 `Dockerfile.runtime`，去掉 `docs/`、`README.md`、`SESSION_HANDOFF.md`、`NEXT_STEPS.md` 和 `data_sources/`\n  - 已更新 `.dockerignore`，排除 `project_management`、`prototype/tests`、交接文档和非必要 `docs`\n  - 已新增 `prototype/tests/unit/docker-packaging-boundary.test.js`，锁定打包边界回归\n  - 已补齐镜像 tag 规则、部署交付包目录模板和发布说明包文档快照清单：\n    - `docs/archive/2026-04-17-v1关闭批次与阶段文档/124-v1.0镜像标签与部署交付包目录模板.md`\n    - `docs/archive/2026-04-17-v1关闭批次与阶段文档/125-v1.0发布说明包与文档快照清单.md`\n  - 已落仓库模板目录：\n    - `release_bundle_templates/deployment_bundle/`\n    - `release_bundle_templates/release_notes_bundle/`\n  - 已新增 release bundle 生成脚本：\n    - `prototype/src/cli/prepare-release-bundle.js`\n    - `npm run prepare:release-bundle`\n  - 已新增模板与生成回归：\n    - `prototype/tests/unit/release-bundle-templates.test.js`\n    - `prototype/tests/unit/prepare-release-bundle.test.js`\n  - 已在本地成功生成示例交付目录：\n    - `prototype/workspace/release_bundle_preview/`\n  - 已在外部宿主机完成三条正式镜像构建验证，并留档：\n    - `prototype/workspace/job100_docker_build_logs/admin-build.log`\n    - `prototype/workspace/job100_docker_build_logs/runtime-build.log`\n    - `prototype/workspace/job100_docker_build_logs/prototype-build.log`\n  - 已更新 `docs/86-v1.0发布手册.md`、`docs/archive/2026-04-17-v1关闭批次与阶段文档/122-v1.0最终发布包组成与发布包装清理清单.md`、`docs/archive/2026-04-17-v1关闭批次与阶段文档/123-JOB-100最终发布包组成与发布包装清理实施拆解.md` 以及索引文档，使最终发布包边界和交付目录口径一致\n  - 已完成本地回归：\n    - `node --test --test-concurrency=1 ./prototype/tests/unit/docker-packaging-boundary.test.js`\n    - `node --test --test-concurrency=1 ./prototype/tests/unit/release-bundle-templates.test.js`\n    - `node --test --test-concurrency=1 ./prototype/tests/unit/prepare-release-bundle.test.js`\n    - `npm run prepare:release-bundle -- --version v1.0.0 --release-id rel_demo_001 --image-registry registry.test.local --output-dir ./prototype/workspace/release_bundle_preview`\n    - `npm run test:unit`\n    - `npm run test:console`\n    - `npm run smoke:console`\n- 完成标准：\n  - 最终发布包三类交付物边界明确\n  - 正式镜像不再混入无关过程文档和运行产物\n  - 发布证据包结构与 `JOB-030` 收口口径一致\n  - admin/runtime/全量镜像构建验证完成\n  - 打包相关回归通过\n\n子任务 checklist：\n\n- [x] 明确运行制品包边界\n- [x] 明确部署交付包边界\n- [x] 明确发布证据包边界\n- [x] 收紧 `Dockerfile.admin`\n- [x] 收紧 `Dockerfile.runtime`\n- [x] 收紧通用 `Dockerfile`\n- [x] 更新 `.dockerignore`\n- [x] 明确帮助文档进入正式镜像的范围\n- [x] 确认 `SESSION_HANDOFF.md` / `NEXT_STEPS.md` 不进入正式镜像\n- [x] 让 `JOB-030` 证据包结构与最终发布包边界一致\n- [x] 固定镜像 tag 规则\n- [x] 固定部署交付包目录模板\n- [x] 固定发布说明包文档快照清单\n- [x] 固定部署交付包模板目录\n- [x] 固定发布说明包模板目录\n- [x] 提供 release bundle 目录生成脚本\n- [x] 验证 release bundle 目录生成正常\n- [x] 验证 release 制品构建正常\n- [x] 验证 admin/runtime/全量镜像构建正常\n- [x] `test:unit`\n- [x] `test:console`\n- [x] `smoke:console`",
+      "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-21`\n- 外部依赖：`JOB-030` 发布准备基线、当前镜像与部署资产\n- 是否可关闭：是\n- 目标：\n  在 `v1.0` 正式发布前，把运行制品包、部署交付包、发布证据包边界彻底分清，并完成正式打包清理。\n- 本轮完成：\n  - 已收紧 `Dockerfile`，补齐 `console/` 并只复制最小帮助文档集合\n  - 已收紧 `Dockerfile.admin`，仅复制 `docs/help_manuals` 与 `docs/25`、`docs/26`\n  - 已收紧 `Dockerfile.runtime`，去掉 `docs/`、`README.md`、`SESSION_HANDOFF.md`、`NEXT_STEPS.md` 和 `data_sources/`\n  - 已更新 `.dockerignore`，排除 `project_management`、`prototype/tests`、交接文档和非必要 `docs`\n  - 已新增 `prototype/tests/unit/docker-packaging-boundary.test.js`，锁定打包边界回归\n  - 已补齐镜像 tag 规则、部署交付包目录模板和发布说明包文档快照清单：\n    - `docs/archive/2026-04-17-v1关闭批次与阶段文档/124-v1.0镜像标签与部署交付包目录模板.md`\n    - `docs/archive/2026-04-17-v1关闭批次与阶段文档/125-v1.0发布说明包与文档快照清单.md`\n  - 已落仓库模板目录：\n    - `release_bundle_templates/deployment_bundle/`\n    - `release_bundle_templates/release_notes_bundle/`\n  - 已新增 release bundle 生成脚本：\n    - `prototype/src/cli/prepare-release-bundle.js`\n    - `npm run prepare:release-bundle`\n  - 已新增模板与生成回归：\n    - `prototype/tests/unit/release-bundle-templates.test.js`\n    - `prototype/tests/unit/prepare-release-bundle.test.js`\n  - 已在本地成功生成示例交付目录：\n    - `prototype/workspace/release_bundle_preview/`\n  - 已在外部宿主机完成三条正式镜像构建验证，并留档：\n    - `prototype/workspace/job100_docker_build_logs/admin-build.log`\n    - `prototype/workspace/job100_docker_build_logs/runtime-build.log`\n    - `prototype/workspace/job100_docker_build_logs/prototype-build.log`\n  - 已更新 `docs/86-v1.0发布手册.md`、`docs/archive/2026-04-17-v1关闭批次与阶段文档/122-v1.0最终发布包组成与发布包装清理清单.md`、`docs/archive/2026-04-17-v1关闭批次与阶段文档/123-JOB-100最终发布包组成与发布包装清理实施拆解.md` 以及索引文档，使最终发布包边界和交付目录口径一致\n  - 已补充真实环境最小交付建议：\n    - 不同步整个项目目录\n    - 只交付 `acdp-admin` / `acdp-runtime` 镜像与 `release bundle`\n    - `acdp-prototype` 仅保留给本地联调或演示一体模式，不作为真实环境最小交付物\n    - 推荐拓扑为 `1 admin + N runtime`\n    - 推荐下发方式为 `admin_http_signed`\n    - 节点需先在 admin 完成人工备案，再部署 runtime 注册接入\n  - 已补充最小部署顺序与最小验证命令，确保 `JOB-100` 不只是“边界说明”，也是“最小交付 runbook”入口\n  - 已完成本地回归：\n    - `node --test --test-concurrency=1 ./prototype/tests/unit/docker-packaging-boundary.test.js`\n    - `node --test --test-concurrency=1 ./prototype/tests/unit/release-bundle-templates.test.js`\n    - `node --test --test-concurrency=1 ./prototype/tests/unit/prepare-release-bundle.test.js`\n    - `npm run prepare:release-bundle -- --version v1.0.0 --release-id rel_demo_001 --image-registry registry.test.local --output-dir ./prototype/workspace/release_bundle_preview`\n    - `npm run test:unit`\n    - `npm run test:console`\n    - `npm run smoke:console`\n- 完成标准：\n  - 最终发布包三类交付物边界明确\n  - 正式镜像不再混入无关过程文档和运行产物\n  - 发布证据包结构与 `JOB-030` 收口口径一致\n  - admin/runtime/全量镜像构建验证完成\n  - 打包相关回归通过\n  - 真实环境最小交付口径明确\n\n子任务 checklist：\n\n- [x] 明确运行制品包边界\n- [x] 明确部署交付包边界\n- [x] 明确发布证据包边界\n- [x] 收紧 `Dockerfile.admin`\n- [x] 收紧 `Dockerfile.runtime`\n- [x] 收紧通用 `Dockerfile`\n- [x] 更新 `.dockerignore`\n- [x] 明确帮助文档进入正式镜像的范围\n- [x] 确认 `SESSION_HANDOFF.md` / `NEXT_STEPS.md` 不进入正式镜像\n- [x] 让 `JOB-030` 证据包结构与最终发布包边界一致\n- [x] 固定镜像 tag 规则\n- [x] 固定部署交付包目录模板\n- [x] 固定发布说明包文档快照清单\n- [x] 固定部署交付包模板目录\n- [x] 固定发布说明包模板目录\n- [x] 提供 release bundle 目录生成脚本\n- [x] 验证 release bundle 目录生成正常\n- [x] 验证 release 制品构建正常\n- [x] 验证 admin/runtime/全量镜像构建正常\n- [x] 明确真实环境最小交付物清单\n- [x] 明确不应同步整个项目目录\n- [x] 明确 `acdp-prototype` 非真实环境最小交付物\n- [x] 明确 `1 admin + N runtime` 推荐拓扑\n- [x] 明确 `admin_http_signed` 推荐下发方式\n- [x] 明确 admin 先部署、节点先备案、再部署 runtime 的顺序\n- [x] 明确最小验证命令\n- [x] `test:unit`\n- [x] `test:console`\n- [x] `smoke:console`",
       "links": [
         "docs/83-R7真实环境验证与发布准备实施拆解草案.md",
         "docs/85-R7证据包目录与go-no-go模板.md",
@@ -1017,8 +1039,8 @@
       "status": "in_progress",
       "priority": "P0",
       "owner": "Codex / 待定测试与运维协作人",
-      "updatedAt": "2026-04-15",
-      "currentGoal": "已完成包含 `JOB-036 admin_http_signed` 在内的本地回归确认：`test:unit`、`test:console`、`smoke:console`、`check:api-contracts`、`test:unit:coverage`、`check:v1-local-readiness` 已通过；当前本地阶段已无阻塞，下一步等待外部条件进入 `L4 ~ L6`",
+      "updatedAt": "2026-04-21",
+      "currentGoal": "已完成一轮新的本地完整回归：`test:unit`、`check:api-contracts`、`smoke:console`、`test:console`、`check:v1-local-readiness` 已通过；当前本地阶段已无阻塞，下一步等待外部条件进入 `L4 ~ L6`。",
       "nextAction": "若真实部署与压测资源就绪，则按 `docs/105`~`docs/107` 进入 `L4 ~ L6`；否则保持当前本地 readiness 全绿基线，等待外部条件",
       "externalDependencies": "本地执行无额外依赖；进入 `L4 ~ L6` 时仍依赖外部资源与工具获取授权、真实部署与压测环境",
       "closable": false,
@@ -1100,6 +1122,71 @@
       "primaryRisk": "若后续只改代码而不继续同步这些详细设计文档，工作区仍可能重新失去开发依据价值。",
       "detailHeading": "JOB-103 `v1.0` 正式文档工作区详细设计化与 Codex 开发依据补齐",
       "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-17`\n- 外部依赖：无\n- 是否可关闭：否\n- 目标：\n  将当前正式文档工作区从“正式基线文档集”升级为“详细设计说明书 + Codex 可直接编码的开发依据文档集”。\n- 本轮已完成：\n  - 已确认详细设计化方向与目录结构\n  - 已建立以下子目录：\n    - `design/`\n    - `data_dictionary/`\n    - `api_specs/`\n    - `pages/`\n    - `codex_dev/`\n  - 已建立 5 份索引骨架：\n    - `design/00-详细设计索引.md`\n    - `data_dictionary/00-数据字典索引.md`\n    - `api_specs/00-接口规范索引.md`\n    - `pages/00-页面设计索引.md`\n    - `codex_dev/00-Codex开发索引.md`\n  - 已建立本 job 文档：\n    - `jobs/JOB-103-v1.0正式文档工作区详细设计化与Codex开发依据补齐.md`\n  - 已将上述索引骨架接入工作区总索引与单一真源注册表\n- 目标交付：\n  - `data_dictionary/`：表结构、字段类型、约束、索引、案例、改造影响\n  - `api_specs/`：参数、响应、错误码、样例、代码入口、测试入口\n  - `design/`：业务域和技术链路详细设计\n  - `pages/`：页面区块、按钮、状态、权限、接口来源\n  - `codex_dev/`：后续 Codex 开发阅读顺序与改动矩阵\n- 完成标准：\n  - 其他 Codex 不翻聊天记录也能直接按文档开工\n  - 详细设计文档可指导数据库、接口、页面和配置修改\n  - 文档、真源、索引和 checklist 保持同步\n\n子任务 checklist：\n\n- [x] 确认详细设计层目录结构\n- [x] 建立 `design/` 索引骨架\n- [x] 建立 `data_dictionary/` 索引骨架\n- [x] 建立 `api_specs/` 索引骨架\n- [x] 建立 `pages/` 索引骨架\n- [x] 建立 `codex_dev/` 索引骨架\n- [x] 建立 `JOB-103` 文档并挂单\n- [x] 将新目录接入总索引与真源\n- [x] 补 `data_dictionary/` 详细正文\n- [x] 补 `api_specs/` 详细正文（核心层已完成）\n- [x] 补 `design/` 详细正文\n- [x] 补 `codex_dev/` 详细正文\n- [x] 补 `pages/` 详细正文\n- [x] 更新工作区总索引与变更记录\n- [x] `npm run pm:sync`\n- [x] `npm run pm:check`"
+    },
+    {
+      "jobId": "JOB-104",
+      "stageGroup": "Release-v1.0",
+      "title": "`v1.0` 发布流水线自动化与交付产物标准化",
+      "status": "pending",
+      "priority": "P1",
+      "owner": "Codex",
+      "updatedAt": "2026-04-21",
+      "currentGoal": "把 `JOB-100` 已收口的发布包边界推进到可自动执行的流水线：镜像构建/推送、release bundle 生成、元数据落盘和交付物命名规则标准化。",
+      "nextAction": "先冻结自动化边界、输入输出、环境变量与收尾标准，再实现脚本和模板扩展。",
+      "externalDependencies": "镜像仓库地址、镜像推送凭据、发布版本号策略、releaseId 规则、可选的制品签名/扫描工具。",
+      "closable": false,
+      "primaryRisk": "如果直接在 `JOB-100` 里继续堆功能，容易把“边界收口”和“自动化实现”混成一个批次；如果不先固定输入输出、命名和失败回滚口径，后续发布流水线会反复返工。",
+      "detailHeading": "JOB-104 `v1.0` 发布流水线自动化与交付产物标准化",
+      "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-21`\n- 外部依赖：镜像仓库、镜像推送凭据、发布版本号与 releaseId 规则\n- 是否可关闭：否\n- 目标：\n  在 `JOB-100` 已明确发布包边界的基础上，继续把 admin/runtime 双镜像构建与推送、release bundle 生成、镜像 tag 清单、构建元数据、checksum 与最小交付目录标准化为可重复执行的发布流水线。\n- 范围：\n  - 自动构建 `acdp-admin` / `acdp-runtime`\n  - 自动推送到目标 registry\n  - 自动生成 `deployment_bundle` / `release_notes_bundle`\n  - 自动写出镜像 tag、commit id、构建时间、checksum 等元数据\n  - 固定交付目录命名和发布批次命名规则\n- 不在本 job 范围内：\n  - 不改业务接口与业务逻辑\n  - 不实现真实集群一键发布\n  - 不实现 runtime 灰度策略本身\n  - 不在本 job 内强制引入 SBOM/漏洞扫描平台，但要预留挂点\n- 目标交付：\n  - 可执行的发布流水线脚本或命令入口\n  - 标准化镜像命名与 tag 规则\n  - 标准化 release bundle 输出目录\n  - 标准化构建元数据文件\n  - 标准化发布前校验与失败退出口径\n- 完成标准：\n  - 其他 Codex 或运维同学不靠聊天记录，也能按文档执行完整发布流水线\n  - 输入参数、输出目录、失败码、日志路径全部明确\n  - 文档、真源、模板、脚本保持同步\n\n子任务 checklist：\n\n- [ ] 冻结镜像命名、tag 和 releaseId 规则\n- [ ] 冻结发布流水线输入参数\n- [ ] 冻结发布流水线输出目录结构\n- [ ] 明确 registry 登录与凭据注入口径\n- [ ] 明确构建元数据文件格式\n- [ ] 明确 checksum / manifest 输出格式\n- [ ] 明确失败退出与回滚提示口径\n- [ ] 新增发布流水线脚本入口\n- [ ] 让脚本自动构建 admin/runtime 镜像\n- [ ] 让脚本自动推送 admin/runtime 镜像\n- [ ] 让脚本自动生成 release bundle\n- [ ] 让脚本自动写出 image-tags / build-metadata / checksums\n- [ ] 补发布流水线模板或 README\n- [ ] 补单元测试或 contract 测试\n- [ ] 更新 `JOB-100` / 正式文档工作区相关文档\n- [ ] `npm run pm:sync`\n- [ ] `npm run pm:check`",
+      "links": [
+        "docs/archive/2026-04-17-v1关闭批次与阶段文档/123-JOB-100最终发布包组成与发布包装清理实施拆解.md",
+        "docs/2026-04-17-v1.0正式文档工作区/design/13-发布包与交付物详细设计.md",
+        "release_bundle_templates/deployment_bundle/README.md"
+      ]
+    },
+    {
+      "jobId": "JOB-105",
+      "stageGroup": "Release-v1.0",
+      "title": "`v1.0` 批量导入按行阻断与可通过记录导入",
+      "status": "done",
+      "priority": "P1",
+      "owner": "Codex",
+      "updatedAt": "2026-04-21",
+      "currentGoal": "已完成批量导入“按行阻断、可通过记录继续导入”主路径：阻断行跳过、结果汇总扩展、详情页按钮/下拉/卡片改造、错误报表字段增强和页面中文化，并完成本地回归。",
+      "nextAction": "已完成；后续若要继续扩到更细粒度导入状态、批次级重试、自动纠正建议或阻断原因智能分组，按新批次重开，不复用 `JOB-105`。",
+      "externalDependencies": "现有 import-jobs 预览模型、导入详情页、审核任务生成逻辑、导入结果汇总结构。",
+      "closable": true,
+      "primaryRisk": "如果直接把所有 block 降成 warning，会把坏数据放进主库；如果继续保留整批阻断，批量导入在真实场景下操作成本过高；如果不先统一页面、接口和结果汇总口径，后续实现会出现状态含义不一致。",
+      "detailHeading": "JOB-105 `v1.0` 批量导入按行阻断与可通过记录导入",
+      "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-21`\n- 外部依赖：现有 import preview / confirm / result summary 结构\n- 是否可关闭：是\n- 目标：\n  在保留行级准入阻断的前提下，把当前“整批导入确认门禁”调整为“可导入行继续导入，阻断行只跳过不入库”，降低批量导入的操作成本。\n- 当前问题：\n  - 现状为：批次中只要存在任意 `error` 行，`confirmImportJob()` 就直接返回 `import_job_blocked_rows`\n  - 这会导致大量 `ready` / `warning` 行也无法入库\n  - 真实导入场景中，小量阻断行会拖死整批导入效率\n- 已完成：\n  - 已完成 `confirmImportJob()` 主路径改造：阻断行跳过、可通过记录继续导入\n  - 已新增结果汇总字段：\n    - `importedReadyCount`\n    - `importedWarningCount`\n    - `skippedBlockedCount`\n  - 已让阻断行在确认导入后写成：\n    - `status = error`\n    - `decision = skipped_blocked`\n  - 已调整批量导入详情页：\n    - 主按钮改为 `导入可通过记录`\n    - 报表按钮改为 `下载阻断报表`\n    - 被跳过行显示为 `阻断未导入`\n  - 已增强错误 CSV 下载，新增 `canonicalText` 列，提高阻断报表可读性\n  - 已同步接口规范、详细设计、页面设计和 `JOB-105` 文档\n  - 已完成页面中文化要求收口，按钮、卡片、下拉、提示均使用中文\n  - 已完成本地回归：\n    - `node --test /Codex/ACDP/prototype/tests/unit/import-jobs.test.js`\n    - `node --test /Codex/ACDP/prototype/tests/unit/console-api.test.js`\n    - `node --test /Codex/ACDP/prototype/tests/unit/console-workflows.test.js`\n    - `node --test /Codex/ACDP/prototype/tests/unit/console-client-render.test.js`\n    - `cd /Codex/ACDP && npm run test:unit`\n    - `cd /Codex/ACDP && npm run test:console`\n    - `cd /Codex/ACDP && npm run smoke:console`\n    - `cd /Codex/ACDP && npm run check:api-contracts`\n- 完成标准：\n  - 存在 `error` 行的批次仍可导入 `ready` / `warning` 行\n  - `error` 行不会入库\n  - 页面与接口都能明确告诉用户哪些行已导入、哪些行被跳过\n  - 不破坏词条审核任务生成链路\n  - 文档、真源、测试同步\n\n子任务 checklist：\n\n- [x] 冻结批量导入“整批阻断”和“行级阻断”的边界\n- [x] 冻结导入详情页按钮文案与提示文案\n- [x] 冻结 `import_job_results` 汇总字段扩展口径\n- [x] 调整 `confirmImportJob()`，允许跳过 `error` 行\n- [x] 保持 `warning` 行可导入\n- [x] 保持 `error` 行不入库且不生成审核任务\n- [x] 导入结果中输出“导入成功数 / 跳过阻断数 / warning 数”\n- [x] 调整 console 导入详情页展示与按钮可用性\n- [x] 调整错误 CSV 下载内容，明确“未导入阻断行”\n- [x] 补 `import-jobs.test.js`\n- [x] 补 `console-api.test.js`\n- [x] 补 `console-workflows.test.js`\n- [x] 更新批量导入接口文档\n- [x] 更新批量导入详细设计文档\n- [x] `npm run pm:sync`\n- [x] `npm run pm:check`\n- [x] `npm run test:unit`",
+      "links": [
+        "docs/2026-04-17-v1.0正式文档工作区/api_specs/06-console-批量导入接口详细规范.md",
+        "docs/2026-04-17-v1.0正式文档工作区/design/02-批量导入域详细设计.md",
+        "prototype/src/lib/import-jobs.js"
+      ]
+    },
+    {
+      "jobId": "JOB-106",
+      "stageGroup": "Release-v1.0",
+      "title": "`v1.0` 词典准入与 runtime 输出统一方案",
+      "status": "pending",
+      "priority": "P0",
+      "owner": "Codex",
+      "updatedAt": "2026-04-22",
+      "currentGoal": "统一词典治理与 runtime 执行标准：准入层只保留 `blocked / ready`，而 `ready` 再按运行方式分成 `replace / candidate`，并要求系统在录入时直接给处理建议，用户按建议批量处理。",
+      "nextAction": "已完成实现、本地回归和 JOB-090 本地测试主链；后续若再扩候选分流、存量重评估或更细粒度审核提示，按新批次重开，不复用 JOB-106。",
+      "externalDependencies": "当前 term-admission、词典录入页、批量导入页、runtime literal/pinyin 执行链、`correct / correct_cand` 接口合同。",
+      "closable": true,
+      "primaryRisk": "如果继续沿用当前“治理逻辑”和“runtime 真实触发逻辑”两套不完全一致的标准，后续词条录入、批量导入、候选输出和替换输出会持续出现解释不一致；如果不先把系统建议和批量处理口径冻结，页面实现会继续让用户逐条判断，操作成本很高。",
+      "detailHeading": "JOB-106 `v1.0` 词典准入与 runtime 输出统一方案",
+      "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-22`\n- 外部依赖：无\n- 是否可关闭：否\n- 目标：\n  把词典治理和 runtime 执行统一到一条主线：只允许那些能形成稳定、有限、可审计 `triggerText -> canonicalText` 映射的词条进入 runtime；准入层只保留 `blocked / ready` 两层，而 `ready` 再按运行方式分成 `replace / candidate`。\n- 统一原则：\n  - 词典不是通用词库存储系统，而是给 runtime 输出 `canonicalText` 的治理系统\n  - `literal` 通道当前只看 `alias`\n  - `pinyin` 通道当前会让 `canonical + alias` 进入拼音索引\n  - 因此准入必须按 runtime 真实触发链而不是抽象关系判断\n- 方案核心：\n  - `blocked`\n    - 不允许进入 runtime 词典\n  - `ready + replace`\n    - 允许进入 runtime，且允许 `/correct` 直接替换\n  - `ready + candidate`\n    - 允许进入 runtime，但只进入 `/correct_cand` 候选链，不允许自动替换\n- 系统处理建议：\n  - 录入或导入时，系统必须直接给每个词条/每一行输出：\n    - `recommendedAction`\n    - `reasonCodes`\n    - `reasonSummary`\n    - `reviewHints`\n  - 用户不再逐条自己判断，而是按系统建议进行批量处理\n- 已冻结口径：\n  - 当 `triggerText` 命中其他已存在标准词时：\n    - 一律不允许 `replace`\n    - 建议优先顺序为 `merge_existing -> append_alias_to_existing -> save_candidate -> skip_blocked`\n    - 仅在无明确并入目标、歧义范围有限且确有推荐价值时，才允许 `save_candidate`\n  - `merge_existing` 与 `append_alias_to_existing` 只有在存在唯一目标词条时才允许进入批量确认执行；多目标或无目标时，只能降级为 `save_candidate` 或 `skip_blocked`\n  - 第一版即使存在唯一目标词条，也不做全自动落库，而采用“系统建议 + 用户一键确认批量执行”模式\n  - `ready + candidate` 第一版不允许没有 `alias`、只靠拼音参与推荐\n  - `save_candidate` 的歧义阈值固定为 `< 4`，即候选标准词数量最多允许 `3` 个\n  - `replaceMode = candidate` 第一版仍保留 `candidateOnly` 规则兜底\n  - `reviewHints` 第一版不落库，按当前词条状态和当前词典现状动态计算；批量导入预览页可保留当次建议摘要\n  - 第一版不对存量词条做全库自动重评估，只对新录入与新导入生效\n- 页面原则：\n  - 词典录入页和导入页必须中文化\n  - 页面必须直接告诉用户“可替换 / 仅推荐 / 建议并入 / 建议补录 / 阻断跳过”\n  - 对批量导入，提供“按系统建议处理”主动作，而不是要求用户逐行判断\n  - `candidate` 词条在页面上必须明确标识为“仅推荐 / 不可直接替换”\n  - 批量导入页必须增加“建议动作”汇总卡片\n- runtime 原则：\n  - `/api/runtime/correct` 与 `/ws/runtime/correct` 只允许 `replace` 生效\n  - `/api/runtime/correct_cand` 与 `/ws/runtime/correct_cand` 允许 `replace + candidate`\n  - 无 `replace` 命中时，`correct_cand` 主结果位保持原文，`candidate` 只出现在后续候选位\n  - `literal` 通道必须真正尊重 `replaceMode`\n  - `pinyin` 通道必须真正尊重 `pinyinRuntimeMode`\n- 审核与发布原则：\n  - `candidate` 与 `replace` 走同一审核链\n  - `candidate` 审核通过后同样进入 release 与 snapshot\n  - 是否直接替换由运行模式决定，不由审核状态决定\n- 目标交付：\n  - 统一方案文档\n  - 代码改造清单\n  - 页面改造清单\n  - runtime 改造清单\n  - 可直接编码的实施 checklist\n- 完成标准：\n  - 其他 Codex 不翻聊天记录，也能按方案直接拆实现\n  - 方案内关于准入、页面、runtime、接口的逻辑自洽\n  - 文档、真源、索引同步\n\n子任务 checklist：\n\n- [x] 冻结 `blocked / ready` 两层准入口径\n- [x] 冻结 `ready + replace / ready + candidate` 运行方式口径\n- [x] 明确 `triggerText` 定义\n- [x] 明确哪些情况直接 `blocked`\n- [x] 明确哪些情况降级成 `candidate`\n- [x] 明确录入时的系统建议结构\n- [x] 明确批量导入“按系统建议处理”的方案\n- [x] 明确手工录入页页面行为\n- [x] 明确导入页页面行为\n- [x] 明确页面中文化要求\n- [x] 明确 runtime `correct / correct_cand` 行为边界\n- [x] 明确现有代码需要修改的文件\n- [x] 明确页面需要修改的文件\n- [x] 明确 runtime 需要修改的文件\n- [x] 补 `correct_cand` 主结果规则\n- [x] 补目标词条解析规则\n- [x] 补存量词条收口口径\n- [x] 补批量导入结果模型\n- [x] 补 `candidate` 审核发布边界\n- [x] 冻结并入/补录批量确认执行口径\n- [x] 冻结 `candidate` 阈值 `<4`\n- [x] 冻结建议动作汇总卡片要求\n- [x] 收口主要方案遗留问题\n- [x] 形成可直接编码的实施 checklist（见 JOB-106 文档第 14 节）\n- [ ] `npm run pm:sync`\n- [ ] `npm run pm:check`",
+      "links": [
+        "docs/2026-04-17-v1.0正式文档工作区/06-中文拼音增强与词条准入设计.md",
+        "docs/2026-04-17-v1.0正式文档工作区/design/01-词典建设域详细设计.md",
+        "docs/2026-04-17-v1.0正式文档工作区/pages/02-词典记录页面详细设计.md",
+        "docs/2026-04-17-v1.0正式文档工作区/pages/03-批量导入页面详细设计.md",
+        "docs/2026-04-17-v1.0正式文档工作区/09-runtime对外接口说明.md"
+      ]
     }
   ],
   "suggestedPriorities": [
@@ -1129,6 +1216,7 @@
   ],
   "workflow": {
     "recentClosedJobIds": [
+      "JOB-098",
       "JOB-102",
       "JOB-101",
       "JOB-013",
@@ -1138,7 +1226,7 @@
     ],
     "currentSnapshotLines": [
       "- 当前未关闭项全部集中在单一真源；派生文档只保留当前视图，不再手工维护 3 份状态。",
-      "- 当前未关闭 job：`JOB-006`、`JOB-007`、`JOB-009`、`JOB-030`、`JOB-090`、`JOB-100`。",
+      "- 当前未关闭 job：`JOB-006`、`JOB-007`、`JOB-009`、`JOB-030`、`JOB-090`、`JOB-104`、`JOB-105`。",
       "- `/console` 批次 `JOB-013`~`JOB-017` 当前都已关闭，不应默认继续推进。",
       "- `JOB-018` 已完成导入中心统一结构化词条导入重构，不再作为未关闭项继续保留。",
       "- `JOB-019` 已完成统一词条准入规则与跨中心收口，后续扩展按新批次重开。",
@@ -1150,6 +1238,9 @@
       "- `JOB-031` ~ `JOB-033` 已完成，`/console` 产品面收口与总复核已通过；后续进入真实环境验证与发布包装阶段。",
       "- 为避免过程文档、handoff 文档和无关测试资产进入正式镜像，已新增 `JOB-100`（最终发布包组成与发布包装清理）。",
       "- `JOB-090` 当前已完成 `/console` 产品面相关本地测试与总复核；下一步在外部条件就绪后进入 `L4 ~ L6`，或视需要补可选增强项。",
+      "- 已新开 `JOB-104`，用于把 `JOB-100` 已冻结的发布包边界继续推进到可自动执行的发布流水线与交付元数据标准化。",
+      "- 已新开 `JOB-105`，用于把批量导入从“整批阻断”收口为“按行阻断、可通过记录继续导入”。",
+      "- `JOB-098` 已完成 `prototype/workspace-*` 历史测试/验证工作区清理；`JOB-099` 现明确为三步流程，其中第一步可直接复用 `JOB-098` 结果。",
       "- 旧版超长交接文档已归档到 `project_management/legacy/`，只在需要追旧上下文时再查阅。",
       "- 已建立 `docs/2026-04-17-v1.0正式文档工作区/`，并将其接入单一真源与 `pm:sync / pm:check` 的管理链。",
       "- `docs/` 根目录已完成首批历史文档归档分层；已关单且被正式文档工作区覆盖的阶段文档已迁入 `docs/archive/`。",
@@ -1377,7 +1468,8 @@
         "JOB-019",
         "JOB-020",
         "JOB-035",
-        "JOB-101"
+        "JOB-101",
+        "JOB-106"
       ],
       "authoritative": true,
       "mustSyncWhen": [
@@ -1397,7 +1489,7 @@
       "domain": "release_runtime",
       "versionScope": "v1.0",
       "owner": "Codex",
-      "lastUpdatedAt": "2026-04-17",
+      "lastUpdatedAt": "2026-04-22",
       "relatedJobs": [
         "JOB-021",
         "JOB-022",
@@ -1453,7 +1545,8 @@
         "JOB-020",
         "JOB-036",
         "JOB-090",
-        "JOB-101"
+        "JOB-101",
+        "JOB-106"
       ],
       "authoritative": true,
       "mustSyncWhen": [
@@ -1473,7 +1566,7 @@
       "domain": "control_api",
       "versionScope": "v1.0",
       "owner": "Codex",
-      "lastUpdatedAt": "2026-04-17",
+      "lastUpdatedAt": "2026-04-22",
       "relatedJobs": [
         "JOB-020",
         "JOB-021",
@@ -2039,6 +2132,63 @@
       ]
     },
     {
+      "docId": "JOB-104-DOC",
+      "title": "JOB-104-v1.0发布流水线自动化与交付产物标准化",
+      "path": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-104-v1.0发布流水线自动化与交付产物标准化.md",
+      "docType": "job",
+      "status": "active",
+      "domain": "jobs",
+      "versionScope": "v1.0",
+      "owner": "Codex",
+      "lastUpdatedAt": "2026-04-21",
+      "relatedJobs": [
+        "JOB-104"
+      ],
+      "authoritative": true,
+      "mustSyncWhen": [
+        "job_scope_changed",
+        "doc_plan_changed"
+      ]
+    },
+    {
+      "docId": "JOB-105-DOC",
+      "title": "JOB-105-v1.0批量导入按行阻断与可通过记录导入",
+      "path": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-105-v1.0批量导入按行阻断与可通过记录导入.md",
+      "docType": "job",
+      "status": "active",
+      "domain": "jobs",
+      "versionScope": "v1.0",
+      "owner": "Codex",
+      "lastUpdatedAt": "2026-04-21",
+      "relatedJobs": [
+        "JOB-105"
+      ],
+      "authoritative": true,
+      "mustSyncWhen": [
+        "job_scope_changed",
+        "doc_plan_changed"
+      ]
+    },
+    {
+      "docId": "JOB-106-DOC",
+      "title": "JOB-106-v1.0词典准入与runtime输出统一方案",
+      "path": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-106-v1.0词典准入与runtime输出统一方案.md",
+      "docType": "job",
+      "status": "active",
+      "domain": "jobs",
+      "versionScope": "v1.0",
+      "owner": "Codex",
+      "lastUpdatedAt": "2026-04-22",
+      "relatedJobs": [
+        "JOB-106"
+      ],
+      "authoritative": true,
+      "mustSyncWhen": [
+        "job_scope_changed",
+        "doc_plan_changed"
+      ]
+    },
+    {
       "docId": "DOC-15-01",
       "title": "terms表详细字典",
       "path": "docs/2026-04-17-v1.0正式文档工作区/data_dictionary/01-terms表详细字典.md",
@@ -2376,11 +2526,12 @@
       "status": "active",
       "domain": "api_specs",
       "relatedJobs": [
-        "JOB-103"
+        "JOB-103",
+        "JOB-106"
       ],
       "versionScope": "v1.0",
       "owner": "Codex",
-      "lastUpdatedAt": "2026-04-18",
+      "lastUpdatedAt": "2026-04-22",
       "authoritative": true,
       "mustSyncWhen": [
         "code_changed",
@@ -2398,11 +2549,13 @@
       "status": "active",
       "domain": "api_specs",
       "relatedJobs": [
-        "JOB-103"
+        "JOB-103",
+        "JOB-105",
+        "JOB-106"
       ],
       "versionScope": "v1.0",
       "owner": "Codex",
-      "lastUpdatedAt": "2026-04-18",
+      "lastUpdatedAt": "2026-04-22",
       "authoritative": true,
       "mustSyncWhen": [
         "code_changed",
@@ -2508,11 +2661,12 @@
       "status": "active",
       "domain": "design",
       "relatedJobs": [
-        "JOB-103"
+        "JOB-103",
+        "JOB-106"
       ],
       "versionScope": "v1.0",
       "owner": "Codex",
-      "lastUpdatedAt": "2026-04-18",
+      "lastUpdatedAt": "2026-04-22",
       "authoritative": true,
       "mustSyncWhen": [
         "code_changed",
@@ -2882,11 +3036,12 @@
       "status": "active",
       "domain": "pages",
       "relatedJobs": [
-        "JOB-103"
+        "JOB-103",
+        "JOB-106"
       ],
       "versionScope": "v1.0",
       "owner": "Codex",
-      "lastUpdatedAt": "2026-04-18",
+      "lastUpdatedAt": "2026-04-22",
       "authoritative": true,
       "mustSyncWhen": [
         "code_changed",
@@ -2904,11 +3059,12 @@
       "status": "active",
       "domain": "pages",
       "relatedJobs": [
-        "JOB-103"
+        "JOB-103",
+        "JOB-106"
       ],
       "versionScope": "v1.0",
       "owner": "Codex",
-      "lastUpdatedAt": "2026-04-18",
+      "lastUpdatedAt": "2026-04-22",
       "authoritative": true,
       "mustSyncWhen": [
         "code_changed",
@@ -3419,6 +3575,19 @@
       "summary": "左侧目录树与主后台体验收口"
     },
     {
+      "jobId": "JOB-098",
+      "docImpact": [
+        "DOC-11",
+        "DOC-12"
+      ],
+      "docDeliverables": [],
+      "checklistRef": "docs/archive/2026-04-17-v1关闭批次与阶段文档/142-JOB-098测试验证工作区历史副产物清理实施说明.md",
+      "adrRefs": [],
+      "docSyncRequired": true,
+      "docSyncStatus": "done",
+      "summary": "测试/验证工作区历史副产物清理"
+    },
+    {
       "jobId": "JOB-099",
       "docImpact": [
         "DOC-01",
@@ -3726,6 +3895,64 @@
       "docSyncRequired": true,
       "docSyncStatus": "done",
       "summary": "详细设计层、数据字典层、接口规范层、页面设计层与 Codex 开发依据层补齐"
+    },
+    {
+      "jobId": "JOB-104",
+      "docImpact": [
+        "DOC-01",
+        "DOC-04",
+        "DOC-07",
+        "DOC-11",
+        "DOC-12",
+        "DOC-14-13",
+        "JOB-104-DOC"
+      ],
+      "docDeliverables": [
+        "JOB-104-DOC"
+      ],
+      "checklistRef": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-104-v1.0发布流水线自动化与交付产物标准化.md",
+      "adrRefs": [],
+      "docSyncRequired": true,
+      "docSyncStatus": "done",
+      "summary": "发布流水线自动化与交付产物标准化"
+    },
+    {
+      "jobId": "JOB-105",
+      "docImpact": [
+        "DOC-10",
+        "DOC-16-06",
+        "DOC-14-02",
+        "JOB-105-DOC"
+      ],
+      "docDeliverables": [
+        "JOB-105-DOC"
+      ],
+      "checklistRef": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-105-v1.0批量导入按行阻断与可通过记录导入.md",
+      "adrRefs": [],
+      "docSyncRequired": true,
+      "docSyncStatus": "done",
+      "summary": "批量导入按行阻断与可通过记录导入"
+    },
+    {
+      "jobId": "JOB-106",
+      "docImpact": [
+        "DOC-06",
+        "DOC-09",
+        "DOC-16-05",
+        "DOC-16-06",
+        "DOC-14-01",
+        "DOC-17-02",
+        "DOC-17-03",
+        "JOB-106-DOC"
+      ],
+      "docDeliverables": [
+        "JOB-106-DOC"
+      ],
+      "checklistRef": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-106-v1.0词典准入与runtime输出统一方案.md",
+      "adrRefs": [],
+      "docSyncRequired": true,
+      "docSyncStatus": "done",
+      "summary": "词典准入、系统处理建议、页面批量处理与 runtime 输出模式统一收口"
     }
   ],
   "adrRegistry": [
@@ -3952,6 +4179,21 @@
       ],
       "changeType": "complete_design_pages_codex_dev",
       "summary": "补齐 design/07~13、api_specs/11~13、codex_dev/01~10、pages/01~13，完成 JOB-103 规划内全部主题文档。"
+    },
+    {
+      "changeId": "DOC-CHANGE-011",
+      "date": "2026-04-22",
+      "jobId": "JOB-106",
+      "affectedDocs": [
+        "DOC-06",
+        "DOC-09",
+        "DOC-14-01",
+        "DOC-17-02",
+        "DOC-17-03",
+        "JOB-106-DOC"
+      ],
+      "changeType": "add_unified_admission_runtime_plan",
+      "summary": "新增 JOB-106 并将词典准入、系统建议、页面批量处理与 runtime replace/candidate 边界收口到统一方案。"
     }
   ],
   "docRules": {

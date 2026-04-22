@@ -4,7 +4,7 @@
 - 适用版本：v1.0
 - 文档类型：baseline
 - 所属工作区：2026-04-17-v1.0正式文档工作区
-- 最后更新时间：2026-04-17
+- 最后更新时间：2026-04-22
 - 责任对象：runtime HTTP / WebSocket 对外合同
 
 ## 1. 接口范围
@@ -157,6 +157,12 @@ runtime 在执行纠错前，会先根据请求体选择 stable 或 canary。
 |---|---|
 | `correctedTexts` | 候选整句数组，第一个元素为主结果 |
 
+补充约束：
+
+1. 若存在 `replace` 命中，则 `correctedTexts[0]` 为主替换结果
+2. 若不存在 `replace` 命中、只有 `candidate` 命中，则 `correctedTexts[0]` 固定返回原文
+3. `candidate` 结果只允许出现在后续候选位，不允许提升为主结果
+
 ### 4.7 `POST /api/simulate`
 
 作用：用于模拟和验证，不作为正式 runtime 对外合同主接口。
@@ -205,6 +211,11 @@ runtime 在执行纠错前，会先根据请求体选择 stable 或 canary。
 1. `correctedTexts`
 2. 或 `error`
 
+补充约束与 HTTP `correct_cand` 保持一致：
+
+1. 无 `replace` 命中时，主结果位保持原文
+2. `candidate` 只出现在后续候选位
+
 ## 6. 错误语义
 
 当前典型错误包括：
@@ -224,3 +235,57 @@ runtime 在执行纠错前，会先根据请求体选择 stable 或 canary。
 2. `correct_cand` 与 `ws correct_cand` 返回整句候选集合 `correctedTexts`。
 3. runtime 当前不直接对外暴露完整匹配细节合同。
 4. `/api/simulate` 主要用于验证，不建议替代正式 runtime 接口。
+
+## 8. JOB-106 统一收口口径
+
+### 8.1 运行模式定义
+
+统一方案要求 runtime 明确区分两类可入库词条：
+
+1. `replace`
+   - 可进入直接替换链
+2. `candidate`
+   - 只能进入候选推荐链
+
+### 8.2 接口边界
+
+统一后接口边界固定为：
+
+1. `/api/runtime/correct`
+   - 只允许 `replace` 生效
+2. `/ws/runtime/correct`
+   - 与 HTTP `correct` 保持一致
+3. `/api/runtime/correct_cand`
+   - `replace` 形成主结果
+   - `candidate` 进入候选集合
+   - 无 `replace` 命中时主结果保持原文
+4. `/ws/runtime/correct_cand`
+   - 与 HTTP `correct_cand` 保持一致
+
+### 8.3 当前实现与目标口径的差异
+
+当前 literal 通道尚未完全与治理口径对齐。
+
+当前实现中：
+
+1. `replaceMode = block` 会进入 `block`
+2. 其他值会被当成 `replace`
+
+这意味着：
+
+1. 仅把词条落成 `replaceMode = candidate` 还不够
+2. runtime 需要补改，真正尊重：
+   - `replaceMode`
+   - `pinyinRuntimeMode`
+
+### 8.4 与准入方案的关系
+
+runtime 不再承担“替治理层消化脏词典”的职责。
+
+统一后的职责边界为：
+
+1. 准入层先判断词条是：
+   - `blocked`
+   - `ready + replace`
+   - `ready + candidate`
+2. runtime 严格按该结论执行输出

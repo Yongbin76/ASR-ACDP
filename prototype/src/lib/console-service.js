@@ -446,6 +446,7 @@ function buildReviewTargetSummaryMap(db, items = []) {
         : (liveTerm ? liveTerm.canonicalText : item.targetId);
       const categoryCode = snapshot.categoryCode || (liveTerm ? liveTerm.categoryCode : '');
       const status = snapshot.status || (liveTerm ? liveTerm.status : '');
+      const replaceMode = snapshot.replaceMode || (liveTerm ? liveTerm.replaceMode : '');
       summary = {
         title: canonicalText,
         subtitle: categoryCode ? `词条 / ${consoleDisplayLabel(categoryCode)}` : '词条',
@@ -454,6 +455,7 @@ function buildReviewTargetSummaryMap(db, items = []) {
         canonicalText,
         version: '',
         fullPinyinNoTone: '',
+        replaceMode,
         workflow: {
           purpose: '确认当前词条内容是否可以进入后续版本构建输入。',
           approveNext: '通过后，词条将进入可参与下一次 build 的状态；下一步请进入版本发布构建新版本。',
@@ -526,6 +528,7 @@ function buildReviewTargetSummaryMap(db, items = []) {
         canonicalText: '',
         version: '',
         fullPinyinNoTone: '',
+        replaceMode: '',
       };
     }
 
@@ -3257,7 +3260,12 @@ function importJobPreviewSummary(db, jobId) {
       SUM(CASE WHEN status = 'ready' THEN 1 ELSE 0 END) AS ready_rows,
       SUM(CASE WHEN status = 'warning' THEN 1 ELSE 0 END) AS warning_rows,
       SUM(CASE WHEN status = 'error' THEN 1 ELSE 0 END) AS error_rows,
-      SUM(CASE WHEN status IN ('ready', 'warning') THEN 1 ELSE 0 END) AS importable_rows
+      SUM(CASE WHEN status IN ('ready', 'warning') THEN 1 ELSE 0 END) AS importable_rows,
+      SUM(CASE WHEN json_extract(normalized_payload_json, '$.__systemRecommendation.recommendedAction') = 'save_replace' THEN 1 ELSE 0 END) AS save_replace_count,
+      SUM(CASE WHEN json_extract(normalized_payload_json, '$.__systemRecommendation.recommendedAction') = 'save_candidate' THEN 1 ELSE 0 END) AS save_candidate_count,
+      SUM(CASE WHEN json_extract(normalized_payload_json, '$.__systemRecommendation.recommendedAction') = 'merge_existing' THEN 1 ELSE 0 END) AS merge_existing_count,
+      SUM(CASE WHEN json_extract(normalized_payload_json, '$.__systemRecommendation.recommendedAction') = 'append_alias_to_existing' THEN 1 ELSE 0 END) AS append_alias_count,
+      SUM(CASE WHEN json_extract(normalized_payload_json, '$.__systemRecommendation.recommendedAction') = 'skip_blocked' THEN 1 ELSE 0 END) AS skip_blocked_count
     FROM import_job_rows
     WHERE job_id = ?
   `).get(jobId);
@@ -3267,6 +3275,13 @@ function importJobPreviewSummary(db, jobId) {
     warningRows: Number((row || {}).warning_rows || 0),
     errorRows: Number((row || {}).error_rows || 0),
     importableRows: Number((row || {}).importable_rows || 0),
+    recommendationSummary: {
+      saveReplaceCount: Number((row || {}).save_replace_count || 0),
+      saveCandidateCount: Number((row || {}).save_candidate_count || 0),
+      mergeExistingCount: Number((row || {}).merge_existing_count || 0),
+      appendAliasCount: Number((row || {}).append_alias_count || 0),
+      skipBlockedCount: Number((row || {}).skip_blocked_count || 0),
+    },
   };
 }
 
@@ -3408,6 +3423,9 @@ function listConsoleImportJobs(db, filters = {}) {
         updatedTermCount: row.updated_term_count,
         newAliasCount: row.new_alias_count,
         updatedAliasCount: row.updated_alias_count,
+        importedReadyCount: row.imported_ready_count,
+        importedWarningCount: row.imported_warning_count,
+        skippedBlockedCount: row.skipped_blocked_count,
         skippedCount: row.skipped_count,
         errorCount: row.error_count,
         importedBy: row.imported_by,
@@ -3485,7 +3503,7 @@ function getConsoleImportJobDetail(db, appConfig, jobId) {
     previewSummary,
     blockedRowCount: Number(previewSummary.errorRows || 0),
     warningRowCount: Number(previewSummary.warningRows || 0),
-    canConfirm: job.status === 'preview_ready' && Number(previewSummary.errorRows || 0) === 0,
+    canConfirm: job.status === 'preview_ready' && Number(previewSummary.importableRows || 0) > 0,
     resultSummary: getImportJobResult(db, jobId),
     errors: listImportJobErrorPreview(db, jobId, 50),
     linkedTerms,

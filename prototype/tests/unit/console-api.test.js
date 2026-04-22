@@ -188,6 +188,165 @@ test('console API applies single-character canonical admission exception rules',
     });
     assert.equal(allowed.statusCode, 201);
     assert.equal(allowed.json.item.canonicalText, '李');
+    assert.equal(allowed.json.admission.level, 'ready');
+    assert.equal(allowed.json.admission.recommendedAction, 'save_replace');
+  } finally {
+    await app.stop();
+  }
+});
+
+test('console API returns candidate admission and downgrades persisted modes when suggestion is save_candidate', { timeout: 120000 }, async () => {
+  const config = createTestConfig(87956);
+  prepareData.main(config);
+  bootstrapDb.main(config);
+  buildSnapshot.main('console api candidate admission build', config);
+  const app = createPrototypeApp(config);
+  try {
+    const seed = await app.inject({
+      method: 'POST',
+      url: '/api/console/dictionary/terms',
+      headers: consoleHeaders(),
+      body: {
+        categoryCode: 'poi_road',
+        canonicalText: '岐接口顺路',
+        aliases: ['旗接口顺路'],
+        priority: 80,
+        riskLevel: 'medium',
+        replaceMode: 'replace',
+        baseConfidence: 0.9,
+        sourceType: 'manual',
+        pinyinRuntimeMode: 'candidate',
+      },
+    });
+    assert.equal(seed.statusCode, 201);
+
+    const seed2 = await app.inject({
+      method: 'POST',
+      url: '/api/console/dictionary/terms',
+      headers: consoleHeaders(),
+      body: {
+        categoryCode: 'poi_road',
+        canonicalText: '齐接口顺路',
+        aliases: ['旗接口顺路'],
+        priority: 80,
+        riskLevel: 'medium',
+        replaceMode: 'replace',
+        baseConfidence: 0.9,
+        sourceType: 'manual',
+        pinyinRuntimeMode: 'candidate',
+      },
+    });
+    assert.equal(seed2.statusCode, 201);
+
+    const created = await app.inject({
+      method: 'POST',
+      url: '/api/console/dictionary/terms',
+      headers: consoleHeaders(),
+      body: {
+        categoryCode: 'poi_road',
+        canonicalText: '祁接口顺路',
+        aliases: ['旗接口顺路'],
+        priority: 80,
+        riskLevel: 'medium',
+        replaceMode: 'candidate',
+        baseConfidence: 0.9,
+        sourceType: 'manual',
+        pinyinRuntimeMode: 'replace',
+      },
+    });
+    assert.equal(created.statusCode, 201);
+    assert.equal(created.json.admission.level, 'ready');
+    assert.equal(created.json.admission.runtimeSuitability, 'candidate');
+    assert.equal(created.json.admission.recommendedAction, 'save_candidate');
+    assert.equal(created.json.item.replaceMode, 'candidate');
+    assert.equal(created.json.item.pinyinRuntimeMode, 'candidate');
+  } finally {
+    await app.stop();
+  }
+});
+
+test('console API blocks direct creation when admission requires append or skip action', { timeout: 120000 }, async () => {
+  const config = createTestConfig(87957);
+  prepareData.main(config);
+  bootstrapDb.main(config);
+  buildSnapshot.main('console api action required build', config);
+  const app = createPrototypeApp(config);
+  try {
+    const existing = await app.inject({
+      method: 'POST',
+      url: '/api/console/dictionary/terms',
+      headers: consoleHeaders(),
+      body: {
+        categoryCode: 'gov_term',
+        canonicalText: '接口唯一工伤认定',
+        aliases: ['接口唯一工商认定'],
+        priority: 80,
+        riskLevel: 'medium',
+        replaceMode: 'replace',
+        baseConfidence: 0.9,
+        sourceType: 'manual',
+        pinyinRuntimeMode: 'candidate',
+      },
+    });
+    assert.equal(existing.statusCode, 201);
+
+    const append = await app.inject({
+      method: 'POST',
+      url: '/api/console/dictionary/terms',
+      headers: consoleHeaders(),
+      body: {
+        categoryCode: 'gov_term',
+        canonicalText: '接口唯一工商认定',
+        aliases: ['接口唯一工商认丁'],
+        priority: 80,
+        riskLevel: 'medium',
+        replaceMode: 'replace',
+        baseConfidence: 0.9,
+        sourceType: 'manual',
+        pinyinRuntimeMode: 'candidate',
+      },
+    });
+    assert.equal(append.statusCode, 409);
+    assert.equal(append.json.recommendedAction, 'append_alias_to_existing');
+    assert.equal(append.json.targetCanonicalText, '接口唯一工伤认定');
+
+    const canonical = await app.inject({
+      method: 'POST',
+      url: '/api/console/dictionary/terms',
+      headers: consoleHeaders(),
+      body: {
+        categoryCode: 'gov_term',
+        canonicalText: '民政局',
+        aliases: ['123'],
+        priority: 80,
+        riskLevel: 'medium',
+        replaceMode: 'replace',
+        baseConfidence: 0.9,
+        sourceType: 'manual',
+        pinyinRuntimeMode: 'candidate',
+      },
+    });
+    assert.equal(canonical.statusCode, 201);
+
+    const blocked = await app.inject({
+      method: 'POST',
+      url: '/api/console/dictionary/terms',
+      headers: consoleHeaders(),
+      body: {
+        categoryCode: 'gov_term',
+        canonicalText: '民政通',
+        aliases: ['民政局'],
+        priority: 80,
+        riskLevel: 'medium',
+        replaceMode: 'replace',
+        baseConfidence: 0.9,
+        sourceType: 'manual',
+        pinyinRuntimeMode: 'candidate',
+      },
+    });
+    assert.equal(blocked.statusCode, 409);
+    assert.equal(blocked.json.recommendedAction, 'skip_blocked');
+    assert.equal(blocked.json.admissionLevel, 'blocked');
   } finally {
     await app.stop();
   }
@@ -553,6 +712,80 @@ test('console API supports import-job scoped review filtering and batch review e
     });
     assert.equal(invalidBatch.statusCode, 400);
     assert.match(String(invalidBatch.json.error || ''), /review_batch_task_ids_required/);
+  } finally {
+    await app.stop();
+  }
+});
+
+test('console API confirms import jobs by importing passable rows and skipping blocked rows', { timeout: 120000 }, async () => {
+  const config = createTestConfig(87981);
+  prepareData.main(config);
+  bootstrapDb.main(config);
+  buildSnapshot.main('console api import skip blocked build', config);
+  const app = createPrototypeApp(config);
+  try {
+    const importCsv = [
+      'canonicalText,aliases,categoryCode,priority,riskLevel,replaceMode,baseConfidence,pinyinRuntimeMode,customFullPinyinNoTone,alternativeReadings,sourceType,remark',
+      '接口可导入词,接口可导入别名,proper_noun,80,medium,replace,0.9,candidate,,,manual,api-import-ready',
+      '办理材料,,gov_term,80,medium,replace,0.9,candidate,,,manual,api-import-blocked',
+    ].join('\n');
+    const createdImportJob = await app.inject({
+      method: 'POST',
+      url: '/api/console/dictionary/import-jobs',
+      headers: consoleHeaders(),
+      body: {
+        templateCode: 'structured_terms_csv_v2',
+        sourceType: 'manual',
+        fileName: 'console_api_import_skip_blocked.csv',
+        contentType: 'text/csv',
+        fileContent: importCsv,
+        comment: 'console api import skip blocked',
+      },
+    });
+    assert.equal(createdImportJob.statusCode, 201);
+    const importJobId = createdImportJob.json.item.jobId;
+
+    const confirmed = await app.inject({
+      method: 'POST',
+      url: `/api/console/dictionary/import-jobs/${encodeURIComponent(importJobId)}/confirm`,
+      headers: consoleHeaders(),
+      body: { importMode: 'upsert' },
+    });
+    assert.equal(confirmed.statusCode, 200);
+    assert.equal(confirmed.json.item.resultSummary.importedReadyCount, 1);
+    assert.equal(confirmed.json.item.resultSummary.importedWarningCount, 0);
+    assert.equal(confirmed.json.item.resultSummary.skippedBlockedCount, 1);
+    assert.equal(confirmed.json.item.resultSummary.replaceImportedCount, 1);
+    assert.equal(confirmed.json.item.resultSummary.candidateImportedCount, 0);
+
+    const detail = await app.inject({
+      method: 'GET',
+      url: `/api/console/dictionary/import-jobs/${encodeURIComponent(importJobId)}`,
+      headers: consoleHeaders(),
+    });
+    assert.equal(detail.statusCode, 200);
+    assert.equal(detail.json.item.job.status, 'imported');
+    assert.equal(detail.json.item.resultSummary.skippedBlockedCount, 1);
+    assert.equal(detail.json.item.previewSummary.recommendationSummary.saveReplaceCount, 1);
+    assert.equal(detail.json.item.previewSummary.recommendationSummary.skipBlockedCount, 1);
+
+    const rows = await app.inject({
+      method: 'GET',
+      url: `/api/console/dictionary/import-jobs/${encodeURIComponent(importJobId)}/rows?status=error&decision=skipped_blocked`,
+      headers: consoleHeaders(),
+    });
+    assert.equal(rows.statusCode, 200);
+    assert.equal((rows.json.items || []).length, 1);
+    assert.equal(rows.json.items[0].decision, 'skipped_blocked');
+
+    const filteredRows = await app.inject({
+      method: 'GET',
+      url: `/api/console/dictionary/import-jobs/${encodeURIComponent(importJobId)}/rows?recommendedAction=save_replace`,
+      headers: consoleHeaders(),
+    });
+    assert.equal(filteredRows.statusCode, 200);
+    assert.equal((filteredRows.json.items || []).length, 1);
+    assert.equal(filteredRows.json.items[0].recommendedAction, 'save_replace');
   } finally {
     await app.stop();
   }

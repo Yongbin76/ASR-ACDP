@@ -4,7 +4,7 @@
 - 适用版本：v1.0
 - 文档类型：api_spec
 - 所属工作区：2026-04-17-v1.0正式文档工作区
-- 最后更新时间：2026-04-18
+- 最后更新时间：2026-04-22
 - 责任对象：`/api/console/dictionary/terms*`
 
 ## 1. 覆盖范围
@@ -146,6 +146,54 @@
 1. 进入统一准入校验。
 2. 通过后写入 `terms/aliases/term_rules/pinyin_profiles`。
 
+#### JOB-106 扩展返回口径
+
+创建接口在第一版需要补齐以下返回区块，供词典录入页直接消费：
+
+1. `admission.level`
+   - `blocked`
+   - `ready`
+2. `admission.runtimeSuitability`
+   - `replace`
+   - `candidate`
+   - `blocked`
+3. `admission.recommendedAction`
+   - `save_replace`
+   - `save_candidate`
+   - `merge_existing`
+   - `append_alias_to_existing`
+   - `skip_blocked`
+4. `admission.reasonCodes`
+5. `admission.reasonSummary`
+6. `admission.reviewHints`
+7. `admission.targetTermId`
+8. `admission.targetCanonicalText`
+
+典型响应摘要：
+
+```json
+{
+  "item": {
+    "termId": "term_xxx",
+    "status": "draft",
+    "replaceMode": "candidate",
+    "pinyinRuntimeMode": "candidate"
+  },
+  "admission": {
+    "level": "ready",
+    "runtimeSuitability": "candidate",
+    "recommendedAction": "save_candidate",
+    "reasonCodes": ["multi_canonical_ambiguous"],
+    "reasonSummary": "当前词条存在有限歧义，仅允许作为推荐候选录入。",
+    "reviewHints": [
+      "该词条存在有限歧义，当前只允许推荐，不允许直接替换。"
+    ],
+    "targetTermId": "",
+    "targetCanonicalText": ""
+  }
+}
+```
+
 ### 6.2 `PUT /api/console/dictionary/terms/{termId}`
 
 作用：
@@ -158,6 +206,42 @@
 2. 替换别名集合。
 3. 更新规则和拼音画像。
 4. `revision` 自增。
+
+#### JOB-106 扩展返回口径
+
+更新接口也需要返回与创建接口一致的 `admission` 区块，保证详情页编辑保存后能立即刷新：
+
+1. `recommendedAction`
+2. `runtimeSuitability`
+3. `reasonSummary`
+4. `reviewHints`
+5. `targetTermId`
+6. `targetCanonicalText`
+
+#### 运行模式组合矩阵
+
+`replaceMode` 是词条级上限，`pinyinRuntimeMode` 只控制拼音通道，不允许把词条从 `candidate` 提升成 `replace`。
+
+第一版冻结规则如下：
+
+| replaceMode | pinyinRuntimeMode | literal 通道 | pinyin 通道 | 有效口径 |
+|---|---|---|---|---|
+| `replace` | `off` | `replace` | `off` | 合法 |
+| `replace` | `candidate` | `replace` | `candidate` | 合法 |
+| `replace` | `replace` | `replace` | `replace` | 合法 |
+| `candidate` | `off` | `candidate` | `off` | 合法 |
+| `candidate` | `candidate` | `candidate` | `candidate` | 合法 |
+| `candidate` | `replace` | `candidate` | `candidate` | 视为降级，不允许提升 |
+| `block` | `off/candidate/replace` | `block` | `off` | 不应进入 runtime snapshot |
+
+接口口径要求：
+
+1. 页面不应让用户选出非法提升组合
+2. 若 API 收到 `replaceMode = candidate` 且 `pinyinRuntimeMode = replace`
+   - 服务端不得把该词条提升为 `replace`
+   - 实际运行口径按 `candidate` 处理
+3. 若 `replaceMode = block`
+   - 该词条不应进入 runtime 词典
 
 ## 7. 审核动作
 
@@ -221,6 +305,7 @@
 |---|---|
 | `term not found` | 词条不存在 |
 | `term_admission_blocked` | 准入规则阻断 |
+| `term_admission_conflict` | 运行模式或目标词条解析冲突 |
 | `term_review_status_invalid` | 当前状态不允许提交审核 |
 | `pinyin_candidate_not_found` | 指定候选读音不存在 |
 

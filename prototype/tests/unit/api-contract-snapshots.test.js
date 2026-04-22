@@ -1,16 +1,10 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { spawnSync } = require('child_process');
-const path = require('path');
+const { main } = require('../../src/cli/check-api-contract-snapshots');
 
-test('api contract snapshot checker passes', () => {
-  const result = spawnSync(
-    process.execPath,
-    [path.join(__dirname, '../../src/cli/check-api-contract-snapshots.js')],
-    {
-      cwd: path.join(__dirname, '../../..'),
-      encoding: 'utf8',
-    },
-  );
-  assert.equal(result.status, 0, result.stderr || result.stdout);
+test('api contract snapshot checker passes', async () => {
+  const result = await main();
+  assert.equal(result.ok, true);
+  assert.equal(result.consoleSnapshot, 'passed');
+  assert.equal(result.runtimeSnapshot, 'passed');
 });

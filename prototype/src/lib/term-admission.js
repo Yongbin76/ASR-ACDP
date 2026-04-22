@@ -34,8 +34,8 @@ const BLOCKED_DICTIONARY_PHRASES = new Set([
   '附件下载',
 ]);
 const BLOCKED_METADATA_MARKERS = ['备注', '说明', '注：', '注:', '序号', '编号', '地址信息'];
-const ROAD_SUFFIXES = ['大道', '公路', '支路', '支弄', '胡同', '大街', '中路', '东路', '西路', '南路', '北路', '路', '街', '巷', '弄', '道', '里'];
-const GOVERNMENT_STRONG_SUFFIXES = ['检察院', '服务中心', '派出所', '委员会', '总队', '大队', '法院', '政府', '党委', '人大', '政协', '中心', '委', '局', '厅', '办'];
+const ROAD_SUFFIXES = ['大道', '公路', '支路', '支弄', '胡同', '大街', '中路', '东路', '西路', '南路', '北路', '路', '街', '巷', '弄', '道', '里', '桥', '高速', '立交'];
+const GOVERNMENT_STRONG_SUFFIXES = ['检察院', '服务中心', '派出所', '委员会', '办公室', '研究室', '参事室', '总队', '大队', '法院', '政府', '党委', '人大', '政协', '中心', '委', '局', '厅', '办'];
 const GOVERNMENT_WEAK_TOKENS = ['发展改革', '发展和改革', '市场监管', '政务服务', '城管执法', '行政审批', '司法行政'];
 const ROAD_CATEGORY_CODES = new Set(['poi_road', 'ROAD_INFO']);
 const GOVERNMENT_CATEGORY_CODES = new Set(['gov_term', 'GOV_INFO']);
@@ -46,6 +46,7 @@ const PHONE_PATTERN = /(?:\+?86[-\s]?)?(?:1\d{10}|0\d{2,3}[-\s]?\d{7,8})/u;
 const NOISE_PATTERN = /[_=]{2,}|[#＊*]{2,}|(?:\d+\s*\/\s*\d+)|(?:第\s*\d+\s*页)/u;
 const CHINESE_ENUM_PATTERN = /^[一二三四五六七八九十]+[、.．]/u;
 const PINYIN_TOKEN_PATTERN = /^[a-z]+(?:\s+[a-z]+)*$/;
+const CANDIDATE_MAX_CANONICAL_TARGETS = 3;
 
 function uniqueStrings(items = []) {
   return Array.from(new Set((items || []).map((item) => String(item || '').trim()).filter(Boolean)));
@@ -85,6 +86,18 @@ function issue(level, code, field, message, options = {}) {
   };
 }
 
+function dedupeTermsById(items = []) {
+  const dedup = new Map();
+  for (const item of items || []) {
+    const termId = String((item && item.termId) || '').trim();
+    if (!termId || dedup.has(termId)) {
+      continue;
+    }
+    dedup.set(termId, item);
+  }
+  return Array.from(dedup.values());
+}
+
 function issueLevelRank(level = '') {
   if (level === 'blocked') return 2;
   if (level === 'warning') return 1;
@@ -94,9 +107,6 @@ function issueLevelRank(level = '') {
 function computeAdmissionLevel(issues = []) {
   if ((issues || []).some((entry) => entry && entry.level === 'blocked')) {
     return 'blocked';
-  }
-  if ((issues || []).some((entry) => entry && entry.level === 'warning')) {
-    return 'warning';
   }
   return 'ready';
 }
@@ -111,6 +121,16 @@ function normalizeInputPayload(payload = {}, options = {}) {
   const rawAlternativeReadings = Array.isArray(rawAlternativeReadingsInput)
     ? rawAlternativeReadingsInput.map((item) => String(item || '').trim())
     : String(rawAlternativeReadingsInput || '').split('|').map((item) => item.trim());
+  const requestedReplaceMode = String(payload.replaceMode ?? currentTerm.replaceMode ?? '').trim() || 'replace';
+  const requestedPinyinRuntimeMode = String(payload.pinyinRuntimeMode ?? currentTerm.pinyinRuntimeMode ?? '').trim() || 'candidate';
+  let replaceMode = requestedReplaceMode;
+  let pinyinRuntimeMode = requestedPinyinRuntimeMode;
+  if (replaceMode === 'candidate' && pinyinRuntimeMode === 'replace') {
+    pinyinRuntimeMode = 'candidate';
+  }
+  if (replaceMode === 'block') {
+    pinyinRuntimeMode = 'off';
+  }
   return {
     termId: String(options.currentTermId || payload.termId || currentTerm.termId || '').trim(),
     categoryCode: String(payload.categoryCode ?? currentTerm.categoryCode ?? '').trim(),
@@ -118,10 +138,12 @@ function normalizeInputPayload(payload = {}, options = {}) {
     aliases: normalizeAliases(payload.aliases ?? currentTerm.aliases ?? []),
     priority: normalizeNumber(payload.priority ?? currentTerm.priority, 80),
     riskLevel: String(payload.riskLevel ?? currentTerm.riskLevel ?? '').trim() || 'medium',
-    replaceMode: String(payload.replaceMode ?? currentTerm.replaceMode ?? '').trim() || 'replace',
+    requestedReplaceMode,
+    requestedPinyinRuntimeMode,
+    replaceMode,
     baseConfidence: normalizeNumber(payload.baseConfidence ?? currentTerm.baseConfidence, 0.9),
     sourceType: String(payload.sourceType ?? currentTerm.sourceType ?? '').trim() || 'manual',
-    pinyinRuntimeMode: String(payload.pinyinRuntimeMode ?? currentTerm.pinyinRuntimeMode ?? '').trim() || 'candidate',
+    pinyinRuntimeMode,
     pinyinProfile: {
       runtimeMode: String(pinyinProfile.runtimeMode ?? (currentTerm.pinyinProfile || {}).runtimeMode ?? '').trim() || 'candidate',
       customFullPinyinNoTone: joinPinyin(rawCustomFullPinyinNoTone),
@@ -187,6 +209,21 @@ function validateEnumAndNumericFields(normalizedInput, issues) {
   if (!Number.isInteger(normalizedInput.priority) || normalizedInput.priority < 1 || normalizedInput.priority > 1000) {
     issues.push(issue('blocked', 'invalid_priority', 'priority', '优先级必须是 1 到 1000 之间的整数。', {
       evidence: normalizedInput.priority,
+    }));
+  }
+}
+
+function validateModeCombination(normalizedInput, issues) {
+  if (normalizedInput.requestedReplaceMode === 'candidate' && normalizedInput.requestedPinyinRuntimeMode === 'replace') {
+    issues.push(issue('warning', 'runtime_mode_downgraded', 'pinyinRuntimeMode', '当前词条只能作为推荐候选，拼音通道已自动降级为候选模式。', {
+      evidence: `${normalizedInput.requestedReplaceMode}+${normalizedInput.requestedPinyinRuntimeMode}`,
+      suggestion: '请把拼音运行模式改成 off 或 candidate。',
+    }));
+  }
+  if (normalizedInput.requestedReplaceMode === 'block' && normalizedInput.requestedPinyinRuntimeMode !== 'off') {
+    issues.push(issue('warning', 'runtime_mode_downgraded', 'pinyinRuntimeMode', '当前词条禁止直接输出，拼音通道已自动关闭。', {
+      evidence: `${normalizedInput.requestedReplaceMode}+${normalizedInput.requestedPinyinRuntimeMode}`,
+      suggestion: '若需要进入运行时，请改为 replace 或 candidate。',
     }));
   }
 }
@@ -278,7 +315,7 @@ function validateCategoryShape(normalizedInput, issues) {
   if (ROAD_CATEGORY_CODES.has(normalizedInput.categoryCode) && !hasRoadShape(canonicalText)) {
     issues.push(issue('blocked', 'poi_road_shape_blocked', 'canonicalText', '当前文本不符合路名的基础形态要求。', {
       evidence: canonicalText,
-      suggestion: '路名类标准词通常应以路/街/巷/弄/大道/公路等后缀结尾。',
+      suggestion: '路名类标准词通常应以路/街/巷/弄/大道/公路/桥/高速/立交等后缀结尾。',
     }));
   }
   if (GOVERNMENT_CATEGORY_CODES.has(normalizedInput.categoryCode)) {
@@ -340,13 +377,32 @@ function validatePinyinFields(normalizedInput, issues) {
   }
 }
 
-function validateExistingCanonical(db, normalizedInput, issues, options = {}) {
-  if (!normalizedInput.categoryCode || !normalizedInput.canonicalText) {
-    return null;
+function buildConflictContext(db, normalizedInput, options = {}) {
+  const excludeTermId = normalizedInput.termId || options.currentTermId || '';
+  const exactExisting = normalizedInput.categoryCode && normalizedInput.canonicalText
+    ? findTermByCategoryAndCanonical(db, normalizedInput.categoryCode, normalizedInput.canonicalText, {
+      excludeTermId,
+    })
+    : null;
+  const canonicalAliasTargets = normalizedInput.canonicalText
+    ? dedupeTermsById(findTermsByAliasText(db, normalizedInput.canonicalText, { excludeTermId }))
+    : [];
+  const aliasCanonicalTargetsByAlias = new Map();
+  const aliasAliasTargetsByAlias = new Map();
+  for (const aliasText of normalizedInput.aliases || []) {
+    aliasCanonicalTargetsByAlias.set(aliasText, dedupeTermsById(findTermsByCanonicalText(db, aliasText, { excludeTermId })));
+    aliasAliasTargetsByAlias.set(aliasText, dedupeTermsById(findTermsByAliasText(db, aliasText, { excludeTermId })));
   }
-  const existing = findTermByCategoryAndCanonical(db, normalizedInput.categoryCode, normalizedInput.canonicalText, {
-    excludeTermId: normalizedInput.termId || options.currentTermId || '',
-  });
+  return {
+    exactExisting,
+    canonicalAliasTargets,
+    aliasCanonicalTargetsByAlias,
+    aliasAliasTargetsByAlias,
+  };
+}
+
+function validateExistingCanonical(context, issues) {
+  const existing = context.exactExisting || null;
   if (existing) {
     issues.push(issue('warning', 'exact_match_existing', 'canonicalText', '同类同名标准词已存在，当前操作将转为补充或更新现有词条。', {
       trace: buildTraceFromTerm(existing),
@@ -356,37 +412,25 @@ function validateExistingCanonical(db, normalizedInput, issues, options = {}) {
   return existing;
 }
 
-function validateCanonicalAliasConflict(db, normalizedInput, issues, options = {}) {
-  if (!normalizedInput.canonicalText) {
-    return;
-  }
-  const conflicts = findTermsByAliasText(db, normalizedInput.canonicalText, {
-    excludeTermId: normalizedInput.termId || options.currentTermId || '',
-  });
-  for (const conflict of conflicts) {
-    issues.push(issue('blocked', 'alias_conflict', 'canonicalText', '当前标准词命中了其他词条的错误词或别名，不能直接作为新的标准词录入。', {
+function validateCanonicalAliasConflict(normalizedInput, context, issues) {
+  for (const conflict of context.canonicalAliasTargets || []) {
+    issues.push(issue('warning', 'alias_conflict', 'canonicalText', '当前标准词命中了其他词条的错误词或别名，系统将优先建议并入或补录。', {
       trace: buildTraceFromTerm(conflict, { aliasText: normalizedInput.canonicalText }),
       suggestion: '请先确认是否应合并到现有词条，或改为错误词补录。',
     }));
   }
 }
 
-function validateAliasConflicts(db, normalizedInput, issues, options = {}) {
-  const aliases = normalizedInput.aliases || [];
-  const currentTermId = normalizedInput.termId || options.currentTermId || '';
-  for (const aliasText of aliases) {
-    const canonicalConflicts = findTermsByCanonicalText(db, aliasText, {
-      excludeTermId: currentTermId,
-    });
+function validateAliasConflicts(normalizedInput, context, issues) {
+  for (const aliasText of normalizedInput.aliases || []) {
+    const canonicalConflicts = context.aliasCanonicalTargetsByAlias.get(aliasText) || [];
     for (const conflict of canonicalConflicts) {
       issues.push(issue('warning', 'alias_conflict', 'aliases', '当前错误词或别名与其他词条的标准词重名，建议确认是否会造成混淆。', {
         evidence: aliasText,
         trace: buildTraceFromTerm(conflict),
       }));
     }
-    const aliasConflicts = findTermsByAliasText(db, aliasText, {
-      excludeTermId: currentTermId,
-    });
+    const aliasConflicts = context.aliasAliasTargetsByAlias.get(aliasText) || [];
     for (const conflict of aliasConflicts) {
       issues.push(issue('warning', 'alias_conflict', 'aliases', '当前错误词或别名与其他词条的错误词重复，建议确认是否会造成歧义。', {
         evidence: aliasText,
@@ -396,6 +440,159 @@ function validateAliasConflicts(db, normalizedInput, issues, options = {}) {
   }
 }
 
+function uniqueConflictCanonicals(context = {}) {
+  const dedup = new Map();
+  for (const target of context.canonicalAliasTargets || []) {
+    dedup.set(String(target.termId || '').trim(), target);
+  }
+  for (const targets of (context.aliasAliasTargetsByAlias || new Map()).values()) {
+    for (const target of targets || []) {
+      dedup.set(String(target.termId || '').trim(), target);
+    }
+  }
+  return Array.from(dedup.values());
+}
+
+function aliasHitsExistingCanonical(context = {}) {
+  return Array.from((context.aliasCanonicalTargetsByAlias || new Map()).values()).some((items) => Array.isArray(items) && items.length > 0);
+}
+
+function hasEffectiveTrigger(normalizedInput) {
+  if ((normalizedInput.aliases || []).length > 0) {
+    return true;
+  }
+  return normalizedInput.pinyinRuntimeMode !== 'off';
+}
+
+function buildRecommendationResult(level, runtimeSuitability, recommendedAction, reasonCodes = [], reasonSummary = '', reviewHints = [], target = null) {
+  return {
+    level,
+    runtimeSuitability,
+    recommendedAction,
+    reasonCodes: Array.from(new Set((reasonCodes || []).map((item) => String(item || '').trim()).filter(Boolean))),
+    reasonSummary: String(reasonSummary || '').trim(),
+    reviewHints: Array.from(new Set((reviewHints || []).map((item) => String(item || '').trim()).filter(Boolean))),
+    targetTermId: target ? String(target.termId || '').trim() : '',
+    targetCanonicalText: target ? String(target.canonicalText || '').trim() : '',
+  };
+}
+
+function deriveAdmissionRecommendation(normalizedInput, issues, context) {
+  const hardBlocked = issues.some((entry) => entry && entry.level === 'blocked');
+  if (hardBlocked) {
+    return buildRecommendationResult(
+      'blocked',
+      'blocked',
+      'skip_blocked',
+      issues.filter((entry) => entry && entry.level === 'blocked').map((entry) => entry.code),
+      '当前词条内容不满足准入规则，不能直接进入词典。',
+      ['请先修正阻断项后再继续录入或导入。'],
+    );
+  }
+  if (!hasEffectiveTrigger(normalizedInput)) {
+    return buildRecommendationResult(
+      'blocked',
+      'blocked',
+      'skip_blocked',
+      ['missing_runtime_trigger'],
+      '当前词条没有有效触发条件，录入后不会稳定生效。',
+      ['请至少保留一个错误词/别名，或打开拼音运行模式后再继续。'],
+    );
+  }
+  if (context.exactExisting) {
+    return buildRecommendationResult(
+      'ready',
+      'replace',
+      'merge_existing',
+      ['exact_match_existing'],
+      `建议并入已有词条“${context.exactExisting.canonicalText}”。`,
+      ['当前标准词与现有词条完全一致，建议不要重复新建。'],
+      context.exactExisting,
+    );
+  }
+  if ((context.canonicalAliasTargets || []).length === 1) {
+    const target = context.canonicalAliasTargets[0];
+    return buildRecommendationResult(
+      'ready',
+      'replace',
+      'append_alias_to_existing',
+      ['canonical_hits_existing_alias'],
+      `建议补录到已有词条“${target.canonicalText}”。`,
+      ['当前标准词已是现有词条的错误词或别名，建议不要再新建独立标准词。'],
+      target,
+    );
+  }
+  if (normalizedInput.replaceMode === 'block') {
+    return buildRecommendationResult(
+      'blocked',
+      'blocked',
+      'skip_blocked',
+      ['replace_mode_blocked'],
+      '当前词条被配置为禁止输出，不能进入运行时词典。',
+      ['如需进入运行时，请把替换模式调整为“直接替换”或“推荐候选”。'],
+    );
+  }
+  if (aliasHitsExistingCanonical(context)) {
+    return buildRecommendationResult(
+      'blocked',
+      'blocked',
+      'skip_blocked',
+      ['trigger_hits_existing_canonical'],
+      '当前触发词已命中现有标准词，继续录入会误改正确输入。',
+      ['建议优先检查是否应并入已有词条，或调整错误词后再提交。'],
+    );
+  }
+  const candidateTargets = uniqueConflictCanonicals(context);
+  if (candidateTargets.length > 0) {
+    if ((normalizedInput.aliases || []).length === 0) {
+      return buildRecommendationResult(
+        'blocked',
+        'blocked',
+        'skip_blocked',
+        ['candidate_requires_alias'],
+        '当前词条只能作为推荐候选，但缺少明确错误词触发入口。',
+        ['第一版不允许无错误词、仅靠拼音进入推荐候选。'],
+      );
+    }
+    if (candidateTargets.length <= CANDIDATE_MAX_CANONICAL_TARGETS) {
+      return buildRecommendationResult(
+        'ready',
+        'candidate',
+        'save_candidate',
+        ['multi_canonical_ambiguous'],
+        '当前词条存在有限歧义，仅允许作为推荐候选录入。',
+        ['该词条存在有限歧义，当前只允许推荐，不允许直接替换。'],
+      );
+    }
+    return buildRecommendationResult(
+      'blocked',
+      'blocked',
+      'skip_blocked',
+      ['multi_canonical_ambiguous'],
+      '当前词条会触发过多候选标准词，不适合进入推荐链。',
+      ['候选标准词数量过多，容易把推荐结果污染成大面积噪声。'],
+    );
+  }
+  if (normalizedInput.replaceMode === 'candidate') {
+    return buildRecommendationResult(
+      'ready',
+      'candidate',
+      'save_candidate',
+      ['candidate_mode_enforced'],
+      '当前词条按推荐候选方式录入。',
+      ['该词条将以“仅推荐”方式进入运行时，不会直接改写主结果。'],
+    );
+  }
+  return buildRecommendationResult(
+    'ready',
+    'replace',
+    'save_replace',
+    [],
+    '当前词条满足直接替换条件，可按替换词条保存。',
+    [],
+  );
+}
+
 function evaluateTermAdmission(db, payload = {}, options = {}) {
   const normalizedInput = normalizeInputPayload(payload, options);
   const issues = [];
@@ -403,12 +600,15 @@ function evaluateTermAdmission(db, payload = {}, options = {}) {
   validateConfiguredBusinessProperty(db, normalizedInput, issues, options);
   validateConfiguredSourceType(db, normalizedInput, issues, options);
   validateEnumAndNumericFields(normalizedInput, issues);
+  validateModeCombination(normalizedInput, issues);
   validateDictionarySuitability(normalizedInput, issues);
   validateCategoryShape(normalizedInput, issues);
   validatePinyinFields(normalizedInput, issues);
-  validateExistingCanonical(db, normalizedInput, issues, options);
-  validateCanonicalAliasConflict(db, normalizedInput, issues, options);
-  validateAliasConflicts(db, normalizedInput, issues, options);
+  const conflictContext = buildConflictContext(db, normalizedInput, options);
+  validateExistingCanonical(conflictContext, issues);
+  validateCanonicalAliasConflict(normalizedInput, conflictContext, issues);
+  validateAliasConflicts(normalizedInput, conflictContext, issues);
+  const recommendation = deriveAdmissionRecommendation(normalizedInput, issues, conflictContext);
 
   issues.sort((left, right) => {
     const levelRank = issueLevelRank(right.level) - issueLevelRank(left.level);
@@ -419,9 +619,16 @@ function evaluateTermAdmission(db, payload = {}, options = {}) {
   });
 
   return {
-    level: computeAdmissionLevel(issues),
+    level: recommendation.level || computeAdmissionLevel(issues),
     issues,
     normalizedInput,
+    runtimeSuitability: recommendation.runtimeSuitability,
+    recommendedAction: recommendation.recommendedAction,
+    reasonCodes: recommendation.reasonCodes,
+    reasonSummary: recommendation.reasonSummary,
+    reviewHints: recommendation.reviewHints,
+    targetTermId: recommendation.targetTermId,
+    targetCanonicalText: recommendation.targetCanonicalText,
   };
 }
 
@@ -429,15 +636,23 @@ function summarizeTermAdmission(admissionOrIssues) {
   const issues = Array.isArray(admissionOrIssues)
     ? admissionOrIssues
     : (admissionOrIssues && Array.isArray(admissionOrIssues.issues) ? admissionOrIssues.issues : []);
+  const admission = Array.isArray(admissionOrIssues) ? {} : (admissionOrIssues || {});
   const blockedIssues = issues.filter((entry) => entry.level === 'blocked');
   const warningIssues = issues.filter((entry) => entry.level === 'warning');
   return {
-    level: computeAdmissionLevel(issues),
+    level: String(admission.level || computeAdmissionLevel(issues)).trim() || 'ready',
     blockedCount: blockedIssues.length,
     warningCount: warningIssues.length,
     issueCount: issues.length,
     primaryIssue: blockedIssues[0] || warningIssues[0] || null,
     issues,
+    runtimeSuitability: String(admission.runtimeSuitability || (blockedIssues.length > 0 ? 'blocked' : 'replace')).trim() || 'replace',
+    recommendedAction: String(admission.recommendedAction || (blockedIssues.length > 0 ? 'skip_blocked' : 'save_replace')).trim() || 'save_replace',
+    reasonCodes: Array.isArray(admission.reasonCodes) ? admission.reasonCodes : [],
+    reasonSummary: String(admission.reasonSummary || '').trim(),
+    reviewHints: Array.isArray(admission.reviewHints) ? admission.reviewHints : [],
+    targetTermId: String(admission.targetTermId || '').trim(),
+    targetCanonicalText: String(admission.targetCanonicalText || '').trim(),
   };
 }
 
@@ -449,6 +664,13 @@ function createBlockedAdmissionError(summary, options = {}) {
   error.payload = {
     error: `${error.code}: ${error.message}`,
     admissionLevel: normalized.level,
+    runtimeSuitability: normalized.runtimeSuitability,
+    recommendedAction: normalized.recommendedAction,
+    reasonCodes: normalized.reasonCodes,
+    reasonSummary: normalized.reasonSummary,
+    reviewHints: normalized.reviewHints,
+    targetTermId: normalized.targetTermId,
+    targetCanonicalText: normalized.targetCanonicalText,
     blockedCount: normalized.blockedCount,
     warningCount: normalized.warningCount,
     issues: normalized.issues,
@@ -461,6 +683,7 @@ module.exports = {
   ALLOWED_REPLACE_MODES,
   ALLOWED_PINYIN_RUNTIME_MODES,
   BLOCKED_DICTIONARY_PHRASES,
+  CANDIDATE_MAX_CANONICAL_TARGETS,
   evaluateTermAdmission,
   summarizeTermAdmission,
   createBlockedAdmissionError,

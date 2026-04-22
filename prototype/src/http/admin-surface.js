@@ -62,10 +62,40 @@ function enforceTermAdmission(db, payload = {}, options = {}) {
   return admission;
 }
 
+function createAdmissionActionRequiredError(admission, message = '') {
+  const summary = summarizeTermAdmission(admission);
+  const error = new Error(message || summary.reasonSummary || '当前词条需要按系统建议处理。');
+  error.statusCode = 409;
+  error.code = 'term_admission_action_required';
+  error.payload = {
+    error: `${error.code}: ${error.message}`,
+    admissionLevel: summary.level,
+    runtimeSuitability: summary.runtimeSuitability,
+    recommendedAction: summary.recommendedAction,
+    reasonCodes: summary.reasonCodes,
+    reasonSummary: summary.reasonSummary,
+    reviewHints: summary.reviewHints,
+    targetTermId: summary.targetTermId,
+    targetCanonicalText: summary.targetCanonicalText,
+    blockedCount: summary.blockedCount,
+    warningCount: summary.warningCount,
+    issues: summary.issues,
+  };
+  return error;
+}
+
 function buildAdmissionSummaryPayload(admission = {}) {
   const summary = summarizeTermAdmission(admission);
   return {
+    level: summary.level,
     admissionLevel: summary.level,
+    runtimeSuitability: summary.runtimeSuitability,
+    recommendedAction: summary.recommendedAction,
+    reasonCodes: summary.reasonCodes,
+    reasonSummary: summary.reasonSummary,
+    reviewHints: summary.reviewHints,
+    targetTermId: summary.targetTermId,
+    targetCanonicalText: summary.targetCanonicalText,
     blockedCount: summary.blockedCount,
     warningCount: summary.warningCount,
     issueCount: summary.issueCount,
@@ -103,6 +133,41 @@ function buildManualTermReviewOptions(term, admission = {}) {
     admissionSummary: buildAdmissionSummaryPayload(admission),
     conflictSummary: buildConflictSummaryPayload(admission),
   };
+}
+
+function buildPersistableTermPayload(payload = {}, admission = {}, currentTerm = null) {
+  const next = {
+    ...payload,
+  };
+  const currentRules = currentTerm && currentTerm.rules ? currentTerm.rules : {};
+  const incomingRules = payload && payload.rules ? payload.rules : {};
+  if (String(admission.runtimeSuitability || '').trim() === 'candidate') {
+    next.replaceMode = 'candidate';
+    if (String(next.pinyinRuntimeMode || '').trim() !== 'off') {
+      next.pinyinRuntimeMode = 'candidate';
+    }
+    next.rules = {
+      ...currentRules,
+      ...incomingRules,
+      candidateOnly: true,
+    };
+    return next;
+  }
+  if (payload && Object.prototype.hasOwnProperty.call(payload, 'rules')) {
+    next.rules = {
+      ...currentRules,
+      ...incomingRules,
+    };
+  }
+  return next;
+}
+
+function assertSaveActionAllowed(admission, message = '') {
+  const action = String((admission && admission.recommendedAction) || '').trim();
+  if (action === 'save_replace' || action === 'save_candidate') {
+    return;
+  }
+  throw createAdmissionActionRequiredError(admission, message);
 }
 
 function countBusinessAttributeReferences(db, code) {
@@ -1331,6 +1396,7 @@ async function handleAdminRequest(req, res, context = {}) {
     sendJson(res, 200, listImportJobRows(db, jobId, {
       status: searchParams.get('status') || '',
       decision: searchParams.get('decision') || '',
+      recommendedAction: searchParams.get('recommendedAction') || '',
       pageSize: searchParams.get('pageSize') || 100,
     }));
     return true;
@@ -1344,9 +1410,10 @@ async function handleAdminRequest(req, res, context = {}) {
       return true;
     }
     const rows = listImportJobRows(db, jobId, { status: 'error', pageSize: 1000 }).items;
-    const body = ['rowNo,errorCode,errorMessage,issueCodes,issueMessages,traceSummary']
+    const body = ['rowNo,canonicalText,errorCode,errorMessage,issueCodes,issueMessages,traceSummary']
       .concat(rows.map((item) => {
         const issues = Array.isArray(item.issues) ? item.issues : [];
+        const canonicalText = String((((item || {}).normalizedPayload || {}).canonicalText) || '').trim();
         const issueCodes = issues.map((entry) => String(entry.code || '').trim()).filter(Boolean).join('|');
         const issueMessages = issues.map((entry) => String(entry.message || '').trim()).filter(Boolean).join(' | ');
         const traceSummary = issues.map((entry) => {
@@ -1356,7 +1423,7 @@ async function handleAdminRequest(req, res, context = {}) {
           const trace = entry.trace;
           return [trace.termId, trace.categoryCode, trace.canonicalText, trace.aliasText, trace.importJobId].filter(Boolean).join('/');
         }).filter(Boolean).join(' | ');
-        return `${item.rowNo},"${String(item.errorCode || '').replace(/"/g, '""')}","${String(item.errorMessage || '').replace(/"/g, '""')}","${issueCodes.replace(/"/g, '""')}","${issueMessages.replace(/"/g, '""')}","${traceSummary.replace(/"/g, '""')}"`;
+        return `${item.rowNo},"${canonicalText.replace(/"/g, '""')}","${String(item.errorCode || '').replace(/"/g, '""')}","${String(item.errorMessage || '').replace(/"/g, '""')}","${issueCodes.replace(/"/g, '""')}","${issueMessages.replace(/"/g, '""')}","${traceSummary.replace(/"/g, '""')}"`;
       }))
       .join('\n');
     res.writeHead(200, {
@@ -1507,11 +1574,17 @@ async function handleAdminRequest(req, res, context = {}) {
   if (req.method === 'POST' && (pathname === '/api/console/terms' || pathname === '/api/console/dictionary/terms')) {
     const payload = await readJson(req);
     const auth = authContextFrom(req, payload);
-    enforceTermAdmission(db, buildAdmissionPayloadForPersist(payload), {
+    const admission = enforceTermAdmission(db, buildAdmissionPayloadForPersist(payload), {
       sourceMode: 'manual',
       message: '当前词条内容不满足准入规则，请先修正后再保存。',
     });
-    sendJson(res, 201, { ok: true, item: createTerm(db, payload, auth.operator) });
+    assertSaveActionAllowed(admission, '当前词条不能直接新建，请先按系统建议处理。');
+    const persistPayload = buildPersistableTermPayload(payload, admission, null);
+    sendJson(res, 201, {
+      ok: true,
+      item: createTerm(db, persistPayload, auth.operator),
+      admission: buildAdmissionSummaryPayload(admission),
+    });
     return true;
   }
 
@@ -1526,7 +1599,7 @@ async function handleAdminRequest(req, res, context = {}) {
       return true;
     }
     const currentPinyinProfile = getTermPinyinProfile(db, termId, current.canonicalText);
-    enforceTermAdmission(db, buildAdmissionPayloadForPersist(payload, {
+    const admission = enforceTermAdmission(db, buildAdmissionPayloadForPersist(payload, {
       ...current,
       pinyinProfile: currentPinyinProfile,
     }), {
@@ -1538,7 +1611,16 @@ async function handleAdminRequest(req, res, context = {}) {
       },
       message: '当前词条内容不满足准入规则，请先修正后再保存。',
     });
-    sendJson(res, 200, { ok: true, item: updateTerm(db, decodeURIComponent(consoleTermUpdateMatch[0]), payload, auth.operator) });
+    assertSaveActionAllowed(admission, '当前词条不能直接保存，请先按系统建议处理。');
+    const persistPayload = buildPersistableTermPayload(payload, admission, {
+      ...current,
+      rules: current.rules || {},
+    });
+    sendJson(res, 200, {
+      ok: true,
+      item: updateTerm(db, decodeURIComponent(consoleTermUpdateMatch[0]), persistPayload, auth.operator),
+      admission: buildAdmissionSummaryPayload(admission),
+    });
     return true;
   }
 
@@ -1822,10 +1904,15 @@ async function handleAdminRequest(req, res, context = {}) {
   if (req.method === 'POST' && pathname === '/api/admin/terms') {
     const payload = await readJson(req);
     const auth = authContextFrom(req, payload);
-    enforceTermAdmission(db, buildAdmissionPayloadForPersist(payload), {
+    const admission = enforceTermAdmission(db, buildAdmissionPayloadForPersist(payload), {
       message: '当前词条内容不满足准入规则，请先修正后再保存。',
     });
-    sendJson(res, 201, createTerm(db, payload, auth.operator));
+    assertSaveActionAllowed(admission, '当前词条不能直接新建，请先按系统建议处理。');
+    const persistPayload = buildPersistableTermPayload(payload, admission, null);
+    sendJson(res, 201, {
+      item: createTerm(db, persistPayload, auth.operator),
+      admission: buildAdmissionSummaryPayload(admission),
+    });
     return true;
   }
 
@@ -1896,7 +1983,7 @@ async function handleAdminRequest(req, res, context = {}) {
       return true;
     }
     const currentPinyinProfile = getTermPinyinProfile(db, termId, current.canonicalText);
-    enforceTermAdmission(db, buildAdmissionPayloadForPersist(payload, {
+    const admission = enforceTermAdmission(db, buildAdmissionPayloadForPersist(payload, {
       ...current,
       pinyinProfile: currentPinyinProfile,
     }), {
@@ -1907,7 +1994,15 @@ async function handleAdminRequest(req, res, context = {}) {
       },
       message: '当前词条内容不满足准入规则，请先修正后再保存。',
     });
-    sendJson(res, 200, updateTerm(db, termId, payload, auth.operator));
+    assertSaveActionAllowed(admission, '当前词条不能直接保存，请先按系统建议处理。');
+    const persistPayload = buildPersistableTermPayload(payload, admission, {
+      ...current,
+      rules: current.rules || {},
+    });
+    sendJson(res, 200, {
+      item: updateTerm(db, termId, persistPayload, auth.operator),
+      admission: buildAdmissionSummaryPayload(admission),
+    });
     return true;
   }
 

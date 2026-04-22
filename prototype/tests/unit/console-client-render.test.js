@@ -458,6 +458,7 @@ test('console client major routes finish rendering without staying in loading st
             assert.ok(html.includes('surface-block-terms-action'));
             assert.ok(html.includes('surface-block-terms-filter'));
             assert.ok(html.includes('surface-block-terms-results'));
+            assert.ok(html.includes('系统建议说明'));
             assert.ok(html.indexOf('批量操作与导出') < html.indexOf('筛选条件'));
           }
         } catch (error) {
@@ -465,6 +466,99 @@ test('console client major routes finish rendering without staying in loading st
         }
       });
     }
+
+    await t.test('import job detail renders localized passable import actions', async (subtest) => {
+      const importCsv = [
+        'canonicalText,aliases,categoryCode,priority,riskLevel,replaceMode,baseConfidence,pinyinRuntimeMode,customFullPinyinNoTone,alternativeReadings,sourceType,remark',
+        '渲染可导入词,渲染可导入别名,proper_noun,80,medium,replace,0.9,candidate,,,manual,render-ready',
+        '办理材料,,gov_term,80,medium,replace,0.9,candidate,,,manual,render-blocked',
+      ].join('\n');
+      const createdImportJob = await app.inject({
+        method: 'POST',
+        url: '/api/console/dictionary/import-jobs',
+        headers: { 'x-role': 'dict_admin', 'x-operator': 'render_tester' },
+        body: {
+          templateCode: 'structured_terms_csv_v2',
+          sourceType: 'manual',
+          fileName: 'render_import_skip_blocked.csv',
+          contentType: 'text/csv',
+          fileContent: importCsv,
+          comment: 'console render import skip blocked',
+        },
+      });
+      assert.equal(createdImportJob.statusCode, 201);
+      const importJobId = createdImportJob.json.item.jobId;
+
+      {
+        const fakeBrowser = createFakeBrowserEnvironment(`/dictionary/import-jobs/${encodeURIComponent(importJobId)}`);
+        const context = vm.createContext({
+          console: fakeBrowser.console,
+          fetch: createInjectFetch(app),
+          window: fakeBrowser.window,
+          document: fakeBrowser.document,
+          location: fakeBrowser.location,
+          history: fakeBrowser.history,
+          localStorage: fakeBrowser.localStorage,
+          URL,
+          URLSearchParams,
+          FormData,
+          setTimeout,
+          clearTimeout,
+          queueMicrotask,
+          setInterval() { return 1; },
+          clearInterval() {},
+        });
+        vm.runInContext(appScriptSource, context, { filename: appScriptPath });
+        const result = await waitForRender(fakeBrowser.app, fakeBrowser.pageTitle);
+        subtest.diagnostic(`rendered import detail preview in ${result.durationMs}ms`);
+        assert.equal(result.ok, true);
+        const html = String(fakeBrowser.app.innerHTML || '');
+        assert.ok(html.includes('按系统建议处理'));
+        assert.ok(html.includes('下载阻断报表'));
+        assert.ok(html.includes('可导入总数'));
+        assert.ok(html.includes('建议候选导入'));
+        assert.ok(html.includes('建议动作'));
+        assert.ok(html.includes('阻断跳过（skipped_blocked）'));
+      }
+
+      const confirmed = await app.inject({
+        method: 'POST',
+        url: `/api/console/dictionary/import-jobs/${encodeURIComponent(importJobId)}/confirm`,
+        headers: { 'x-role': 'dict_admin', 'x-operator': 'render_tester' },
+        body: { importMode: 'upsert' },
+      });
+      assert.equal(confirmed.statusCode, 200);
+
+      {
+        const fakeBrowser = createFakeBrowserEnvironment(`/dictionary/import-jobs/${encodeURIComponent(importJobId)}?rowStatus=error&rowDecision=skipped_blocked`);
+        const context = vm.createContext({
+          console: fakeBrowser.console,
+          fetch: createInjectFetch(app),
+          window: fakeBrowser.window,
+          document: fakeBrowser.document,
+          location: fakeBrowser.location,
+          history: fakeBrowser.history,
+          localStorage: fakeBrowser.localStorage,
+          URL,
+          URLSearchParams,
+          FormData,
+          setTimeout,
+          clearTimeout,
+          queueMicrotask,
+          setInterval() { return 1; },
+          clearInterval() {},
+        });
+        vm.runInContext(appScriptSource, context, { filename: appScriptPath });
+        const result = await waitForRender(fakeBrowser.app, fakeBrowser.pageTitle);
+        subtest.diagnostic(`rendered import detail imported in ${result.durationMs}ms`);
+        assert.equal(result.ok, true);
+        const html = String(fakeBrowser.app.innerHTML || '');
+        assert.ok(html.includes('替换导入'));
+        assert.ok(html.includes('候选导入'));
+        assert.ok(html.includes('跳过阻断'));
+        assert.ok(html.includes('阻断未导入'));
+      }
+    });
   } finally {
     await app.stop();
   }

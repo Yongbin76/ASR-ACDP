@@ -17,7 +17,11 @@ const { getTermPinyinProfile, getRuntimeNodeRegistryItem } = require('../../src/
  */
 function createTestConfig() {
   const baseConfig = createAppConfig();
-  const workspaceDir = path.join(baseConfig.projectRoot, 'prototype', 'workspace-unit-console-workflows');
+  const workspaceDir = path.join(
+    baseConfig.projectRoot,
+    'prototype',
+    `workspace-unit-console-workflows-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+  );
   const catalogDir = path.join(workspaceDir, 'catalog');
   const releasesDir = path.join(workspaceDir, 'releases');
   if (fs.existsSync(workspaceDir)) {
@@ -290,6 +294,79 @@ test('console workflow supports validation case creation and related terms looku
   }
 });
 
+test('console workflow keeps blocked rows downloadable after importing passable rows', { timeout: 120000 }, async () => {
+  const config = createTestConfig();
+  prepareData.main(config);
+  bootstrapDb.main(config);
+  buildSnapshot.main('console workflow import skip blocked build', config);
+  const app = createPrototypeApp({
+    ...config,
+    server: {
+      ...config.server,
+      host: '127.0.0.1',
+      port: 8806,
+    },
+  });
+  try {
+    const importCsv = [
+      'canonicalText,aliases,categoryCode,priority,riskLevel,replaceMode,baseConfidence,pinyinRuntimeMode,customFullPinyinNoTone,alternativeReadings,sourceType,remark',
+      '工作流可导入词,工作流可导入别名,proper_noun,80,medium,replace,0.9,candidate,,,manual,workflow-ready',
+      '办理材料,,gov_term,80,medium,replace,0.9,candidate,,,manual,workflow-blocked',
+    ].join('\n');
+    const createdImportJob = await app.inject({
+      method: 'POST',
+      url: '/api/console/dictionary/import-jobs',
+      headers: headers('dict_editor', 'editor_user'),
+      body: {
+        templateCode: 'structured_terms_csv_v2',
+        sourceType: 'manual',
+        fileName: 'workflow_import_skip_blocked.csv',
+        contentType: 'text/csv',
+        fileContent: importCsv,
+        comment: 'console workflow import skip blocked',
+      },
+    });
+    assert.equal(createdImportJob.statusCode, 201);
+    const importJobId = createdImportJob.json.item.jobId;
+
+    const confirmed = await app.inject({
+      method: 'POST',
+      url: `/api/console/dictionary/import-jobs/${encodeURIComponent(importJobId)}/confirm`,
+      headers: headers('dict_editor', 'editor_user'),
+      body: { importMode: 'upsert' },
+    });
+    assert.equal(confirmed.statusCode, 200);
+    assert.equal(confirmed.json.item.resultSummary.importedReadyCount, 1);
+    assert.equal(confirmed.json.item.resultSummary.skippedBlockedCount, 1);
+
+    const detail = await app.inject({
+      method: 'GET',
+      url: `/api/console/dictionary/import-jobs/${encodeURIComponent(importJobId)}`,
+      headers: headers('dict_editor', 'editor_user'),
+    });
+    assert.equal(detail.statusCode, 200);
+    assert.equal(detail.json.item.resultSummary.skippedBlockedCount, 1);
+
+    const rows = await app.inject({
+      method: 'GET',
+      url: `/api/console/dictionary/import-jobs/${encodeURIComponent(importJobId)}/rows?status=error&decision=skipped_blocked`,
+      headers: headers('dict_editor', 'editor_user'),
+    });
+    assert.equal(rows.statusCode, 200);
+    assert.equal((rows.json.items || []).length, 1);
+
+    const download = await app.inject({
+      method: 'GET',
+      url: `/api/console/dictionary/import-jobs/${encodeURIComponent(importJobId)}/errors/download`,
+      headers: headers('dict_editor', 'editor_user'),
+    });
+    assert.equal(download.statusCode, 200);
+    assert.match(String(download.body || ''), /办理材料/);
+  } finally {
+    await app.stop();
+  }
+});
+
 test('console workflow supports import-batch scoped term review bulk approve', { timeout: 120000 }, async () => {
   const config = createTestConfig();
   prepareData.main(config);
@@ -300,7 +377,7 @@ test('console workflow supports import-batch scoped term review bulk approve', {
     server: {
       ...config.server,
       host: '127.0.0.1',
-      port: 8804,
+      port: 8805,
     },
   });
   try {
@@ -371,7 +448,7 @@ test('console workflow supports current-filter scoped term review bulk approve',
     server: {
       ...config.server,
       host: '127.0.0.1',
-      port: 88041,
+      port: 8807,
     },
   });
   try {

@@ -352,9 +352,16 @@ function openDatabase(appConfigOrPath) {
       result_id TEXT PRIMARY KEY,
       job_id TEXT NOT NULL,
       new_term_count INTEGER NOT NULL DEFAULT 0,
+      replace_imported_count INTEGER NOT NULL DEFAULT 0,
+      candidate_imported_count INTEGER NOT NULL DEFAULT 0,
+      merged_existing_count INTEGER NOT NULL DEFAULT 0,
+      alias_appended_count INTEGER NOT NULL DEFAULT 0,
       updated_term_count INTEGER NOT NULL DEFAULT 0,
       new_alias_count INTEGER NOT NULL DEFAULT 0,
       updated_alias_count INTEGER NOT NULL DEFAULT 0,
+      imported_ready_count INTEGER NOT NULL DEFAULT 0,
+      imported_warning_count INTEGER NOT NULL DEFAULT 0,
+      skipped_blocked_count INTEGER NOT NULL DEFAULT 0,
       skipped_count INTEGER NOT NULL DEFAULT 0,
       error_count INTEGER NOT NULL DEFAULT 0,
       imported_by TEXT NOT NULL,
@@ -523,6 +530,13 @@ function openDatabase(appConfigOrPath) {
     CREATE INDEX IF NOT EXISTS idx_audits_target ON audit_logs(target_type, target_id);
   `);
   ensureTableColumn(db, 'import_job_rows', 'issues_json', "TEXT NOT NULL DEFAULT '[]'");
+  ensureTableColumn(db, 'import_job_results', 'replace_imported_count', 'INTEGER NOT NULL DEFAULT 0');
+  ensureTableColumn(db, 'import_job_results', 'candidate_imported_count', 'INTEGER NOT NULL DEFAULT 0');
+  ensureTableColumn(db, 'import_job_results', 'merged_existing_count', 'INTEGER NOT NULL DEFAULT 0');
+  ensureTableColumn(db, 'import_job_results', 'alias_appended_count', 'INTEGER NOT NULL DEFAULT 0');
+  ensureTableColumn(db, 'import_job_results', 'imported_ready_count', 'INTEGER NOT NULL DEFAULT 0');
+  ensureTableColumn(db, 'import_job_results', 'imported_warning_count', 'INTEGER NOT NULL DEFAULT 0');
+  ensureTableColumn(db, 'import_job_results', 'skipped_blocked_count', 'INTEGER NOT NULL DEFAULT 0');
   seedValidationCases(db, appConfigOrPath);
   return db;
 }
@@ -1992,6 +2006,13 @@ function composeImportJobFile(row) {
  * 输出：导入行对象。
  */
 function composeImportJobRow(row) {
+  const storedPayload = deserializeJson(row.normalized_payload_json, {});
+  const systemRecommendation = storedPayload && typeof storedPayload.__systemRecommendation === 'object'
+    ? storedPayload.__systemRecommendation
+    : {};
+  if (storedPayload && Object.prototype.hasOwnProperty.call(storedPayload, '__systemRecommendation')) {
+    delete storedPayload.__systemRecommendation;
+  }
   const issues = deserializeJson(row.issues_json, []);
   const blockedCount = issues.filter((item) => item && item.level === 'blocked').length;
   const warningCount = issues.filter((item) => item && item.level === 'warning').length;
@@ -2001,12 +2022,21 @@ function composeImportJobRow(row) {
     importJobId: row.job_id,
     rowNo: row.row_no,
     rawPayload: deserializeJson(row.raw_payload_json, {}),
-    normalizedPayload: deserializeJson(row.normalized_payload_json, {}),
+    normalizedPayload: storedPayload || {},
     issues,
     targetTermKey: row.target_term_key,
     status: row.status,
-    admissionLevel: blockedCount > 0 ? 'blocked' : (warningCount > 0 ? 'warning' : 'ready'),
+    admissionLevel: row.status === 'error' || String(systemRecommendation.recommendedAction || '').trim() === 'skip_blocked'
+      ? 'blocked'
+      : (warningCount > 0 ? 'warning' : 'ready'),
     decision: row.decision,
+    recommendedAction: String(systemRecommendation.recommendedAction || '').trim(),
+    runtimeSuitability: String(systemRecommendation.runtimeSuitability || '').trim(),
+    reasonCodes: Array.isArray(systemRecommendation.reasonCodes) ? systemRecommendation.reasonCodes : [],
+    reasonSummary: String(systemRecommendation.reasonSummary || '').trim(),
+    reviewHints: Array.isArray(systemRecommendation.reviewHints) ? systemRecommendation.reviewHints : [],
+    targetTermId: String(systemRecommendation.targetTermId || '').trim(),
+    targetCanonicalText: String(systemRecommendation.targetCanonicalText || '').trim(),
     errorCode: row.error_code,
     errorMessage: row.error_message,
     createdAt: row.created_at,
@@ -2024,9 +2054,16 @@ function composeImportJobResult(row) {
     resultId: row.result_id,
     jobId: row.job_id,
     newTermCount: row.new_term_count,
+    replaceImportedCount: row.replace_imported_count || 0,
+    candidateImportedCount: row.candidate_imported_count || 0,
+    mergedExistingCount: row.merged_existing_count || 0,
+    aliasAppendedCount: row.alias_appended_count || 0,
     updatedTermCount: row.updated_term_count,
     newAliasCount: row.new_alias_count,
     updatedAliasCount: row.updated_alias_count,
+    importedReadyCount: row.imported_ready_count || 0,
+    importedWarningCount: row.imported_warning_count || 0,
+    skippedBlockedCount: row.skipped_blocked_count || 0,
     skippedCount: row.skipped_count,
     errorCount: row.error_count,
     importedBy: row.imported_by,
@@ -2160,6 +2197,10 @@ function listImportJobRows(db, jobId, filters = {}) {
   if (filters.decision) {
     conditions.push('decision = ?');
     values.push(String(filters.decision).trim());
+  }
+  if (filters.recommendedAction) {
+    conditions.push("json_extract(normalized_payload_json, '$.__systemRecommendation.recommendedAction') = ?");
+    values.push(String(filters.recommendedAction).trim());
   }
   const where = `WHERE ${conditions.join(' AND ')}`;
   const limit = Math.max(1, Math.min(500, Number(filters.limit || filters.pageSize || 100)));
@@ -4691,6 +4732,7 @@ function getBuildableTerms(db) {
   const termIds = rows.map((row) => row.term_id);
   const aliasMap = aliasMapForTermIds(db, termIds);
   const ruleMap = ruleMapForTermIds(db, termIds);
+  const pinyinProfileMap = pinyinProfileMapForTermIds(db, termIds);
   return rows.map((row) => ({
     termId: row.term_id,
     categoryCode: row.category_code,
@@ -4702,6 +4744,7 @@ function getBuildableTerms(db) {
     sourceType: row.source_type,
     pinyinRuntimeMode: row.pinyin_runtime_mode,
     rules: ruleMap.get(row.term_id) || sanitizeRules({}),
+    pinyinProfile: pinyinProfileMap.get(row.term_id) || buildPinyinProfile(row.canonical_text || '', { runtimeMode: row.pinyin_runtime_mode || 'candidate' }),
   }));
 }
 

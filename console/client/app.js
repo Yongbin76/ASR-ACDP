@@ -125,7 +125,24 @@ const IMPORT_ROW_DECISION_OPTIONS = [
   { value: '', label: '全部处理决策' },
   { value: 'accept', label: '直接接收（accept）' },
   { value: 'merge_existing', label: '合并已有词条（merge_existing）' },
+  { value: 'append_alias_to_existing', label: '补录已有词条（append_alias_to_existing）' },
   { value: 'pending', label: '待人工确认（pending）' },
+  { value: 'skipped_blocked', label: '阻断跳过（skipped_blocked）' },
+];
+
+const IMPORT_RECOMMENDATION_OPTIONS = [
+  { value: '', label: '全部建议动作' },
+  { value: 'save_replace', label: '建议替换导入' },
+  { value: 'save_candidate', label: '建议候选导入' },
+  { value: 'merge_existing', label: '建议并入已有' },
+  { value: 'append_alias_to_existing', label: '建议补录已有' },
+  { value: 'skip_blocked', label: '建议阻断跳过' },
+];
+
+const RUNTIME_SUITABILITY_OPTIONS = [
+  { value: 'replace', label: '直接替换' },
+  { value: 'candidate', label: '仅推荐' },
+  { value: 'blocked', label: '不可进入运行时' },
 ];
 
 const VALIDATION_IMPORT_MODE_OPTIONS = [
@@ -274,6 +291,7 @@ const CONSOLE_ERROR_MESSAGES = {
 };
 
 let flashState = null;
+let termCreateAdviceState = null;
 const FORM_SUBMITTING_TEXT = '处理中...';
 let currentAccessMeta = null;
 let currentAccessMetaFetchedAt = 0;
@@ -1452,6 +1470,7 @@ function renderTermsResultsSurface(view = {}) {
         { label: '业务属性', render: (item) => escapeHtml(businessPropertyLabel(item.categoryCode, item.categoryCode)) },
         { label: '来源', render: (item) => escapeHtml(sourceTypeLabel(item.sourceType, item.sourceType)) },
         { label: '记录状态', render: (item) => renderBadge(item.status) },
+        { label: '运行方式', render: (item) => escapeHtml(displayOptionLabel(item.replaceMode || 'replace', RUNTIME_SUITABILITY_OPTIONS, item.replaceMode || 'replace')) },
         { label: '错误词数', render: (item) => escapeHtml(String(item.aliasCount)) },
         { label: '风险等级', render: (item) => escapeHtml(displayLabel(item.riskLevel) || item.riskLevel) },
         { label: '审核状态', render: (item) => renderBadge(item.latestReviewStatus) },
@@ -1648,6 +1667,7 @@ function normalizeImportRowsQueryState(jobId, params = {}) {
     page: normalizePage(params.page),
     rowStatus: String(params.rowStatus || '').trim(),
     rowDecision: String(params.rowDecision || '').trim(),
+    recommendedAction: String(params.recommendedAction || '').trim(),
   };
 }
 
@@ -1659,7 +1679,7 @@ function normalizeImportRowsQueryState(jobId, params = {}) {
 async function fetchImportRowsViewData(state = {}) {
   const queryState = normalizeImportRowsQueryState(state.jobId, state);
   const pageSize = 50;
-  const data = await fetchJson(`/api/console/dictionary/import-jobs/${encodeURIComponent(queryState.jobId)}/rows?page=${encodeURIComponent(queryState.page)}&pageSize=${pageSize}&status=${encodeURIComponent(queryState.rowStatus)}&decision=${encodeURIComponent(queryState.rowDecision)}`);
+  const data = await fetchJson(`/api/console/dictionary/import-jobs/${encodeURIComponent(queryState.jobId)}/rows?page=${encodeURIComponent(queryState.page)}&pageSize=${pageSize}&status=${encodeURIComponent(queryState.rowStatus)}&decision=${encodeURIComponent(queryState.rowDecision)}&recommendedAction=${encodeURIComponent(queryState.recommendedAction)}`);
   return {
     ...queryState,
     data,
@@ -1689,16 +1709,24 @@ function renderImportRowsResultsSurface(view = {}) {
       </div>
       ${renderDenseTable([
         { label: '行号', render: (entry) => escapeHtml(String(entry.rowNo)) },
-        { label: '预览状态', render: (entry) => renderBadge(entry.status) },
+        {
+          label: '预览状态',
+          render: (entry) => entry.status === 'error' && entry.decision === 'skipped_blocked'
+            ? renderToneBadge('阻断未导入', 'danger')
+            : renderBadge(entry.status),
+        },
         { label: '处理决策', render: (entry) => escapeHtml(displayOptionLabel(entry.decision, IMPORT_ROW_DECISION_OPTIONS, '未记录')) },
-        { label: '目标键', render: (entry) => escapeHtml(entry.targetTermKey || '') },
+        { label: '系统建议', render: (entry) => escapeHtml(displayOptionLabel(entry.recommendedAction, IMPORT_RECOMMENDATION_OPTIONS, '未记录')) },
+        { label: '运行方式', render: (entry) => escapeHtml(displayOptionLabel(entry.runtimeSuitability, RUNTIME_SUITABILITY_OPTIONS, '未记录')) },
+        { label: '目标词条', render: (entry) => escapeHtml(entry.targetCanonicalText || entry.targetTermKey || '') },
         { label: '预览数据', render: (entry) => `<span class="mono">${escapeHtml(JSON.stringify(entry.normalizedPayload || {}))}</span>` },
+        { label: '系统说明', render: (entry) => escapeHtml(entry.reasonSummary || '') },
         { label: '准入问题', render: (entry) => Array.isArray(entry.issues) && entry.issues.length ? escapeHtml(entry.issues.map((issue) => {
           const trace = issue.trace ? [issue.trace.termId, issue.trace.canonicalText, issue.trace.importJobId, issue.trace.sourceFileName, issue.trace.sourceRowNo].filter(Boolean).join('/') : '';
           return `${issue.code}: ${issue.message}${trace ? ` [${trace}]` : ''}`;
         }).join(' | ')) : escapeHtml(entry.errorMessage || '') },
       ], items, '当前没有预览行。', { scrollSizeClass: 'panel-scroll-large', collapseThreshold: 12, collapsedSummary: '预览行较多，默认收起明细' })}
-      ${renderPagination(`/dictionary/import-jobs/${encodeURIComponent(view.jobId)}`, { rowStatus: view.rowStatus, rowDecision: view.rowDecision }, data)}
+      ${renderPagination(`/dictionary/import-jobs/${encodeURIComponent(view.jobId)}`, { rowStatus: view.rowStatus, rowDecision: view.rowDecision, recommendedAction: view.recommendedAction }, data)}
     </section>
   `;
 }
@@ -1718,6 +1746,7 @@ async function refreshImportRowsResultsOnly(params = {}) {
     page: view.page > 1 ? view.page : '',
     rowStatus: view.rowStatus,
     rowDecision: view.rowDecision,
+    recommendedAction: view.recommendedAction,
   }));
 }
 
@@ -1735,6 +1764,7 @@ function importRowsQueryStateFromHref(href = '') {
     page: target.searchParams.get('page') || 1,
     rowStatus: target.searchParams.get('rowStatus') || '',
     rowDecision: target.searchParams.get('rowDecision') || '',
+    recommendedAction: target.searchParams.get('recommendedAction') || '',
   };
 }
 
@@ -3914,7 +3944,9 @@ function importJobSummaryText(item = {}) {
     if (isValidationImportJob(item)) {
       return `新增样本 ${escapeHtml(String((item.resultSummary || {}).newTermCount || 0))} / 更新样本 ${escapeHtml(String((item.resultSummary || {}).updatedTermCount || 0))} / 错误 ${escapeHtml(String((item.resultSummary || {}).errorCount || 0))}`;
     }
-    return `新增词条 ${escapeHtml(String((item.resultSummary || {}).newTermCount || 0))} / 更新词条 ${escapeHtml(String((item.resultSummary || {}).updatedTermCount || 0))} / 错误 ${escapeHtml(String((item.resultSummary || {}).errorCount || 0))}`;
+    const skippedBlockedCount = Number((item.resultSummary || {}).skippedBlockedCount || 0);
+    const suffix = skippedBlockedCount > 0 ? ` / 已导入（含阻断跳过 ${escapeHtml(String(skippedBlockedCount))}）` : '';
+    return `替换导入 ${escapeHtml(String((item.resultSummary || {}).replaceImportedCount || 0))} / 候选导入 ${escapeHtml(String((item.resultSummary || {}).candidateImportedCount || 0))} / 跳过阻断 ${escapeHtml(String(skippedBlockedCount))}${suffix}`;
   }
   return `可导入 ${escapeHtml(String((item.previewSummary || {}).readyRows || 0))} / 需确认 ${escapeHtml(String((item.previewSummary || {}).warningRows || 0))} / 错误 ${escapeHtml(String((item.previewSummary || {}).errorRows || 0))}`;
 }
@@ -4045,13 +4077,64 @@ function renderAdmissionTrace(trace = null) {
   return parts.length ? `<span class="mono">${escapeHtml(parts.join(' | '))}</span>` : '<span class="subtle">无</span>';
 }
 
+function renderAdmissionAdviceCard(summary = {}, title = '系统建议') {
+  if (!summary || typeof summary !== 'object') {
+    return '';
+  }
+  const hints = Array.isArray(summary.reviewHints) ? summary.reviewHints : [];
+  const targetText = String(summary.targetCanonicalText || '').trim();
+  const actionLabel = displayOptionLabel(summary.recommendedAction, IMPORT_RECOMMENDATION_OPTIONS, summary.recommendedAction || '未给出');
+  const runtimeLabel = displayOptionLabel(summary.runtimeSuitability, RUNTIME_SUITABILITY_OPTIONS, summary.runtimeSuitability || '未给出');
+  return `
+    <section class="callout ${summary.level === 'blocked' ? 'danger' : 'warning'}">
+      <h3 class="callout-title">${escapeHtml(title)}</h3>
+      <div class="summary-list" style="margin-bottom:12px;">
+        <div class="summary-row"><span class="subtle">建议动作</span><span>${escapeHtml(actionLabel)}</span></div>
+        <div class="summary-row"><span class="subtle">运行方式</span><span>${escapeHtml(runtimeLabel)}</span></div>
+        ${targetText ? `<div class="summary-row"><span class="subtle">目标词条</span><span>${escapeHtml(targetText)}</span></div>` : ''}
+      </div>
+      <p>${escapeHtml(summary.reasonSummary || '系统已给出建议，请按建议处理。')}</p>
+      ${hints.length ? `<ul class="help-list">${hints.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>` : ''}
+    </section>
+  `;
+}
+
+function renderSystemSuggestionHelpCard() {
+  return `
+    <section class="callout">
+      <h3 class="callout-title">系统建议说明</h3>
+      <ul class="help-list">
+        <li>建议替换导入：按直接替换词条保存或导入。</li>
+        <li>建议候选导入：只进入推荐候选链，不直接改写主结果。</li>
+        <li>建议并入已有：不再新建，建议并入已存在词条。</li>
+        <li>建议补录已有：把当前标准词和错误词补录到已有词条。</li>
+        <li>建议阻断跳过：当前内容不应直接进入词典，请先修正。</li>
+      </ul>
+    </section>
+  `;
+}
+
+function renderRecommendationSummaryCards(summary = {}) {
+  const recommendationSummary = summary || {};
+  return `
+    <div class="grid cards compact">
+      ${metricCard('建议替换导入', recommendationSummary.saveReplaceCount || 0)}
+      ${metricCard('建议候选导入', recommendationSummary.saveCandidateCount || 0)}
+      ${metricCard('建议并入已有', recommendationSummary.mergeExistingCount || 0)}
+      ${metricCard('建议补录已有', recommendationSummary.appendAliasCount || 0)}
+      ${metricCard('建议阻断跳过', recommendationSummary.skipBlockedCount || 0)}
+    </div>
+  `;
+}
+
 function renderAdmissionSummaryBlock(summary = {}, title = '统一准入摘要') {
   const issues = Array.isArray(summary.issues) ? summary.issues : [];
-  if (!issues.length && summary.level !== 'blocked' && summary.level !== 'warning') {
+  if (!issues.length && summary.level !== 'blocked') {
     return `
       <section class="callout success">
         <h3 class="callout-title">${escapeHtml(title)}</h3>
         <p>当前未命中阻断或警示项，准入口径保持通过。</p>
+        ${summary.recommendedAction ? `<p>建议动作：${escapeHtml(displayOptionLabel(summary.recommendedAction, IMPORT_RECOMMENDATION_OPTIONS, summary.recommendedAction))}；运行方式：${escapeHtml(displayOptionLabel(summary.runtimeSuitability, RUNTIME_SUITABILITY_OPTIONS, summary.runtimeSuitability || 'replace'))}。</p>` : ''}
       </section>
     `;
   }
@@ -4059,6 +4142,7 @@ function renderAdmissionSummaryBlock(summary = {}, title = '统一准入摘要')
     <section class="${admissionCalloutClass(summary.level)}">
       <h3 class="callout-title">${escapeHtml(title)}</h3>
       <p>当前 level=${escapeHtml(summary.level || 'ready')}，blocked=${escapeHtml(String(summary.blockedCount || 0))}，warning=${escapeHtml(String(summary.warningCount || 0))}。</p>
+      ${summary.recommendedAction ? `<p>建议动作：${escapeHtml(displayOptionLabel(summary.recommendedAction, IMPORT_RECOMMENDATION_OPTIONS, summary.recommendedAction))}；运行方式：${escapeHtml(displayOptionLabel(summary.runtimeSuitability, RUNTIME_SUITABILITY_OPTIONS, summary.runtimeSuitability || 'replace'))}。</p>` : ''}
       ${renderDenseTable([
         { label: '级别', render: (entry) => renderBadge(entry.level || 'warning') },
         { label: '编码', render: (entry) => `<span class="mono">${escapeHtml(entry.code || '')}</span>` },
@@ -6180,6 +6264,8 @@ async function renderTerms() {
             <button type="submit">创建词典记录</button>
           </div>
         </form>` : renderEmptyState('当前身份没有“创建词典记录”页面功能。')}
+        ${termCreateAdviceState ? renderAdmissionAdviceCard(termCreateAdviceState, '本次录入的系统建议') : ''}
+        ${renderSystemSuggestionHelpCard()}
         <section class="callout">
           <h3 class="callout-title">当前页建议用法</h3>
           <ul>
@@ -6303,6 +6389,7 @@ async function renderTermDetail(termId) {
               ${renderBadge(item.basic.status)}
               ${renderBadge(item.reviewSummary.latestStatus)}
               <span class="badge">${escapeHtml(sourceTypeLabel(item.basic.sourceType, item.basic.sourceType || '未记录'))}</span>
+              ${item.basic.replaceMode === 'candidate' ? renderToneBadge('仅推荐', 'warning') : ''}
               ${admissionSummary.level !== 'ready' ? renderBadge(admissionSummary.level) : '<span class="badge success">准入通过</span>'}
             </div>
             <div class="summary-list">
@@ -6318,6 +6405,7 @@ async function renderTermDetail(termId) {
             <div style="margin-top:14px;">
               ${renderAdmissionSummaryBlock(admissionSummary, '统一准入结果')}
             </div>
+            ${admissionSummary.recommendedAction ? `<div style="margin-top:14px;">${renderAdmissionAdviceCard(admissionSummary, '当前词条的系统建议')}</div>` : ''}
           </section>
         </div>
         <div class="page-side">
@@ -6331,6 +6419,7 @@ async function renderTermDetail(termId) {
             <div class="summary-list" style="margin-bottom:14px;">
               <div class="summary-row"><span class="subtle">词条状态</span><span>${renderBadge(item.basic.status)}</span></div>
               <div class="summary-row"><span class="subtle">最近审核状态</span><span>${renderBadge(item.reviewSummary.latestStatus)}</span></div>
+              <div class="summary-row"><span class="subtle">运行方式</span><span>${escapeHtml(displayOptionLabel(item.basic.replaceMode || 'replace', RUNTIME_SUITABILITY_OPTIONS, item.basic.replaceMode || 'replace'))}</span></div>
               <div class="summary-row"><span class="subtle">导入批次</span><span>${item.sourceSummary.importJobId ? `<a class="summary-link" data-link href="/console/dictionary/import-jobs/${encodeURIComponent(item.sourceSummary.importJobId)}">${escapeHtml(item.sourceSummary.importJobId)}</a>` : '人工录入'}</span></div>
             </div>
             <div class="action-zone">
@@ -6825,16 +6914,20 @@ async function renderImportJobDetail(jobId) {
     page: route.query.get('page') || 1,
     rowStatus: route.query.get('rowStatus') || '',
     rowDecision: route.query.get('rowDecision') || '',
+    recommendedAction: route.query.get('recommendedAction') || '',
   });
-  const { rowStatus, rowDecision, data: rows } = importRowsView;
+  const { rowStatus, rowDecision, recommendedAction, data: rows } = importRowsView;
   const data = await fetchJson(`/api/console/dictionary/import-jobs/${encodeURIComponent(jobId)}`);
   const item = data.item;
   const template = item.template || null;
   const categoryCodes = Array.isArray(item.categoryCodes) ? item.categoryCodes : [];
   const jobStatus = item.job.status;
   const validationImport = isValidationImportJob(item.job);
-  const hasErrorRows = Number((item.previewSummary || {}).errorRows || 0) > 0 || Number((item.resultSummary || {}).errorCount || 0) > 0;
+  const hasErrorRows = Number((item.previewSummary || {}).errorRows || 0) > 0
+    || Number((item.resultSummary || {}).errorCount || 0) > 0
+    || Number((item.resultSummary || {}).skippedBlockedCount || 0) > 0;
   const canConfirm = item.canConfirm === true;
+  const importableRows = Number((item.previewSummary || {}).importableRows || 0);
   const pendingReviewTasks = (item.createdReviewTasks || []).filter((entry) => entry.taskType === 'term_review' && entry.status === 'pending');
   const businessCategorySummary = categoryCodes.length
     ? categoryCodes.map((entry) => businessPropertyLabel(entry, entry)).join(' / ')
@@ -6842,6 +6935,11 @@ async function renderImportJobDetail(jobId) {
   const summaryCards = jobStatus === 'imported'
     ? `
       <div class="grid cards compact">
+        ${metricCard('替换导入', (item.resultSummary || {}).replaceImportedCount || 0)}
+        ${metricCard('候选导入', (item.resultSummary || {}).candidateImportedCount || 0)}
+        ${metricCard('并入已有', (item.resultSummary || {}).mergedExistingCount || 0)}
+        ${metricCard('补录已有', (item.resultSummary || {}).aliasAppendedCount || 0)}
+        ${metricCard('跳过阻断', (item.resultSummary || {}).skippedBlockedCount || 0)}
         ${metricCard(validationImport ? '新增样本' : '新增词条', (item.resultSummary || {}).newTermCount || 0)}
         ${metricCard(validationImport ? '更新样本' : '更新词条', (item.resultSummary || {}).updatedTermCount || 0)}
         ${metricCard(validationImport ? '跳过样本' : '新增错误词', validationImport ? ((item.resultSummary || {}).skippedCount || 0) : ((item.resultSummary || {}).newAliasCount || 0))}
@@ -6856,18 +6954,23 @@ async function renderImportJobDetail(jobId) {
         ${metricCard('错误行', item.previewSummary.errorRows)}
       </div>
     `;
+  const recommendationCards = !validationImport && item.job.status === 'preview_ready'
+    ? renderRecommendationSummaryCards((item.previewSummary || {}).recommendationSummary || {})
+    : '';
   const nextStepHtml = jobStatus === 'preview_ready'
     ? `
       <section class="callout">
         <h3 class="callout-title">下一步建议</h3>
-        <p>当前批次还没有真正入库。请先核对预览结果，再点击“确认导入”。如果预览明显不对，请取消批次并重新准备文件。</p>
+        <p>当前批次还没有真正入库。请先核对系统建议，再点击“按系统建议处理”。阻断行不会入库；如果预览明显不对，请取消批次并重新准备文件。</p>
       </section>
     `
       : jobStatus === 'imported'
       ? `
         <section class="callout">
           <h3 class="callout-title">导入已完成</h3>
-          <p>${validationImport ? '下一步建议回到“验证样本”，按来源类型或关键字筛查刚导入的样本，确认样本已正确参与后续验证链路。' : '下一步请检查“影响词条”和“生成的审核任务”；若当前批次生成了大量词条审核任务，建议直接进入“本批词条审核”视图集中处理。'}</p>
+          <p>${validationImport
+            ? `成功导入 ${(item.resultSummary || {}).importedReadyCount || 0} 行，warning 导入 ${(item.resultSummary || {}).importedWarningCount || 0} 行，跳过阻断 ${(item.resultSummary || {}).skippedBlockedCount || 0} 行。下一步建议回到“验证样本”检查入库结果。`
+            : `成功导入 ${(item.resultSummary || {}).importedReadyCount || 0} 行，warning 导入 ${(item.resultSummary || {}).importedWarningCount || 0} 行，跳过阻断 ${(item.resultSummary || {}).skippedBlockedCount || 0} 行。下一步请检查“影响词条”和“生成的审核任务”；如仍有阻断行，可下载阻断报表继续修正。`}</p>
         </section>
       `
       : '';
@@ -6887,6 +6990,7 @@ async function renderImportJobDetail(jobId) {
       ${nextStepHtml}
       ${legacyTemplateHtml}
       ${summaryCards}
+      ${recommendationCards}
       <div class="page-layout equal">
         <section class="panel">
           <div class="section-head">
@@ -6906,13 +7010,13 @@ async function renderImportJobDetail(jobId) {
           <div class="inline-actions" style="margin-top:14px;">
             ${item.job.status === 'preview_ready' ? `
               ${canConfirm
-                ? renderFeatureAction('import.confirm', `<form data-action="confirm-import-job" action="/api/console/dictionary/import-jobs/${encodeURIComponent(jobId)}/confirm"><button type="submit">确认导入</button></form>`, '确认导入', '当前身份不能确认导入批次。')
-                : renderDisabledAction('确认导入', '当前批次仍存在 blocked/error 行，必须先修正文件后重新生成预览。')}
+                ? renderFeatureAction('import.confirm', `<form data-action="confirm-import-job" action="/api/console/dictionary/import-jobs/${encodeURIComponent(jobId)}/confirm"><button type="submit">按系统建议处理</button></form>`, '按系统建议处理', '当前身份不能确认导入批次。')
+                : renderDisabledAction('按系统建议处理', importableRows > 0 ? '当前身份不能执行导入。' : '当前没有可导入记录，仅剩阻断行，需修正后重新预览。')}
               ${renderFeatureAction('import.cancel', `<form data-action="cancel-import-job" action="/api/console/dictionary/import-jobs/${encodeURIComponent(jobId)}/cancel"><button type="submit" class="secondary-button">取消批次</button></form>`, '取消批次', '当前身份不能取消导入批次。')}
             ` : ''}
             ${hasErrorRows
-              ? `<a class="button-link secondary-button" href="/api/console/dictionary/import-jobs/${encodeURIComponent(jobId)}/errors/download" download>下载错误报表</a>`
-              : renderDisabledAction('无错误报表', '当前批次没有错误行，无需下载错误报表。')}
+              ? `<a class="button-link secondary-button" href="/api/console/dictionary/import-jobs/${encodeURIComponent(jobId)}/errors/download" download>下载阻断报表</a>`
+              : renderDisabledAction('无阻断报表', '当前批次没有阻断行，无需下载阻断报表。')}
             ${!validationImport && pendingReviewTasks.length
               ? `<a class="button-link" data-link href="${escapeHtml(buildConsoleUrl('/dictionary/reviews', { view: 'terms', importJobId: jobId }))}">前往词条审核本批任务</a>`
               : ''}
@@ -6940,13 +7044,13 @@ async function renderImportJobDetail(jobId) {
               <div class="section-desc">确认导入前，请重点看这里。</div>
             </div>
           </div>
-          <div class="summary-list">
-            <div class="summary-row"><span class="subtle">总行数</span><span>${escapeHtml(String(item.previewSummary.totalRows))}</span></div>
-            <div class="summary-row"><span class="subtle">可直接导入</span><span>${escapeHtml(String(item.previewSummary.readyRows))}</span></div>
-            <div class="summary-row"><span class="subtle">需人工确认</span><span>${escapeHtml(String(item.previewSummary.warningRows))}</span></div>
-            <div class="summary-row"><span class="subtle">错误行</span><span>${escapeHtml(String(item.previewSummary.errorRows))}</span></div>
-            <div class="summary-row"><span class="subtle">可导入总数</span><span>${escapeHtml(String(item.previewSummary.importableRows))}</span></div>
-          </div>
+            <div class="summary-list">
+              <div class="summary-row"><span class="subtle">总行数</span><span>${escapeHtml(String(item.previewSummary.totalRows))}</span></div>
+              <div class="summary-row"><span class="subtle">可直接导入</span><span>${escapeHtml(String(item.previewSummary.readyRows))}</span></div>
+              <div class="summary-row"><span class="subtle">需人工确认</span><span>${escapeHtml(String(item.previewSummary.warningRows))}</span></div>
+              <div class="summary-row"><span class="subtle">错误行</span><span>${escapeHtml(String(item.previewSummary.errorRows))}</span></div>
+              <div class="summary-row"><span class="subtle">可导入总数</span><span>${escapeHtml(String(item.previewSummary.importableRows))}</span></div>
+            </div>
           ${item.job.status === 'preview_ready' ? `<div style="margin-top:14px;">${renderAdmissionSummaryBlock({
             level: Number(item.previewSummary.errorRows || 0) > 0 ? 'blocked' : (Number(item.previewSummary.warningRows || 0) > 0 ? 'warning' : 'ready'),
             blockedCount: Number(item.previewSummary.errorRows || 0),
@@ -7026,6 +7130,7 @@ async function renderImportJobDetail(jobId) {
             <input type="hidden" name="jobId" value="${escapeHtml(jobId)}">
             ${selectField({ label: '行状态', name: 'rowStatus', value: rowStatus, options: IMPORT_ROW_STATUS_OPTIONS })}
             ${selectField({ label: '处理决策', name: 'rowDecision', value: rowDecision, options: IMPORT_ROW_DECISION_OPTIONS })}
+            ${selectField({ label: '建议动作', name: 'recommendedAction', value: recommendedAction, options: IMPORT_RECOMMENDATION_OPTIONS })}
             <div class="form-actions">
               <button type="submit">应用筛选</button>
               <button type="button" class="secondary-button" data-action="clear-import-job-row-filters">清空筛选</button>
@@ -7238,6 +7343,7 @@ async function renderReviewDetail(taskId) {
               ${renderBadge(item.status)}
               <span class="badge">${escapeHtml(displayLabel(item.taskType))}</span>
               <span class="badge">${escapeHtml(displayLabel(item.targetType))}</span>
+              ${summary.replaceMode === 'candidate' ? renderToneBadge('仅推荐', 'warning') : ''}
             </div>
             <div class="summary-list">
               <div class="summary-row"><span class="subtle">任务 ID</span><span>${escapeHtml(item.taskId)}</span></div>
@@ -8588,7 +8694,7 @@ document.addEventListener('click', (event) => {
     const form = importRowClearButton.closest('form');
     const jobId = form ? String(new FormData(form).get('jobId') || '').trim() : '';
     if (form) {
-      form.querySelectorAll('select[name="rowStatus"], select[name="rowDecision"]').forEach((element) => {
+      form.querySelectorAll('select[name="rowStatus"], select[name="rowDecision"], select[name="recommendedAction"]').forEach((element) => {
         element.value = '';
       });
     }
@@ -8597,6 +8703,7 @@ document.addEventListener('click', (event) => {
       page: 1,
       rowStatus: '',
       rowDecision: '',
+      recommendedAction: '',
     }).catch((error) => showActionError(error));
     return;
   }
@@ -9166,10 +9273,13 @@ document.addEventListener('submit', async (event) => {
         sourceType: formData.get('sourceType') || 'manual',
         pinyinRuntimeMode: formData.get('pinyinRuntimeMode') || 'candidate',
       });
+      termCreateAdviceState = null;
       setFlash({
         type: 'success',
         title: `词典记录已创建：${created.item.canonicalText}`,
-        description: '建议下一步先检查详情页信息，然后直接提交词典审核。',
+        description: created.admission && created.admission.reasonSummary
+          ? created.admission.reasonSummary
+          : '建议下一步先检查详情页信息，然后直接提交词典审核。',
         actions: [
           {
             label: '立即提交审核',
@@ -9237,7 +9347,7 @@ document.addEventListener('submit', async (event) => {
 
     if (action === 'update-term-basic') {
       const formData = new FormData(form);
-      await postJson(form.action, {
+      const updated = await postJson(form.action, {
         categoryCode: formData.get('categoryCode'),
         canonicalText: formData.get('canonicalText'),
         aliases: splitPipeList(formData.get('aliases')),
@@ -9251,7 +9361,9 @@ document.addEventListener('submit', async (event) => {
       setFlash({
         type: 'success',
         title: '基础信息已保存',
-        description: '如果词条内容已确认，请继续提交审核。',
+        description: updated.admission && updated.admission.reasonSummary
+          ? updated.admission.reasonSummary
+          : '如果词条内容已确认，请继续提交审核。',
       });
       return renderRoute();
     }
@@ -9357,13 +9469,16 @@ document.addEventListener('submit', async (event) => {
 
     if (action === 'confirm-import-job') {
       const importJobId = String(form.action.split('/').slice(-2, -1)[0] || '').trim();
-      await postJson(form.action, { importMode: 'upsert' });
+      const imported = await postJson(form.action, { importMode: 'upsert' });
+      const resultSummary = (imported.item || {}).resultSummary || {};
+      const skippedBlockedCount = Number(resultSummary.skippedBlockedCount || 0);
       setFlash({
         type: 'success',
-        title: '导入已确认并入库',
-        description: '下一步请检查影响词条与生成的审核任务，确认数据已经进入闭环。',
+        title: '系统建议已处理',
+        description: `替换导入 ${resultSummary.replaceImportedCount || 0} 行，候选导入 ${resultSummary.candidateImportedCount || 0} 行，并入已有 ${resultSummary.mergedExistingCount || 0} 行，补录已有 ${resultSummary.aliasAppendedCount || 0} 行，跳过阻断 ${skippedBlockedCount} 行。`,
         actions: [
           { label: '查看本批词条审核', href: buildConsoleUrl('/dictionary/reviews', { view: 'terms', importJobId }) },
+          ...(skippedBlockedCount > 0 ? [{ label: '下载阻断报表', href: `/api/console/dictionary/import-jobs/${encodeURIComponent(importJobId)}/errors/download` }] : []),
           { label: '返回批量导入', href: '/console/dictionary/import-jobs' },
         ],
       });
@@ -9402,6 +9517,7 @@ document.addEventListener('submit', async (event) => {
         page: 1,
         rowStatus: formData.get('rowStatus') || '',
         rowDecision: formData.get('rowDecision') || '',
+        recommendedAction: formData.get('recommendedAction') || '',
       };
       if (/^\/dictionary\/import-jobs\/[^/]+$/.test(currentRouteContext().path) && document.getElementById('importRowsResultsSurface')) {
         await refreshImportRowsResultsOnly(nextParams);
@@ -9410,6 +9526,7 @@ document.addEventListener('submit', async (event) => {
       return navigate(buildConsoleUrl(`/dictionary/import-jobs/${encodeURIComponent(jobId)}`, {
         rowStatus: nextParams.rowStatus,
         rowDecision: nextParams.rowDecision,
+        recommendedAction: nextParams.recommendedAction,
       }));
     }
 
@@ -9657,6 +9774,41 @@ document.addEventListener('submit', async (event) => {
       return navigate(buildConsoleUrl('/validation/cases', nextParams));
     }
   } catch (error) {
+    if (action === 'create-term' || action === 'update-term-basic') {
+      const admission = error && error.data && (
+        error.data.admission
+        || {
+          level: error.data.admissionLevel,
+          runtimeSuitability: error.data.runtimeSuitability,
+          recommendedAction: error.data.recommendedAction,
+          reasonCodes: error.data.reasonCodes,
+          reasonSummary: error.data.reasonSummary,
+          reviewHints: error.data.reviewHints,
+          targetTermId: error.data.targetTermId,
+          targetCanonicalText: error.data.targetCanonicalText,
+          blockedCount: error.data.blockedCount,
+          warningCount: error.data.warningCount,
+          issues: error.data.issues,
+        }
+      );
+      if (action === 'create-term' && admission && admission.recommendedAction) {
+        termCreateAdviceState = admission;
+        setFlash({
+          type: admission.level === 'blocked' ? 'warning' : 'info',
+          title: '当前词条不能直接创建',
+          description: admission.reasonSummary || (error instanceof Error ? error.message : String(error || '未知错误')),
+        });
+        return renderRoute();
+      }
+      if (action === 'update-term-basic' && admission && admission.recommendedAction) {
+        setFlash({
+          type: admission.level === 'blocked' ? 'warning' : 'info',
+          title: '当前词条不能直接保存',
+          description: admission.reasonSummary || (error instanceof Error ? error.message : String(error || '未知错误')),
+        });
+        return renderRoute();
+      }
+    }
     if (action === 'run-overview-simulation') {
       overviewSimulationState = {
         ...currentOverviewSimulationState(),
