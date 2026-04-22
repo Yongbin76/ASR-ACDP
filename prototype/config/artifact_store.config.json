@@ -40,7 +40,7 @@
     "heartbeatIntervalSeconds": 30,
     "syncIntervalSeconds": 30,
     "nodeOfflineThresholdSeconds": 120,
-    "downloadTimeoutMs": 15000,
+    "downloadTimeoutMs": 600000,
     "statsFlushIntervalSeconds": 300,
     "statsFlushMaxBatchSize": 1000,
     "statsRetentionHours": 72
