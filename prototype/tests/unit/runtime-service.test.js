@@ -186,5 +186,9 @@ test('writeSnapshot writes manifest and snapshot files', () => {
   const files = writeSnapshot(tempDir, snapshot);
   assert.equal(fs.existsSync(files.snapshotPath), true);
   assert.equal(fs.existsSync(files.manifestPath), true);
+  const snapshotText = fs.readFileSync(files.snapshotPath, 'utf8');
+  const manifestText = fs.readFileSync(files.manifestPath, 'utf8');
+  assert.equal(snapshotText.includes('\n  '), false);
+  assert.equal(manifestText.includes('\n  '), false);
   fs.rmSync(tempDir, { recursive: true, force: true });
 });

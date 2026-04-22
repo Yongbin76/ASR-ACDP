@@ -23,7 +23,16 @@
 6. `JOB-009` 并发与吞吐验证
    - 状态：`blocked`
    - 下一步：在目标宿主机运行 `test:concurrency` 基础并发与 `--target-rps 200` 验证；若复用已运行服务，可加 `--base-url`
-7. `JOB-104` `v1.0` 发布流水线自动化与交付产物标准化
+7. `JOB-097` `v1.0` 清理 platform.db 数据库
+   - 状态：`pending`
+   - 下一步：已完成 `JOB-097C`；下一步先完成 `JOB-097A`，验证空间回收和主链无回归后，再进入 `JOB-097B`。
+8. `JOB-097A` `v1.0` 清理 platform.db 的 audit_logs 并 VACUUM
+   - 状态：`pending`
+   - 下一步：停写入、备份、记录基线后，执行 `DELETE FROM audit_logs`、`wal_checkpoint(TRUNCATE)` 与 `VACUUM`。
+9. `JOB-097B` `v1.0` 清理 platform.db 历史过程表并 VACUUM
+   - 状态：`pending`
+   - 下一步：在 `JOB-097A` 完成后，按既定顺序删除 `review_tasks / import_job_* / alias_sources / term_sources` 并执行 `VACUUM`。
+10. `JOB-104` `v1.0` 发布流水线自动化与交付产物标准化
    - 状态：`pending`
    - 下一步：先冻结自动化边界、输入输出、环境变量与收尾标准，再实现脚本和模板扩展。
 

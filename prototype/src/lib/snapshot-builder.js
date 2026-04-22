@@ -111,8 +111,8 @@ function writeSnapshot(releaseDir, snapshot) {
   fs.mkdirSync(releaseDir, { recursive: true });
   const snapshotPath = path.join(releaseDir, 'snapshot.json');
   const manifestPath = path.join(releaseDir, 'manifest.json');
-  fs.writeFileSync(snapshotPath, JSON.stringify(snapshot, null, 2), 'utf8');
-  fs.writeFileSync(manifestPath, JSON.stringify(snapshot.manifest, null, 2), 'utf8');
+  fs.writeFileSync(snapshotPath, JSON.stringify(snapshot), 'utf8');
+  fs.writeFileSync(manifestPath, JSON.stringify(snapshot.manifest), 'utf8');
   return { snapshotPath, manifestPath };
 }
 

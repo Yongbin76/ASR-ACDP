@@ -47,6 +47,15 @@
 - `JOB-009` | `blocked` | 并发与吞吐验证
   当前目标：本地可做的脚本、统计接口、报告留档与基础/目标吞吐分离口径已具备，剩余吞吐数据采集受真实宿主机条件阻塞
   下一步：在目标宿主机运行 `test:concurrency` 基础并发与 `--target-rps 200` 验证；若复用已运行服务，可加 `--base-url`
+- `JOB-097` | `pending` | `v1.0` 清理 platform.db 数据库
+  当前目标：按三步方式优化 `prototype/workspace/platform.db`：先清 `audit_logs`，再清历史过程表，最后做索引健康检查与优化。
+  下一步：已完成 `JOB-097C`；下一步先完成 `JOB-097A`，验证空间回收和主链无回归后，再进入 `JOB-097B`。
+- `JOB-097A` | `pending` | `v1.0` 清理 platform.db 的 audit_logs 并 VACUUM
+  当前目标：先清理 `audit_logs` 及其索引占用，再通过 `VACUUM` 完成第一轮数据库瘦身。
+  下一步：停写入、备份、记录基线后，执行 `DELETE FROM audit_logs`、`wal_checkpoint(TRUNCATE)` 与 `VACUUM`。
+- `JOB-097B` | `pending` | `v1.0` 清理 platform.db 历史过程表并 VACUUM
+  当前目标：清理审核、导入和来源追溯这些历史过程表，并通过 `VACUUM` 完成第二轮数据库瘦身。
+  下一步：在 `JOB-097A` 完成后，按既定顺序删除 `review_tasks / import_job_* / alias_sources / term_sources` 并执行 `VACUUM`。
 - `JOB-104` | `pending` | `v1.0` 发布流水线自动化与交付产物标准化
   当前目标：把 `JOB-100` 已收口的发布包边界推进到可自动执行的流水线：镜像构建/推送、release bundle 生成、元数据落盘和交付物命名规则标准化。
   下一步：先冻结自动化边界、输入输出、环境变量与收尾标准，再实现脚本和模板扩展。

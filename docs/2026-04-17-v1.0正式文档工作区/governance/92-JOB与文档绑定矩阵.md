@@ -104,10 +104,15 @@
 | `GOV-95` | 归档与版本快照规则 | `governance` | `governance` |
 | `GOV-96` | 真源文档注册表视图 | `generated_view` | `governance` |
 | `JOB-00` | JOB索引 | `generated_view` | `jobs` |
+| `JOB-097-DOC` | JOB-097-v1.0清理platform.db数据库 | `job` | `jobs` |
+| `JOB-097A-DOC` | JOB-097A-v1.0清理platform.db的audit_logs并VACUUM | `job` | `jobs` |
+| `JOB-097B-DOC` | JOB-097B-v1.0清理platform.db历史过程表并VACUUM | `job` | `jobs` |
+| `JOB-097C-DOC` | JOB-097C-v1.0清理platform.db索引健康检查与优化 | `job` | `jobs` |
 | `JOB-103-DOC` | JOB-103-v1.0正式文档工作区详细设计化与Codex开发依据补齐 | `job` | `jobs` |
 | `JOB-104-DOC` | JOB-104-v1.0发布流水线自动化与交付产物标准化 | `job` | `jobs` |
 | `JOB-105-DOC` | JOB-105-v1.0批量导入按行阻断与可通过记录导入 | `job` | `jobs` |
 | `JOB-106-DOC` | JOB-106-v1.0词典准入与runtime输出统一方案 | `job` | `jobs` |
+| `JOB-107-DOC` | JOB-107-v1.0快照文件紧凑化与制品体积压缩第一阶段 | `job` | `jobs` |
 
 ## 2. 当前主要 job 绑定关系
 
@@ -126,6 +131,11 @@
 | `JOB-101` | `done` | `DOC-00 DOC-01 DOC-02 DOC-03 DOC-04 DOC-05 DOC-06 DOC-07 DOC-08 DOC-09 DOC-10 DOC-11 DOC-12 DOC-13 GOV-90 GOV-91 GOV-92 GOV-93 GOV-94 GOV-95 GOV-96 ADR-00 ADR-001 ADR-002 ADR-003 JOB-00 TPL-01 TPL-02 TPL-03 ARC-00` | `DOC-00 GOV-90 GOV-91 GOV-92 GOV-93 GOV-94 GOV-95 GOV-96 ADR-00 JOB-00` | 正式文档工作区与单一真源绑定 |
 | `JOB-102` | `done` | `DOC-00 GOV-94 GOV-95` | `GOV-94` | docs 根目录首批历史文档归档分层 |
 | `JOB-103` | `done` | `DOC-00 DOC-14 DOC-15 DOC-16 DOC-17 DOC-18 JOB-103-DOC GOV-94 DOC-15-01 DOC-15-02 DOC-15-04 DOC-15-05 DOC-15-03 DOC-15-06 DOC-15-07 DOC-15-08 DOC-15-09 DOC-15-10 DOC-15-11 DOC-16-01 DOC-16-02 DOC-16-03 DOC-16-04 DOC-16-05 DOC-16-06 DOC-16-07 DOC-16-08 DOC-16-09 DOC-16-10 DOC-14-01 DOC-14-02 DOC-14-03 DOC-14-04 DOC-14-05 DOC-14-06 DOC-14-07 DOC-14-08 DOC-14-09 DOC-14-10 DOC-14-11 DOC-14-12 DOC-14-13 DOC-16-11 DOC-16-12 DOC-16-13 DOC-17-01 DOC-17-02 DOC-17-03 DOC-17-04 DOC-17-05 DOC-17-06 DOC-17-07 DOC-17-08 DOC-17-09 DOC-17-10 DOC-17-11 DOC-17-12 DOC-17-13 DOC-18-01 DOC-18-02 DOC-18-03 DOC-18-04 DOC-18-05 DOC-18-06 DOC-18-07 DOC-18-08 DOC-18-09 DOC-18-10` | `DOC-14 DOC-15 DOC-16 DOC-17 DOC-18 JOB-103-DOC DOC-15-01 DOC-15-02 DOC-15-04 DOC-15-05 DOC-15-03 DOC-15-06 DOC-15-07 DOC-15-08 DOC-15-09 DOC-15-10 DOC-15-11 DOC-16-01 DOC-16-02 DOC-16-03 DOC-16-04 DOC-16-05 DOC-16-06 DOC-16-07 DOC-16-08 DOC-16-09 DOC-16-10 DOC-14-01 DOC-14-02 DOC-14-03 DOC-14-04 DOC-14-05 DOC-14-06 DOC-14-07 DOC-14-08 DOC-14-09 DOC-14-10 DOC-14-11 DOC-14-12 DOC-14-13 DOC-16-11 DOC-16-12 DOC-16-13 DOC-17-01 DOC-17-02 DOC-17-03 DOC-17-04 DOC-17-05 DOC-17-06 DOC-17-07 DOC-17-08 DOC-17-09 DOC-17-10 DOC-17-11 DOC-17-12 DOC-17-13 DOC-18-01 DOC-18-02 DOC-18-03 DOC-18-04 DOC-18-05 DOC-18-06 DOC-18-07 DOC-18-08 DOC-18-09 DOC-18-10` | 详细设计层、数据字典层、接口规范层、页面设计层与 Codex 开发依据层补齐 |
+| `JOB-097` | `pending` | `JOB-097-DOC JOB-097A-DOC JOB-097B-DOC JOB-097C-DOC` | `JOB-097-DOC JOB-097A-DOC JOB-097B-DOC JOB-097C-DOC` | 按 097A/097B/097C 三步清理与优化 platform.db：先清审计，再清历史过程表，最后做索引健康检查与优化 |
+| `JOB-097A` | `pending` | `JOB-097A-DOC` | `JOB-097A-DOC` | 清理 audit_logs 并执行 VACUUM |
+| `JOB-097B` | `pending` | `JOB-097B-DOC` | `JOB-097B-DOC` | 清理 review_tasks、import_job_*、alias_sources、term_sources 等历史过程表并执行 VACUUM |
+| `JOB-097C` | `done` | `JOB-097C-DOC` | `JOB-097C-DOC` | 对 platform.db 做完整性检查、统计刷新、关键查询计划采样和必要时的定向 REINDEX |
 | `JOB-104` | `pending` | `DOC-01 DOC-04 DOC-07 DOC-11 DOC-12 DOC-14-13 JOB-104-DOC` | `JOB-104-DOC` | 发布流水线自动化与交付产物标准化 |
 | `JOB-105` | `done` | `DOC-10 DOC-16-06 DOC-14-02 JOB-105-DOC` | `JOB-105-DOC` | 批量导入按行阻断与可通过记录导入 |
 | `JOB-106` | `pending` | `DOC-06 DOC-09 DOC-16-05 DOC-16-06 DOC-14-01 DOC-17-02 DOC-17-03 JOB-106-DOC` | `JOB-106-DOC` | 词典准入、系统处理建议、页面批量处理与 runtime 输出模式统一收口 |
+| `JOB-107` | `done` | `DOC-09 DOC-11 DOC-14-13 JOB-107-DOC` | `JOB-107-DOC` | 以不改结构为前提，把 snapshot/manifest 输出改成紧凑 JSON，优先降低制品体积与 runtime 下载压力 |

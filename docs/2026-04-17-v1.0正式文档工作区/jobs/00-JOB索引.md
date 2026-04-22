@@ -26,6 +26,11 @@
 | `JOB-101` | `done` | 已建立封闭边界的正式文档工作区，并完成与单一真源、JOBLIST、CHECKLIST 和 pm:sync / pm:check 的首轮绑定。 |
 | `JOB-102` | `done` | 已完成 `docs/` 根目录历史文档两批归档分层：保留现行与在用文档，把已被当前正式文档工作区覆盖的旧基线、旧设计、已关单阶段文档迁入 `docs/archive/`。 |
 | `JOB-103` | `done` | 已完成详细设计层、数据字典层、接口规范层、页面设计层和 Codex 开发依据层的首版补齐。 |
+| `JOB-097` | `pending` | 按三步方式优化 `prototype/workspace/platform.db`：先清 `audit_logs`，再清历史过程表，最后做索引健康检查与优化。 |
+| `JOB-097A` | `pending` | 先清理 `audit_logs` 及其索引占用，再通过 `VACUUM` 完成第一轮数据库瘦身。 |
+| `JOB-097B` | `pending` | 清理审核、导入和来源追溯这些历史过程表，并通过 `VACUUM` 完成第二轮数据库瘦身。 |
+| `JOB-097C` | `done` | 对 `platform.db` 做索引健康检查、统计刷新、关键查询计划采样和必要时的定向 REINDEX。 |
 | `JOB-104` | `pending` | 把 `JOB-100` 已收口的发布包边界推进到可自动执行的流水线：镜像构建/推送、release bundle 生成、元数据落盘和交付物命名规则标准化。 |
 | `JOB-105` | `done` | 已完成批量导入“按行阻断、可通过记录继续导入”主路径：阻断行跳过、结果汇总扩展、详情页按钮/下拉/卡片改造、错误报表字段增强和页面中文化，并完成本地回归。 |
 | `JOB-106` | `pending` | 统一词典治理与 runtime 执行标准：准入层只保留 `blocked / ready`，而 `ready` 再按运行方式分成 `replace / candidate`，并要求系统在录入时直接给处理建议，用户按建议批量处理。 |
+| `JOB-107` | `done` | 在不改快照结构和 runtime 行为的前提下，把 snapshot 输出改成紧凑 JSON，优先降低 release 制品体积与 runtime 下载压力。 |

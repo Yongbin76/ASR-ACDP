@@ -960,6 +960,85 @@
       ]
     },
     {
+      "jobId": "JOB-097",
+      "stageGroup": "Release-v1.0",
+      "title": "`v1.0` 清理 platform.db 数据库",
+      "status": "pending",
+      "priority": "P1",
+      "owner": "Codex",
+      "updatedAt": "2026-04-22",
+      "currentGoal": "按三步方式优化 `prototype/workspace/platform.db`：先清 `audit_logs`，再清历史过程表，最后做索引健康检查与优化。",
+      "nextAction": "已完成 `JOB-097C`；下一步先完成 `JOB-097A`，验证空间回收和主链无回归后，再进入 `JOB-097B`。",
+      "externalDependencies": "需要 maintenance window、主库备份、停止会写入主库的进程。",
+      "closable": false,
+      "primaryRisk": "如果不先停写入进程和备份主库，直接删历史表再 `VACUUM`，容易造成回滚困难；如果把主数据表误纳入清理范围，会直接破坏当前词典与版本状态。",
+      "detailHeading": "JOB-097 `v1.0` 清理 platform.db 数据库",
+      "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-22`\n- 外部依赖：maintenance window、主库备份、停止会写入主库的进程\n- 是否可关闭：否\n- 目标：\n  以不破坏当前主词典和发布成果为前提，分三步清理并优化 `platform.db`：先清 `audit_logs`，再清历史过程表，最后做索引健康检查与优化。\n- 子任务：\n  - `JOB-097A`：清 `audit_logs` 并 `VACUUM`\n  - `JOB-097B`：清历史过程表并 `VACUUM`\n  - `JOB-097C`：做索引健康检查与优化\n- 范围：\n  - 处理 `platform.db`\n  - 不处理 release 目录、runtime 实例目录和零数据底座重建\n- 完成标准：\n  - `JOB-097A`、`JOB-097B`、`JOB-097C` 都完成\n  - 数据库体积明显下降\n  - 主词典、发布和 runtime 控制表保持可用\n\n子任务 checklist：\n\n- [ ] 停止主库写入进程\n- [ ] 备份 `platform.db`\n- [ ] 记录清理前基线\n- [ ] 完成 `JOB-097A`\n- [ ] 验证 `JOB-097A` 清理结果\n- [ ] 完成 `JOB-097B`\n- [ ] 验证 `JOB-097B` 清理结果\n- [ ] 完成 `JOB-097C`\n- [ ] 验证 `JOB-097C` 优化结果\n- [ ] 同步文档与真源\n- [ ] `npm run pm:sync`\n- [ ] `npm run pm:check`",
+      "links": [
+        "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097-v1.0清理platform.db数据库.md",
+        "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097A-v1.0清理platform.db的audit_logs并VACUUM.md",
+        "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097B-v1.0清理platform.db历史过程表并VACUUM.md",
+        "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097C-v1.0清理platform.db索引健康检查与优化.md"
+      ]
+    },
+    {
+      "jobId": "JOB-097A",
+      "stageGroup": "Release-v1.0",
+      "title": "`v1.0` 清理 platform.db 的 audit_logs 并 VACUUM",
+      "status": "pending",
+      "priority": "P1",
+      "owner": "Codex",
+      "updatedAt": "2026-04-22",
+      "currentGoal": "先清理 `audit_logs` 及其索引占用，再通过 `VACUUM` 完成第一轮数据库瘦身。",
+      "nextAction": "停写入、备份、记录基线后，执行 `DELETE FROM audit_logs`、`wal_checkpoint(TRUNCATE)` 与 `VACUUM`。",
+      "externalDependencies": "主库备份、停止写入主库的进程。",
+      "closable": false,
+      "primaryRisk": "会失去全部历史审计记录；若未先停写入或未先备份，回滚难度高。",
+      "detailHeading": "JOB-097A `v1.0` 清理 platform.db 的 audit_logs 并 VACUUM",
+      "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-22`\n- 外部依赖：主库备份、停止写入主库的进程\n- 是否可关闭：否\n- 目标：\n  清理 `audit_logs`，并通过 `VACUUM` 真正回收磁盘空间。\n- 完成标准：\n  - `audit_logs` 行数清零\n  - `platform.db` 体积下降\n  - 主数据表未受影响\n\n子任务 checklist：\n\n- [ ] 停止主库写入进程\n- [ ] 备份 `platform.db`\n- [ ] 记录清理前 `audit_logs` 行数和文件大小\n- [ ] 删除 `audit_logs`\n- [ ] 执行 `PRAGMA wal_checkpoint(TRUNCATE)`\n- [ ] 执行 `VACUUM`\n- [ ] 验证主数据表仍在",
+      "links": [
+        "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097A-v1.0清理platform.db的audit_logs并VACUUM.md"
+      ]
+    },
+    {
+      "jobId": "JOB-097B",
+      "stageGroup": "Release-v1.0",
+      "title": "`v1.0` 清理 platform.db 历史过程表并 VACUUM",
+      "status": "pending",
+      "priority": "P1",
+      "owner": "Codex",
+      "updatedAt": "2026-04-22",
+      "currentGoal": "清理审核、导入和来源追溯这些历史过程表，并通过 `VACUUM` 完成第二轮数据库瘦身。",
+      "nextAction": "在 `JOB-097A` 完成后，按既定顺序删除 `review_tasks / import_job_* / alias_sources / term_sources` 并执行 `VACUUM`。",
+      "externalDependencies": "主库备份、停止写入主库的进程、确认当前无需保留历史审核/导入/来源追溯记录。",
+      "closable": false,
+      "primaryRisk": "会失去历史审核任务、导入批次和来源追溯；如果误删主数据或 release 关系表，会直接破坏当前系统状态。",
+      "detailHeading": "JOB-097B `v1.0` 清理 platform.db 历史过程表并 VACUUM",
+      "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-22`\n- 外部依赖：主库备份、停止写入主库的进程、确认当前无需保留历史审核/导入/来源追溯记录\n- 是否可关闭：否\n- 目标：\n  清理 `review_tasks / import_job_rows / import_jobs / import_job_files / import_job_results / alias_sources / term_sources`，并通过 `VACUUM` 回收空间。\n- 完成标准：\n  - 目标历史过程表清零\n  - `terms / aliases / releases / release_terms / runtime_control_state / runtime_nodes` 保持可用\n  - 数据库体积进一步下降\n\n子任务 checklist：\n\n- [ ] 停止主库写入进程\n- [ ] 备份 `platform.db`\n- [ ] 记录清理前各目标表行数\n- [ ] 删除 `review_tasks`\n- [ ] 删除 `import_job_rows`\n- [ ] 删除 `import_job_files`\n- [ ] 删除 `import_job_results`\n- [ ] 删除 `import_jobs`\n- [ ] 删除 `alias_sources`\n- [ ] 删除 `term_sources`\n- [ ] 执行 `PRAGMA wal_checkpoint(TRUNCATE)`\n- [ ] 执行 `VACUUM`\n- [ ] 验证主词典、发布、runtime 控制链仍可读",
+      "links": [
+        "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097B-v1.0清理platform.db历史过程表并VACUUM.md"
+      ]
+    },
+    {
+      "jobId": "JOB-097C",
+      "stageGroup": "Release-v1.0",
+      "title": "`v1.0` 清理 platform.db 索引健康检查与优化",
+      "status": "done",
+      "priority": "P1",
+      "owner": "Codex",
+      "updatedAt": "2026-04-22",
+      "currentGoal": "对 `platform.db` 做索引健康检查、统计刷新、关键查询计划采样和必要时的定向 REINDEX。",
+      "nextAction": "已完成；若后续出现查询计划异常、完整性异常或索引损坏迹象，再按同口径重开。",
+      "externalDependencies": "主库备份、停止写入主库的进程。",
+      "closable": true,
+      "primaryRisk": "如果把 097C 误做成“重建所有索引”，执行成本高但收益不一定明显；如果不先记录查询计划与完整性结果，后续很难判断优化是否真的生效。",
+      "detailHeading": "JOB-097C `v1.0` 清理 platform.db 索引健康检查与优化",
+      "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-22`\n- 外部依赖：主库备份、停止写入主库的进程\n- 是否可关闭：是\n- 目标：\n  对 `platform.db` 做索引健康检查与定向优化，重点是完整性检查、统计刷新、关键查询计划采样和必要时的目标索引重建。\n- 完成标准：\n  - `PRAGMA integrity_check` 返回 `ok`\n  - `ANALYZE` 与 `PRAGMA optimize` 已执行\n  - 关键查询计划已留档\n  - 若执行了 `REINDEX`，目标索引重建完成且无报错\n  - 主系统启动和只读查询正常\n- 本轮执行结果：\n  - 已确认 service manager 管理的 `prototype / admin / runtime` 为 `stopped`\n  - 已生成备份：`/Codex/ACDP/prototype/workspace/backups/platform.db.pre-job097c-20260422153122.bak`\n  - `PRAGMA integrity_check` 返回 `ok`\n  - 已执行 `ANALYZE` 与 `PRAGMA optimize`\n  - 已留档关键查询计划：`termsByStatus / reviewsByStatus / importRowsByJob`\n  - 本轮未执行 `REINDEX`，原因是完整性检查与查询计划均无异常\n  - 执行后主链只读校验通过：`terms / aliases / releases / release_terms / runtime_control_state / runtime_nodes` 可读\n\n子任务 checklist：\n\n- [x] 停止主库写入进程\n- [x] 备份 `platform.db`\n- [x] 记录优化前基线\n- [x] 执行 `PRAGMA integrity_check`\n- [x] 执行 `ANALYZE`\n- [x] 执行 `PRAGMA optimize`\n- [x] 采样关键查询 `EXPLAIN QUERY PLAN`\n- [x] 如有必要，执行目标索引 `REINDEX`\n- [x] 回读优化后基线\n- [x] 验证主链查询与服务可读",
+      "links": [
+        "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097C-v1.0清理platform.db索引健康检查与优化.md"
+      ]
+    },
+    {
       "jobId": "JOB-098",
       "stageGroup": "Release-v1.0",
       "title": "测试/验证工作区历史副产物清理",
@@ -1186,6 +1265,27 @@
         "docs/2026-04-17-v1.0正式文档工作区/pages/02-词典记录页面详细设计.md",
         "docs/2026-04-17-v1.0正式文档工作区/pages/03-批量导入页面详细设计.md",
         "docs/2026-04-17-v1.0正式文档工作区/09-runtime对外接口说明.md"
+      ]
+    },
+    {
+      "jobId": "JOB-107",
+      "stageGroup": "Release-v1.0",
+      "title": "`v1.0` 快照文件紧凑化与制品体积压缩第一阶段",
+      "status": "done",
+      "priority": "P1",
+      "owner": "Codex",
+      "updatedAt": "2026-04-22",
+      "currentGoal": "在不改快照结构和 runtime 行为的前提下，把 snapshot 输出改成紧凑 JSON，优先降低 release 制品体积与 runtime 下载压力。",
+      "nextAction": "已完成；后续若要继续做 snapshot 结构去重、索引压缩或二进制化，再按新批次重开，不复用 JOB-107。",
+      "externalDependencies": "无",
+      "closable": true,
+      "primaryRisk": "如果把结构去重、索引压缩和紧凑 JSON 一起做，会把低风险体积优化扩成高风险运行时重构；如果不先冻结“只压缩、不改结构”的边界，后续 Codex 容易误改 runtime 读取语义。",
+      "detailHeading": "JOB-107 `v1.0` 快照文件紧凑化与制品体积压缩第一阶段",
+      "detailMarkdown": "- 当前负责人：Codex\n- 最近更新时间：`2026-04-22`\n- 外部依赖：无\n- 是否可关闭：是\n- 目标：\n  在不改变 runtime 快照结构、不改变接口契约、不改变运行逻辑的前提下，先把 `snapshot.json` 从 pretty JSON 改为紧凑 JSON 输出，优先拿到最低风险的制品体积下降。\n- 范围：\n  - 修改 `prototype/src/lib/snapshot-builder.js` 的写出方式\n  - `manifest.json` 与 `snapshot.json` 一并改成紧凑输出\n- 生效边界：\n  - 只影响后续新 build / 新 release 生成的快照与 manifest\n  - 已存在的历史 release 制品不会自动重写\n  - 若要让当前线上快照变小，必须重新 build/release 后生效\n- 不在范围：\n  - 不改 `literalPatterns` 结构\n  - 不改 `pinyinExactIndex` 结构\n  - 不改 runtime 读取逻辑\n  - 不做结构去重\n- 已完成：\n  - 已修改 `prototype/src/lib/snapshot-builder.js`，把 `snapshot.json` 与 `manifest.json` 改为紧凑 JSON 输出\n  - 已补 `prototype/tests/unit/runtime-service.test.js` 写出行为断言\n  - 已完成最小体积测量：\n    - 新 snapshot：`35353863` bytes\n    - 当前旧 pretty snapshot：`52514845` bytes\n    - 单份减少约 `16.37MB`\n  - 已完成回归：\n    - `node --check prototype/src/lib/snapshot-builder.js`\n    - `node --test prototype/tests/unit/runtime-service.test.js`\n    - `npm run check:api-contracts`\n    - `npm run test:unit`\n- 完成标准：\n  - `snapshot.json` 改为紧凑 JSON 输出\n  - `manifest.json` 改为紧凑 JSON 输出\n  - runtime 能正常加载新快照\n  - `correct / correct_cand` 无回归\n  - 压缩前后体积对比已留档\n\n子任务 checklist：\n\n- [x] 在 `prototype/src/lib/snapshot-builder.js` 把 `snapshot.json` 改为紧凑 JSON 输出\n- [x] 把 `manifest.json` 也改为紧凑 JSON 输出\n- [x] 不改快照字段结构\n- [x] 不改 runtime 读取逻辑\n- [x] 保持历史 release 制品不自动重写\n- [x] 补或更新 `prototype/tests/unit/runtime-service.test.js`\n- [x] 补或更新 `prototype/tests/unit/release-gates.test.js`\n- [x] 如有必要补 `prototype/tests/unit/api-contract-snapshots.test.js`\n- [x] 记录压缩前后体积对比\n- [x] 执行 `node --check prototype/src/lib/snapshot-builder.js`\n- [x] 执行 `npm run test:unit`\n- [x] 执行 `npm run check:api-contracts`\n- [x] `npm run pm:sync`\n- [x] `npm run pm:check`",
+      "links": [
+        "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-107-v1.0快照文件紧凑化与制品体积压缩第一阶段.md",
+        "docs/2026-04-17-v1.0正式文档工作区/09-runtime对外接口说明.md",
+        "docs/2026-04-17-v1.0正式文档工作区/design/13-发布包与交付物详细设计.md"
       ]
     }
   ],
@@ -2181,6 +2281,101 @@
       "lastUpdatedAt": "2026-04-22",
       "relatedJobs": [
         "JOB-106"
+      ],
+      "authoritative": true,
+      "mustSyncWhen": [
+        "job_scope_changed",
+        "doc_plan_changed"
+      ]
+    },
+    {
+      "docId": "JOB-107-DOC",
+      "title": "JOB-107-v1.0快照文件紧凑化与制品体积压缩第一阶段",
+      "path": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-107-v1.0快照文件紧凑化与制品体积压缩第一阶段.md",
+      "docType": "job",
+      "status": "active",
+      "domain": "jobs",
+      "versionScope": "v1.0",
+      "owner": "Codex",
+      "lastUpdatedAt": "2026-04-22",
+      "relatedJobs": [
+        "JOB-107"
+      ],
+      "authoritative": true,
+      "mustSyncWhen": [
+        "job_scope_changed",
+        "doc_plan_changed"
+      ]
+    },
+    {
+      "docId": "JOB-097-DOC",
+      "title": "JOB-097-v1.0清理platform.db数据库",
+      "path": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097-v1.0清理platform.db数据库.md",
+      "docType": "job",
+      "status": "active",
+      "domain": "jobs",
+      "versionScope": "v1.0",
+      "owner": "Codex",
+      "lastUpdatedAt": "2026-04-22",
+      "relatedJobs": [
+        "JOB-097"
+      ],
+      "authoritative": true,
+      "mustSyncWhen": [
+        "job_scope_changed",
+        "doc_plan_changed"
+      ]
+    },
+    {
+      "docId": "JOB-097A-DOC",
+      "title": "JOB-097A-v1.0清理platform.db的audit_logs并VACUUM",
+      "path": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097A-v1.0清理platform.db的audit_logs并VACUUM.md",
+      "docType": "job",
+      "status": "active",
+      "domain": "jobs",
+      "versionScope": "v1.0",
+      "owner": "Codex",
+      "lastUpdatedAt": "2026-04-22",
+      "relatedJobs": [
+        "JOB-097A"
+      ],
+      "authoritative": true,
+      "mustSyncWhen": [
+        "job_scope_changed",
+        "doc_plan_changed"
+      ]
+    },
+    {
+      "docId": "JOB-097B-DOC",
+      "title": "JOB-097B-v1.0清理platform.db历史过程表并VACUUM",
+      "path": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097B-v1.0清理platform.db历史过程表并VACUUM.md",
+      "docType": "job",
+      "status": "active",
+      "domain": "jobs",
+      "versionScope": "v1.0",
+      "owner": "Codex",
+      "lastUpdatedAt": "2026-04-22",
+      "relatedJobs": [
+        "JOB-097B"
+      ],
+      "authoritative": true,
+      "mustSyncWhen": [
+        "job_scope_changed",
+        "doc_plan_changed"
+      ]
+    },
+    {
+      "docId": "JOB-097C-DOC",
+      "title": "JOB-097C-v1.0清理platform.db索引健康检查与优化",
+      "path": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097C-v1.0清理platform.db索引健康检查与优化.md",
+      "docType": "job",
+      "status": "active",
+      "domain": "jobs",
+      "versionScope": "v1.0",
+      "owner": "Codex",
+      "lastUpdatedAt": "2026-04-22",
+      "relatedJobs": [
+        "JOB-097C"
       ],
       "authoritative": true,
       "mustSyncWhen": [
@@ -3897,6 +4092,68 @@
       "summary": "详细设计层、数据字典层、接口规范层、页面设计层与 Codex 开发依据层补齐"
     },
     {
+      "jobId": "JOB-097",
+      "docImpact": [
+        "JOB-097-DOC",
+        "JOB-097A-DOC",
+        "JOB-097B-DOC",
+        "JOB-097C-DOC"
+      ],
+      "docDeliverables": [
+        "JOB-097-DOC",
+        "JOB-097A-DOC",
+        "JOB-097B-DOC",
+        "JOB-097C-DOC"
+      ],
+      "checklistRef": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097-v1.0清理platform.db数据库.md",
+      "adrRefs": [],
+      "docSyncRequired": true,
+      "docSyncStatus": "done",
+      "summary": "按 097A/097B/097C 三步清理与优化 platform.db：先清审计，再清历史过程表，最后做索引健康检查与优化"
+    },
+    {
+      "jobId": "JOB-097A",
+      "docImpact": [
+        "JOB-097A-DOC"
+      ],
+      "docDeliverables": [
+        "JOB-097A-DOC"
+      ],
+      "checklistRef": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097A-v1.0清理platform.db的audit_logs并VACUUM.md",
+      "adrRefs": [],
+      "docSyncRequired": true,
+      "docSyncStatus": "done",
+      "summary": "清理 audit_logs 并执行 VACUUM"
+    },
+    {
+      "jobId": "JOB-097B",
+      "docImpact": [
+        "JOB-097B-DOC"
+      ],
+      "docDeliverables": [
+        "JOB-097B-DOC"
+      ],
+      "checklistRef": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097B-v1.0清理platform.db历史过程表并VACUUM.md",
+      "adrRefs": [],
+      "docSyncRequired": true,
+      "docSyncStatus": "done",
+      "summary": "清理 review_tasks、import_job_*、alias_sources、term_sources 等历史过程表并执行 VACUUM"
+    },
+    {
+      "jobId": "JOB-097C",
+      "docImpact": [
+        "JOB-097C-DOC"
+      ],
+      "docDeliverables": [
+        "JOB-097C-DOC"
+      ],
+      "checklistRef": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-097C-v1.0清理platform.db索引健康检查与优化.md",
+      "adrRefs": [],
+      "docSyncRequired": true,
+      "docSyncStatus": "done",
+      "summary": "对 platform.db 做完整性检查、统计刷新、关键查询计划采样和必要时的定向 REINDEX"
+    },
+    {
       "jobId": "JOB-104",
       "docImpact": [
         "DOC-01",
@@ -3953,6 +4210,23 @@
       "docSyncRequired": true,
       "docSyncStatus": "done",
       "summary": "词典准入、系统处理建议、页面批量处理与 runtime 输出模式统一收口"
+    },
+    {
+      "jobId": "JOB-107",
+      "docImpact": [
+        "DOC-09",
+        "DOC-11",
+        "DOC-14-13",
+        "JOB-107-DOC"
+      ],
+      "docDeliverables": [
+        "JOB-107-DOC"
+      ],
+      "checklistRef": "docs/2026-04-17-v1.0正式文档工作区/jobs/JOB-107-v1.0快照文件紧凑化与制品体积压缩第一阶段.md",
+      "adrRefs": [],
+      "docSyncRequired": true,
+      "docSyncStatus": "done",
+      "summary": "以不改结构为前提，把 snapshot/manifest 输出改成紧凑 JSON，优先降低制品体积与 runtime 下载压力"
     }
   ],
   "adrRegistry": [

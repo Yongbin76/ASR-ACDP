@@ -84,6 +84,10 @@
 | `JOB-035` | `Release-v1.0` | `v1.0` 词典建设域与验证回流域重构 | `done` | `P0` | Codex | `2026-04-13` | 已完成词典建设域与验证回流域首轮重构：页面、接口、配置模型、审核快照和帮助口径已切到 `dictionary/*` / `validation/*` 新语义 | 已完成；后续若继续扩到验证导入独立页、引用配置项禁删门禁或更细粒度回流视图，按新批次重开，不复用 `JOB-035` | 当前 `terms / import jobs / review tasks / business properties / validation cases` 代码基线，以及 `JOB-034` 已落地的批量审核能力 | 是 | 若把词典建设与验证回流继续混在一个域内，或继续保留手工创建与 CSV 导入两套审核口径，后续页面、接口、帮助和状态语义仍会持续打架 |
 | `JOB-036` | `Split-Architecture` | `admin_http_signed` runtime 快照下发模式落地 | `done` | `P1` | Codex | `2026-04-15` | 已完成 `admin_http_signed` 快照下发模式、admin 下载路由、按节点动态签名 URL 和相关回归；当前可直接由 `JOB-090` 继续做更大范围测试 | 已完成；后续若要继续扩到 LB/Ingress 源站、下载审计留痕或更复杂的节点绑定策略，按新批次重开，不复用 `JOB-036` | `JOB-021` 多 runtime 节点备案基线、现有 runtime control / artifact metadata / runtime 安装链路 | 是 | 若继续把“制品存储方式”和“运行节点下发方式”混成一个配置维度，后续 `file / admin_http_signed / minio` 会持续互相污染；若直接暴露固定 admin 文件 URL 而不做签名、过期和节点绑定，会把 runtime 制品下载面变成长期裸露入口；若把该批次和 MinIO 重构、LB/Ingress 灰度、节点级版本 override 一起硬做，范围会明显失控 |
 | `JOB-037` | `Release-v1.0` | 左侧目录树表现优化 | `done` | `P1` | Codex | `2026-04-15` | 已完成左侧目录树优化并确认可封板：导航数据源抽离、目录名称同步、层级视觉增强、收起态图标化、hover 提示和背景色收口 | 已封板；后续若继续扩到更细粒度图标体系、拖拽排序或完整导航配置平台化，按新批次重开，不复用 `JOB-037` | 当前 `/console` 壳层、导航文案现状、帮助目录与 breadcrumb 现行口径 | 是 | 若继续只做零碎样式 patch，而不把左侧目录树的层级、交互和配置化一起收口，后续新增页面时会再次出现层级弱、当前页难定位、收起态不可用和名称不一致的问题；若本批顺手扩大到整站壳层重构或全量页面改版，范围会失控 |
+| `JOB-097` | `Release-v1.0` | `v1.0` 清理 platform.db 数据库 | `pending` | `P1` | Codex | `2026-04-22` | 按三步方式优化 `prototype/workspace/platform.db`：先清 `audit_logs`，再清历史过程表，最后做索引健康检查与优化。 | 已完成 `JOB-097C`；下一步先完成 `JOB-097A`，验证空间回收和主链无回归后，再进入 `JOB-097B`。 | 需要 maintenance window、主库备份、停止会写入主库的进程。 | 否 | 如果不先停写入进程和备份主库，直接删历史表再 `VACUUM`，容易造成回滚困难；如果把主数据表误纳入清理范围，会直接破坏当前词典与版本状态。 |
+| `JOB-097A` | `Release-v1.0` | `v1.0` 清理 platform.db 的 audit_logs 并 VACUUM | `pending` | `P1` | Codex | `2026-04-22` | 先清理 `audit_logs` 及其索引占用，再通过 `VACUUM` 完成第一轮数据库瘦身。 | 停写入、备份、记录基线后，执行 `DELETE FROM audit_logs`、`wal_checkpoint(TRUNCATE)` 与 `VACUUM`。 | 主库备份、停止写入主库的进程。 | 否 | 会失去全部历史审计记录；若未先停写入或未先备份，回滚难度高。 |
+| `JOB-097B` | `Release-v1.0` | `v1.0` 清理 platform.db 历史过程表并 VACUUM | `pending` | `P1` | Codex | `2026-04-22` | 清理审核、导入和来源追溯这些历史过程表，并通过 `VACUUM` 完成第二轮数据库瘦身。 | 在 `JOB-097A` 完成后，按既定顺序删除 `review_tasks / import_job_* / alias_sources / term_sources` 并执行 `VACUUM`。 | 主库备份、停止写入主库的进程、确认当前无需保留历史审核/导入/来源追溯记录。 | 否 | 会失去历史审核任务、导入批次和来源追溯；如果误删主数据或 release 关系表，会直接破坏当前系统状态。 |
+| `JOB-097C` | `Release-v1.0` | `v1.0` 清理 platform.db 索引健康检查与优化 | `done` | `P1` | Codex | `2026-04-22` | 对 `platform.db` 做索引健康检查、统计刷新、关键查询计划采样和必要时的定向 REINDEX。 | 已完成；若后续出现查询计划异常、完整性异常或索引损坏迹象，再按同口径重开。 | 主库备份、停止写入主库的进程。 | 是 | 如果把 097C 误做成“重建所有索引”，执行成本高但收益不一定明显；如果不先记录查询计划与完整性结果，后续很难判断优化是否真的生效。 |
 | `JOB-098` | `Release-v1.0` | 测试/验证工作区历史副产物清理 | `done` | `P1` | Codex | `2026-04-21` | 已完成 `prototype/workspace-*` 历史测试/验证工作区清理，回收约 `63G` 空间，且未触碰主工作区与 runtime 实例工作区。 | 已完成；后续若测试再次产生大规模 `workspace-*` 副产物，按同口径重复执行，不需要重开更大范围清库任务。 | 无 | 是 | 如果把 `prototype/workspace-*`、`prototype/workspace` 和 `prototype/runtime_instances/*/workspace` 混为一谈，容易在清理磁盘时误删主系统数据或 runtime 实例数据。 |
 | `JOB-099` | `Release-v1.0` | 零数据底座初始化与系统清库 | `done` | `P1` | Codex | `2026-04-21` | 已把零数据底座收口为三步流程：历史测试工作区清理、runtime 实例工作区清理、主工作区零数据化；其中第一步可独立由 `JOB-098` 执行。备份口径已明确为执行前必须留存 1 份主库备份、1 份 `seed_terms.json` 备份和 1 份 `release_validation_cases.json` 备份。 | 已完成；后续若需要再次执行零数据化，可先复用 `JOB-098` 完成第一步，再按 `docs/137` 执行第二步和第三步。若当前系统已重新产生词条、版本或实例运行态，应把 `JOB-099` 作为重置 runbook 重新执行。 | 当前 workspace、`JOB-098` 清理结果（可选）、自动种子回灌逻辑、运行态目录与 service 状态 | 是 | 如果把三步流程混成一次粗暴删目录，容易误删主工作区或实例工作区；如果只做第一步而不同时置空 `seed_terms.json` 和 `release_validation_cases.json`，系统仍不是真正的零数据底座；如果在清库前不保留主库和两个自动回灌源的备份，会失去回滚到清库前状态的入口。 |
 | `JOB-100` | `Release-v1.0` | `v1.0` 最终发布包组成与发布包装清理 | `done` | `P1` | Codex | `2026-04-21` | 已完成最终发布包边界收紧、交付模板目录、release bundle 生成脚本和三条正式镜像构建验证，并补充真实环境最小交付建议：只交付 admin/runtime 镜像与 release bundle，默认 `1 admin + N runtime + admin_http_signed`。 | 已完成；后续若发布包边界、镜像内容或交付模板发生变化，按新批次重开，不复用 `JOB-100` | `JOB-030` 发布准备基线、当前 Docker 打包方式、帮助与发布文档目录 | 是 | 如果不在正式发布前把打包边界和交付物边界收紧，过程文档、handoff 文档、测试脚本和无关资产可能继续进入正式镜像，导致交付边界不清 |
@@ -94,6 +98,7 @@
 | `JOB-104` | `Release-v1.0` | `v1.0` 发布流水线自动化与交付产物标准化 | `pending` | `P1` | Codex | `2026-04-21` | 把 `JOB-100` 已收口的发布包边界推进到可自动执行的流水线：镜像构建/推送、release bundle 生成、元数据落盘和交付物命名规则标准化。 | 先冻结自动化边界、输入输出、环境变量与收尾标准，再实现脚本和模板扩展。 | 镜像仓库地址、镜像推送凭据、发布版本号策略、releaseId 规则、可选的制品签名/扫描工具。 | 否 | 如果直接在 `JOB-100` 里继续堆功能，容易把“边界收口”和“自动化实现”混成一个批次；如果不先固定输入输出、命名和失败回滚口径，后续发布流水线会反复返工。 |
 | `JOB-105` | `Release-v1.0` | `v1.0` 批量导入按行阻断与可通过记录导入 | `done` | `P1` | Codex | `2026-04-21` | 已完成批量导入“按行阻断、可通过记录继续导入”主路径：阻断行跳过、结果汇总扩展、详情页按钮/下拉/卡片改造、错误报表字段增强和页面中文化，并完成本地回归。 | 已完成；后续若要继续扩到更细粒度导入状态、批次级重试、自动纠正建议或阻断原因智能分组，按新批次重开，不复用 `JOB-105`。 | 现有 import-jobs 预览模型、导入详情页、审核任务生成逻辑、导入结果汇总结构。 | 是 | 如果直接把所有 block 降成 warning，会把坏数据放进主库；如果继续保留整批阻断，批量导入在真实场景下操作成本过高；如果不先统一页面、接口和结果汇总口径，后续实现会出现状态含义不一致。 |
 | `JOB-106` | `Release-v1.0` | `v1.0` 词典准入与 runtime 输出统一方案 | `pending` | `P0` | Codex | `2026-04-22` | 统一词典治理与 runtime 执行标准：准入层只保留 `blocked / ready`，而 `ready` 再按运行方式分成 `replace / candidate`，并要求系统在录入时直接给处理建议，用户按建议批量处理。 | 已完成实现、本地回归和 JOB-090 本地测试主链；后续若再扩候选分流、存量重评估或更细粒度审核提示，按新批次重开，不复用 JOB-106。 | 当前 term-admission、词典录入页、批量导入页、runtime literal/pinyin 执行链、`correct / correct_cand` 接口合同。 | 是 | 如果继续沿用当前“治理逻辑”和“runtime 真实触发逻辑”两套不完全一致的标准，后续词条录入、批量导入、候选输出和替换输出会持续出现解释不一致；如果不先把系统建议和批量处理口径冻结，页面实现会继续让用户逐条判断，操作成本很高。 |
+| `JOB-107` | `Release-v1.0` | `v1.0` 快照文件紧凑化与制品体积压缩第一阶段 | `done` | `P1` | Codex | `2026-04-22` | 在不改快照结构和 runtime 行为的前提下，把 snapshot 输出改成紧凑 JSON，优先降低 release 制品体积与 runtime 下载压力。 | 已完成；后续若要继续做 snapshot 结构去重、索引压缩或二进制化，再按新批次重开，不复用 JOB-107。 | 无 | 是 | 如果把结构去重、索引压缩和紧凑 JSON 一起做，会把低风险体积优化扩成高风险运行时重构；如果不先冻结“只压缩、不改结构”的边界，后续 Codex 容易误改 runtime 读取语义。 |
 
 ## 3.1 分组说明
 
@@ -3291,6 +3296,129 @@
 - [x] `npm run pm:check`
 - [x] `T07` 记录封板结论并冻结后续变更口径
 
+### JOB-097 `v1.0` 清理 platform.db 数据库
+
+- 当前负责人：Codex
+- 最近更新时间：`2026-04-22`
+- 外部依赖：maintenance window、主库备份、停止会写入主库的进程
+- 是否可关闭：否
+- 目标：
+  以不破坏当前主词典和发布成果为前提，分三步清理并优化 `platform.db`：先清 `audit_logs`，再清历史过程表，最后做索引健康检查与优化。
+- 子任务：
+  - `JOB-097A`：清 `audit_logs` 并 `VACUUM`
+  - `JOB-097B`：清历史过程表并 `VACUUM`
+  - `JOB-097C`：做索引健康检查与优化
+- 范围：
+  - 处理 `platform.db`
+  - 不处理 release 目录、runtime 实例目录和零数据底座重建
+- 完成标准：
+  - `JOB-097A`、`JOB-097B`、`JOB-097C` 都完成
+  - 数据库体积明显下降
+  - 主词典、发布和 runtime 控制表保持可用
+
+子任务 checklist：
+
+- [ ] 停止主库写入进程
+- [ ] 备份 `platform.db`
+- [ ] 记录清理前基线
+- [ ] 完成 `JOB-097A`
+- [ ] 验证 `JOB-097A` 清理结果
+- [ ] 完成 `JOB-097B`
+- [ ] 验证 `JOB-097B` 清理结果
+- [ ] 完成 `JOB-097C`
+- [ ] 验证 `JOB-097C` 优化结果
+- [ ] 同步文档与真源
+- [ ] `npm run pm:sync`
+- [ ] `npm run pm:check`
+
+### JOB-097A `v1.0` 清理 platform.db 的 audit_logs 并 VACUUM
+
+- 当前负责人：Codex
+- 最近更新时间：`2026-04-22`
+- 外部依赖：主库备份、停止写入主库的进程
+- 是否可关闭：否
+- 目标：
+  清理 `audit_logs`，并通过 `VACUUM` 真正回收磁盘空间。
+- 完成标准：
+  - `audit_logs` 行数清零
+  - `platform.db` 体积下降
+  - 主数据表未受影响
+
+子任务 checklist：
+
+- [ ] 停止主库写入进程
+- [ ] 备份 `platform.db`
+- [ ] 记录清理前 `audit_logs` 行数和文件大小
+- [ ] 删除 `audit_logs`
+- [ ] 执行 `PRAGMA wal_checkpoint(TRUNCATE)`
+- [ ] 执行 `VACUUM`
+- [ ] 验证主数据表仍在
+
+### JOB-097B `v1.0` 清理 platform.db 历史过程表并 VACUUM
+
+- 当前负责人：Codex
+- 最近更新时间：`2026-04-22`
+- 外部依赖：主库备份、停止写入主库的进程、确认当前无需保留历史审核/导入/来源追溯记录
+- 是否可关闭：否
+- 目标：
+  清理 `review_tasks / import_job_rows / import_jobs / import_job_files / import_job_results / alias_sources / term_sources`，并通过 `VACUUM` 回收空间。
+- 完成标准：
+  - 目标历史过程表清零
+  - `terms / aliases / releases / release_terms / runtime_control_state / runtime_nodes` 保持可用
+  - 数据库体积进一步下降
+
+子任务 checklist：
+
+- [ ] 停止主库写入进程
+- [ ] 备份 `platform.db`
+- [ ] 记录清理前各目标表行数
+- [ ] 删除 `review_tasks`
+- [ ] 删除 `import_job_rows`
+- [ ] 删除 `import_job_files`
+- [ ] 删除 `import_job_results`
+- [ ] 删除 `import_jobs`
+- [ ] 删除 `alias_sources`
+- [ ] 删除 `term_sources`
+- [ ] 执行 `PRAGMA wal_checkpoint(TRUNCATE)`
+- [ ] 执行 `VACUUM`
+- [ ] 验证主词典、发布、runtime 控制链仍可读
+
+### JOB-097C `v1.0` 清理 platform.db 索引健康检查与优化
+
+- 当前负责人：Codex
+- 最近更新时间：`2026-04-22`
+- 外部依赖：主库备份、停止写入主库的进程
+- 是否可关闭：是
+- 目标：
+  对 `platform.db` 做索引健康检查与定向优化，重点是完整性检查、统计刷新、关键查询计划采样和必要时的目标索引重建。
+- 完成标准：
+  - `PRAGMA integrity_check` 返回 `ok`
+  - `ANALYZE` 与 `PRAGMA optimize` 已执行
+  - 关键查询计划已留档
+  - 若执行了 `REINDEX`，目标索引重建完成且无报错
+  - 主系统启动和只读查询正常
+- 本轮执行结果：
+  - 已确认 service manager 管理的 `prototype / admin / runtime` 为 `stopped`
+  - 已生成备份：`/Codex/ACDP/prototype/workspace/backups/platform.db.pre-job097c-20260422153122.bak`
+  - `PRAGMA integrity_check` 返回 `ok`
+  - 已执行 `ANALYZE` 与 `PRAGMA optimize`
+  - 已留档关键查询计划：`termsByStatus / reviewsByStatus / importRowsByJob`
+  - 本轮未执行 `REINDEX`，原因是完整性检查与查询计划均无异常
+  - 执行后主链只读校验通过：`terms / aliases / releases / release_terms / runtime_control_state / runtime_nodes` 可读
+
+子任务 checklist：
+
+- [x] 停止主库写入进程
+- [x] 备份 `platform.db`
+- [x] 记录优化前基线
+- [x] 执行 `PRAGMA integrity_check`
+- [x] 执行 `ANALYZE`
+- [x] 执行 `PRAGMA optimize`
+- [x] 采样关键查询 `EXPLAIN QUERY PLAN`
+- [x] 如有必要，执行目标索引 `REINDEX`
+- [x] 回读优化后基线
+- [x] 验证主链查询与服务可读
+
 ### JOB-098 测试/验证工作区历史副产物清理
 
 - 当前负责人：Codex
@@ -3930,6 +4058,62 @@
 - [x] 形成可直接编码的实施 checklist（见 JOB-106 文档第 14 节）
 - [ ] `npm run pm:sync`
 - [ ] `npm run pm:check`
+
+### JOB-107 `v1.0` 快照文件紧凑化与制品体积压缩第一阶段
+
+- 当前负责人：Codex
+- 最近更新时间：`2026-04-22`
+- 外部依赖：无
+- 是否可关闭：是
+- 目标：
+  在不改变 runtime 快照结构、不改变接口契约、不改变运行逻辑的前提下，先把 `snapshot.json` 从 pretty JSON 改为紧凑 JSON 输出，优先拿到最低风险的制品体积下降。
+- 范围：
+  - 修改 `prototype/src/lib/snapshot-builder.js` 的写出方式
+  - `manifest.json` 与 `snapshot.json` 一并改成紧凑输出
+- 生效边界：
+  - 只影响后续新 build / 新 release 生成的快照与 manifest
+  - 已存在的历史 release 制品不会自动重写
+  - 若要让当前线上快照变小，必须重新 build/release 后生效
+- 不在范围：
+  - 不改 `literalPatterns` 结构
+  - 不改 `pinyinExactIndex` 结构
+  - 不改 runtime 读取逻辑
+  - 不做结构去重
+- 已完成：
+  - 已修改 `prototype/src/lib/snapshot-builder.js`，把 `snapshot.json` 与 `manifest.json` 改为紧凑 JSON 输出
+  - 已补 `prototype/tests/unit/runtime-service.test.js` 写出行为断言
+  - 已完成最小体积测量：
+    - 新 snapshot：`35353863` bytes
+    - 当前旧 pretty snapshot：`52514845` bytes
+    - 单份减少约 `16.37MB`
+  - 已完成回归：
+    - `node --check prototype/src/lib/snapshot-builder.js`
+    - `node --test prototype/tests/unit/runtime-service.test.js`
+    - `npm run check:api-contracts`
+    - `npm run test:unit`
+- 完成标准：
+  - `snapshot.json` 改为紧凑 JSON 输出
+  - `manifest.json` 改为紧凑 JSON 输出
+  - runtime 能正常加载新快照
+  - `correct / correct_cand` 无回归
+  - 压缩前后体积对比已留档
+
+子任务 checklist：
+
+- [x] 在 `prototype/src/lib/snapshot-builder.js` 把 `snapshot.json` 改为紧凑 JSON 输出
+- [x] 把 `manifest.json` 也改为紧凑 JSON 输出
+- [x] 不改快照字段结构
+- [x] 不改 runtime 读取逻辑
+- [x] 保持历史 release 制品不自动重写
+- [x] 补或更新 `prototype/tests/unit/runtime-service.test.js`
+- [x] 补或更新 `prototype/tests/unit/release-gates.test.js`
+- [x] 如有必要补 `prototype/tests/unit/api-contract-snapshots.test.js`
+- [x] 记录压缩前后体积对比
+- [x] 执行 `node --check prototype/src/lib/snapshot-builder.js`
+- [x] 执行 `npm run test:unit`
+- [x] 执行 `npm run check:api-contracts`
+- [x] `npm run pm:sync`
+- [x] `npm run pm:check`
 
 ## 5. 当前建议优先级
 
