@@ -73,6 +73,19 @@ function hasCharTypeBoundary(text, start, end) {
   return leftOk && rightOk;
 }
 
+function isPinyinSearchWindow(window = '') {
+  if (!isChineseLike(window)) {
+    return false;
+  }
+  for (const ch of window) {
+    const type = charClass(ch);
+    if (type === 'space' || type === 'punct' || type === 'edge' || type === 'other') {
+      return false;
+    }
+  }
+  return true;
+}
+
 function effectiveLiteralMode(termMeta = {}) {
   const replaceMode = String(termMeta.replaceMode || 'replace').trim() || 'replace';
   if (replaceMode === 'block') {
@@ -245,7 +258,7 @@ class PrototypeRuntime {
     for (let start = 0; start < text.length; start += 1) {
       for (let len = minWindow; len <= maxWindow && start + len <= text.length; len += 1) {
         const window = text.slice(start, start + len);
-        if (!isChineseLike(window) || /\s/.test(window)) {
+        if (!isPinyinSearchWindow(window)) {
           continue;
         }
         const exactKey = toPinyinKey(window);

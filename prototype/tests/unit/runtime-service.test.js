@@ -56,6 +56,33 @@ test('PrototypeRuntime keeps candidate literal hits out of correctedText but exp
   assert.equal(detail.candidates[0].canonical, '祁候选顺路');
 });
 
+test('PrototypeRuntime pinyin recall does not span punctuation', () => {
+  const snapshot = buildSnapshot([{
+    termId: 'term_pinyin_punctuation',
+    categoryCode: 'proper_noun',
+    canonicalText: '拾',
+    aliases: [],
+    replaceMode: 'candidate',
+    baseConfidence: 0.9,
+    pinyinRuntimeMode: 'candidate',
+    rules: {},
+    pinyinProfile: {
+      fullPinyinNoTone: 'shi',
+      initials: 's',
+      syllables: ['shi'],
+      runtimeMode: 'candidate',
+      polyphoneMode: 'default',
+      customFullPinyinNoTone: '',
+      alternativeReadings: [],
+      notes: '',
+    },
+  }]);
+  const runtime = new PrototypeRuntime(snapshot, '/tmp/snapshot.json');
+  const detail = runtime.matchDetailed('问题啊，是这样的啊');
+  assert.equal(detail.correctedText, '问题啊，是这样的啊');
+  assert.equal(detail.candidates.some((item) => item.orig === '，是'), false);
+});
+
 test('PrototypeRuntime disables pinyin replacement when pinyinRuntimeMode is off', () => {
   const snapshot = buildSnapshot([{
     termId: 'term_candidate_2',
